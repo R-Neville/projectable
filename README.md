@@ -1,4 +1,37 @@
-# Getting Started with Create React App
+# Projectable
+### By Felix McKenzie & Robert Neville
+
+Projectable is a lightweight project management applications that assists teams,
+of any size and type, to collaborate and track the progress of their work. 
+It is a free, open source alternative that puts user experience first.
+
+It is the final project for our Coder Academy studies.
+
+## The Why
+
+Visual representation is vital when planning a project in a team setting as it 
+conveys high level information to all involved. A Project Manager is responsible 
+for taking a project from ideation to completion, and navigating the team through 
+every step and problem in-between. Many Project Managers are faced with new 
+challenges in today's post-pandemic world, now trying to lead their teams and 
+projects through a completely remote, work-from-home environment. Moreover, 
+it seems remote work is here to stay: 74% of professionals expect remote work 
+to become standard, with 97% not wanting to return to the office full-time 
+(Prossack, 2021). How can teams achieve the same level of success in a distributed 
+workforce?
+
+Task management and communication is central to the success of any Project Manager 
+and team. Projects are made up of dozens of tasks each with their own level of 
+difficulty and time requirements. 77% of high-performing projects use project 
+management software, yet only 22% of organizations actually make the investment 
+(TeamStage, 2020).
+
+While several project management tools exist on the market, many have been met 
+with criticism from users. Existing tools such as Jira are feature rich, however 
+can be complicated to use, with unintuitive workflows and slow load times, and most 
+importantly no dark mode. Simpler alternatives, such as Trello and Asana, provide a 
+lower barrier to entry, however are capped by a paywall once you reach their free 
+tier limit.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -44,27 +77,3 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

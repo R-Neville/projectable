@@ -1,7 +1,7 @@
 # Projectable
 ### By Felix McKenzie & Robert Neville
 
-Projectable is a lightweight project management applications that assists teams,
+Projectable is a lightweight project management application that assists teams,
 of any size and type, to collaborate and track the progress of their work. 
 It is a free, open source alternative that puts user experience first.
 

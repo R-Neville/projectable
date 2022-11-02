@@ -8,7 +8,7 @@ function HomeContent() {
   const linkClassName = "p-3 w-28 rounded m-3 text-center";
   const linkTheme = { backgroundColor: theme.bgAccent, color: theme.fgAccent };
   return (
-    <div>
+    <div className="flex flex-col p-4">
       <Section
         title={'Collaborate With Ease'}
         content={

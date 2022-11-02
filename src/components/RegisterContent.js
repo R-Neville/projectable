@@ -26,7 +26,7 @@ function RegisterContent() {
   }
 
   return (
-    <>
+    <div className="flex flex-col p-4">
       <Section
         content={
           <form className="register-form w-full">
@@ -75,7 +75,7 @@ function RegisterContent() {
           </form>
         }
       />
-    </>
+    </div>
   );
 }
 

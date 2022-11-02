@@ -26,7 +26,7 @@ function LoginContent() {
   }
 
   return (
-    <>
+    <div className="flex flex-col p-4">
       <Section
         content={
           <form className="login-form w-full">
@@ -61,7 +61,7 @@ function LoginContent() {
           </form>
         }
       />
-    </>
+    </div>
   );
 }
 

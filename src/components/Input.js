@@ -5,7 +5,7 @@ function Input({ type, name }) {
 
   return (
     <input
-      className="px-1 border-0 rounded outline-0"
+      className="p-1 border-0 rounded outline-0"
       type={type}
       name={name}
       style={{ backgroundColor: theme.bgHighlight, color: theme.fgHighlight }}

@@ -6,7 +6,7 @@ function Header() {
   return (
     <header
       className="flex flex-row p-4 w-full"
-      style={{ backgroundColor: theme.bgAccent, color: theme.fgAccent }}
+      style={{ backgroundColor: theme.bgHighlight, color: theme.fgHighlight }}
     >
       <h1
         id="logo-full"

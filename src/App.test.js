@@ -45,4 +45,28 @@ describe('App', () => {
     const p = screen.getByText(/Don't have an account\?/);
     expect(p).toBeInTheDocument();
   });
+
+  test('renders register page when register link is clicked', () => {
+    render(<App />);
+    const registerLink = screen.getByText(/Register/);
+    userEvent.click(registerLink);
+
+    const pageHeading = screen.getByText(/Register/);
+    expect(pageHeading).toBeInTheDocument();
+
+    const form = document.querySelector('form');
+    expect(form).toBeInTheDocument();
+
+    const labels = form.querySelectorAll('label');
+    expect(labels.length).toBe(4);
+    
+    const inputs = form.querySelectorAll('input');
+    expect(inputs.length).toBe(4);
+    
+    const buttons = form.querySelectorAll('button');
+    expect(buttons.length).toBe(2);
+
+    const p = screen.getByText(/Already have an account\?/);
+    expect(p).toBeInTheDocument();
+  });
 });

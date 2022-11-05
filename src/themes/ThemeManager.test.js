@@ -1,9 +1,9 @@
 import { ThemeManager } from '.';
 
 describe("ThemeManager can be used to set user's theme preference", () => {
-  test("instantiation without errors", () => {
+  test('instantiation without errors', () => {
     const tm = new ThemeManager();
-    expect(typeof tm.theme).toBe("string");
+    expect(typeof tm.theme).toBe('string');
   });
 
   test("goDark method changes theme to 'DARK'", () => {

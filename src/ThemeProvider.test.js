@@ -10,7 +10,7 @@ const ThemeTestComponent = () => {
 
   for (let color in theme) {
     spans.push(
-      <span>
+      <span key={`${color} ${theme[color]}`}>
         {color} {theme[color]}
       </span>
     );

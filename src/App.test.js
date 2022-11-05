@@ -1,11 +1,19 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from './App';
 
-describe('app-root layout', () => {
-  render(<App />);
+describe('app layout', () => {
 
-  test('renders app header', () => {
-    const header = document.querySelector("header");
+  test('renders header', () => {
+    render(<App />);
+    const header = document.querySelector('header');
     expect(header).toBeInTheDocument();
+  });
+
+  test('renders landing page as initial route', () => {
+    render(<App />);
+    const pageHeading = screen.getByText(/Welcome!/i);
+    expect(pageHeading).toBeInTheDocument();
+    const pageParagraph = screen.getByText(/Projectable is a lightweight/i);
+    expect(pageParagraph).toBeInTheDocument();
   });
 });

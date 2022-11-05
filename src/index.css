@@ -23,3 +23,13 @@ body {
   font-family: 'Mukta';
   box-sizing: border-box;
 }
+
+@media screen and (max-width: 480px) {
+  #logo-full {
+    display: none;
+  }
+
+  #logo-partial {
+    display: block !important;
+  }
+}

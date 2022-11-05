@@ -1,10 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
+import themes from './themes';
 
-describe('App', () => {
+describe('app layout', () => {
 
-  test('renders header with logo and theme button', () => {
+  test('includes header with logo and theme button', () => {
     render(<App />);
     const header = document.querySelector('header');
     expect(header).toBeInTheDocument();
@@ -68,5 +69,19 @@ describe('App', () => {
 
     const p = screen.getByText(/Already have an account\?/);
     expect(p).toBeInTheDocument();
+  });
+});
+
+describe('theme button', () => {
+  test('correctly changes header background color', () => {
+    render(<App />);
+    const header = document.querySelector('header');
+    const themeButton = header.querySelector('.theme-button');
+    userEvent.click(themeButton);
+    // Default theme is light, so should now be dark:
+    expect(header).toHaveStyle({ 'background-color': themes.dark.bgHighlight });
+    userEvent.click(themeButton);
+    // Should now be light again:
+    expect(header).toHaveStyle({ 'background-color': themes.light.bgHighlight });
   });
 });

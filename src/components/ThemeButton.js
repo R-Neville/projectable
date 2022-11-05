@@ -16,7 +16,7 @@ function ThemeButton() {
       onClick={onClick}
     >
       <img
-        alt="Theme Icon"
+        alt={isDarkMode ? 'Moon Icon' : 'Sun Icon'}
         src={isDarkMode ? NightIcon : DayIcon}
         className="w-full h-full"
       />

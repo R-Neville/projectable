@@ -1,8 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+describe('app-root layout', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  test('renders app header', () => {
+    const header = document.querySelector("header");
+    expect(header).toBeInTheDocument();
+  });
 });

@@ -11,7 +11,7 @@ beforeAll(() => {
 describe('register page content', () => {
   describe('clear action', () => {
     test('clears register form', () => {
-      const inputs = document.querySelectorAll('input');
+      const inputs = screen.getAllByRole('textbox');
       inputs.forEach((input) => {
         input.value = 'Test';
       });

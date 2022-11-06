@@ -13,22 +13,22 @@ beforeEach(() => {
 
 describe('Input', () => {
   test('renders successfully', () => {
-    const input = document.querySelector('input');
+    const input = screen.getByRole('textbox');
     expect(input).toBeInTheDocument();
   });
 
   test('has correct name value', () => {
-    const input = document.querySelector('input');
+    const input = screen.getByRole('textbox');
     expect(input.name).toBe('test');
   });
 
   test('has correct type value', () => {
-    const input = document.querySelector('input');
+    const input = screen.getByRole('textbox');
     expect(input.type).toBe('text');
   });
 
   test('has correct color and background color', () => {
-    const input = document.querySelector('input');
+    const input = screen.getByRole('textbox');
     expect(input).toHaveStyle({
       color: themes.light.fgHighlight,
       'background-color': themes.light.bgHighlight,

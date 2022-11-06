@@ -5,14 +5,10 @@ import themes from './themes';
 
 describe('app layout', () => {
 
-  test('includes header with logo and theme button', () => {
+  test('includes header', () => {
     render(<App />);
-    const header = document.querySelector('header');
+    const header = screen.getByRole('banner');
     expect(header).toBeInTheDocument();
-    const logo = header.querySelector('h1');
-    expect(logo).toBeInTheDocument();
-    const themeButton = header.querySelector('.theme-button');
-    expect(themeButton).toBeInTheDocument();
   });
 
   test('renders landing page as initial route', () => {
@@ -31,18 +27,6 @@ describe('app layout', () => {
     const pageHeading = screen.getByText(/Login/);
     expect(pageHeading).toBeInTheDocument();
   
-    const form = document.querySelector('form');
-    expect(form).toBeInTheDocument();
-
-    const labels = form.querySelectorAll('label');
-    expect(labels.length).toBe(2);
-    
-    const inputs = form.querySelectorAll('input');
-    expect(inputs.length).toBe(2);
-    
-    const buttons = form.querySelectorAll('button');
-    expect(buttons.length).toBe(2);
-
     const p = screen.getByText(/Don't have an account\?/);
     expect(p).toBeInTheDocument();
   });
@@ -54,19 +38,7 @@ describe('app layout', () => {
 
     const pageHeading = screen.getByText(/Register/);
     expect(pageHeading).toBeInTheDocument();
-
-    const form = document.querySelector('form');
-    expect(form).toBeInTheDocument();
-
-    const labels = form.querySelectorAll('label');
-    expect(labels.length).toBe(4);
     
-    const inputs = form.querySelectorAll('input');
-    expect(inputs.length).toBe(4);
-    
-    const buttons = form.querySelectorAll('button');
-    expect(buttons.length).toBe(2);
-
     const p = screen.getByText(/Already have an account\?/);
     expect(p).toBeInTheDocument();
   });
@@ -75,7 +47,7 @@ describe('app layout', () => {
 describe('theme button', () => {
   test('correctly changes header background color', () => {
     render(<App />);
-    const header = document.querySelector('header');
+    const header = screen.getByRole('banner');
     const themeButton = header.querySelector('.theme-button');
     userEvent.click(themeButton);
     // Default theme is light, so should now be dark:

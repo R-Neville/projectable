@@ -1,10 +1,10 @@
 import { useThemeContext } from '../ThemeProvider';
 
-function Label({ text, htmlFor }) {
+function Label({ text }) {
   const { theme } = useThemeContext();
 
   return (
-    <label htmlFor={htmlFor} style={{ color: theme.fgPrimary }}>
+    <label style={{ color: theme.fgPrimary }}>
       {text}
     </label>
   );

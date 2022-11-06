@@ -33,7 +33,7 @@ function LoginContent() {
             <Fieldset
               content={
                 <>
-                  <Label text="Email" htmlFor="email" />
+                  <Label text="Email" />
                   <Input type="email" name="email" />
                 </>
               }
@@ -41,7 +41,7 @@ function LoginContent() {
             <Fieldset
               content={
                 <>
-                  <Label text="Password" htmlFor="password" />
+                  <Label text="Password" />
                   <Input type="password" name="password" />
                 </>
               }

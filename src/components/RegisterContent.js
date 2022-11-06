@@ -33,7 +33,7 @@ function RegisterContent() {
             <Fieldset
               content={
                 <>
-                  <Label text="Username" htmlFor="username" />
+                  <Label text="Username" />
                   <Input type="text" name="username" />
                 </>
               }
@@ -41,7 +41,7 @@ function RegisterContent() {
             <Fieldset
               content={
                 <>
-                  <Label text="Email" htmlFor="email" />
+                  <Label text="Email" />
                   <Input type="email" name="email" />
                 </>
               }
@@ -49,7 +49,7 @@ function RegisterContent() {
             <Fieldset
               content={
                 <>
-                  <Label text="Password" htmlFor="password" />
+                  <Label text="Password" />
                   <Input type="password" name="password" />
                 </>
               }
@@ -57,7 +57,7 @@ function RegisterContent() {
             <Fieldset
               content={
                 <>
-                  <Label text="Confirm Password" htmlFor="confirm-password" />
+                  <Label text="Confirm Password" />
                   <Input type="password" name="confirm-password" />
                 </>
               }

@@ -15,8 +15,6 @@ describe('app layout', () => {
     render(<App />);
     const pageHeading = screen.getByText(/Welcome!/);
     expect(pageHeading).toBeInTheDocument();
-    const pageParagraph = screen.getByText(/Projectable is a lightweight/);
-    expect(pageParagraph).toBeInTheDocument();
   });
 
   test('renders login page when login link is clicked', () => {
@@ -26,9 +24,6 @@ describe('app layout', () => {
 
     const pageHeading = screen.getByText(/Login/);
     expect(pageHeading).toBeInTheDocument();
-  
-    const p = screen.getByText(/Don't have an account\?/);
-    expect(p).toBeInTheDocument();
   });
 
   test('renders register page when register link is clicked', () => {
@@ -38,9 +33,6 @@ describe('app layout', () => {
 
     const pageHeading = screen.getByText(/Register/);
     expect(pageHeading).toBeInTheDocument();
-    
-    const p = screen.getByText(/Already have an account\?/);
-    expect(p).toBeInTheDocument();
   });
 });
 

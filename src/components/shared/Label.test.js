@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import ThemeProvider from '../ThemeProvider';
-import themes from '../themes';
+import ThemeProvider from '../../ThemeProvider';
+import themes from '../../themes';
 import Label from './Label';
 
 beforeEach(() => {

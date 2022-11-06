@@ -1,4 +1,4 @@
-import { useThemeContext } from '../ThemeProvider';
+import { useThemeContext } from '../../ThemeProvider';
 import ThemeButton from './ThemeButton';
 
 function Header() {

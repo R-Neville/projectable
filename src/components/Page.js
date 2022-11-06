@@ -5,7 +5,7 @@ function Page({ title, content }) {
   return (
     <main
       className="flex flex-col grow"
-      style={{ backgroundColor: theme.bgHighlight }}
+      style={{ backgroundColor: theme.bgAccent }}
     >
       <h1
         className="p-4 w-full text-4xl text-center"

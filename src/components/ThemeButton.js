@@ -11,12 +11,12 @@ function ThemeButton() {
 
   return (
     <button
-      className="flex justify-center items-center p-2 w-10 h-10 rounded-full"
+      className="theme-button flex justify-center items-center p-2 w-10 h-10 rounded-full"
       style={{ backgroundColor: theme.bgPrimary }}
       onClick={onClick}
     >
       <img
-        alt="Theme Icon"
+        alt={isDarkMode ? 'Moon Icon' : 'Sun Icon'}
         src={isDarkMode ? NightIcon : DayIcon}
         className="w-full h-full"
       />

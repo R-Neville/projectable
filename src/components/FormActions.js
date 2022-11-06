@@ -9,7 +9,7 @@ function FormActions({ actions }) {
         key={i}
         className="p-3 w-28 rounded m-3"
         onClick={action.onClick}
-        style={{ backgroundColor: theme.bgAccent, color: theme.fgAccent }}
+        style={{ backgroundColor: theme.bgHighlight, color: theme.fgHighlight }}
       >
         {action.text}
       </button>

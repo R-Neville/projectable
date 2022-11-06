@@ -6,7 +6,7 @@ import SectionP from './SectionP';
 function HomeContent() {
   const { theme } = useThemeContext();
   const linkClassName = "p-3 w-28 rounded m-3 text-center";
-  const linkTheme = { backgroundColor: theme.bgAccent, color: theme.fgAccent };
+  const linkTheme = { backgroundColor: theme.bgHighlight, color: theme.fgHighlight };
   return (
     <div className="flex flex-col p-4">
       <Section

@@ -1,11 +1,19 @@
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import App from '../App';
+import ThemeProvider from '../ThemeProvider';
+import RegisterContent from './RegisterContent';
 
 beforeAll(() => {
-  render(<App />);
-  const registerLink = screen.getByText(/Register/);
-  userEvent.click(registerLink);
+  render(
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<RegisterContent />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
+  );
 });
 
 describe('register page content', () => {

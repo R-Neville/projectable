@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useThemeContext } from '../../ThemeProvider';
+import { useThemeContext } from '../../context-providers/ThemeProvider';
 import UserMenuAction from './UserMenuAction';
 import UserIconDark from '../../assets/icons/user-dark.svg';
 import UserIconLight from '../../assets/icons/user-light.svg';

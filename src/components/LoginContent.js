@@ -1,6 +1,6 @@
 import { Link, Navigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useThemeContext } from '../ThemeProvider';
+import { useThemeContext } from '../context-providers/ThemeProvider';
 import Section from './shared/Section';
 import Fieldset from './shared/Fieldset';
 import Input from './shared/Input';

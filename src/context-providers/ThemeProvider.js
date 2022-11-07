@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import themes, { ThemeManager } from './themes';
+import themes, { ThemeManager } from '../themes';
 
 const themeManager = new ThemeManager();
 let initialTheme;

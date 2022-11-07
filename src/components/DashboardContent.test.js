@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import ThemeProvider from '../ThemeProvider';
+import ThemeProvider from '../context-providers/ThemeProvider';
 import DashboardContent from './DashboardContent';
 
 beforeEach(() => {

@@ -1,4 +1,4 @@
-import { useThemeContext } from '../../ThemeProvider';
+import { useThemeContext } from '../../context-providers/ThemeProvider';
 
 function Section({ title, content }) {
   const { theme } = useThemeContext();

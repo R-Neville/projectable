@@ -1,4 +1,4 @@
-import { useThemeContext } from '../../ThemeProvider';
+import { useThemeContext } from '../../context-providers/ThemeProvider';
 import NightIcon from '../../assets/icons/night.svg';
 import DayIcon from '../../assets/icons/day.svg';
 

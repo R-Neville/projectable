@@ -1,4 +1,4 @@
-import { useThemeContext } from '../../ThemeProvider';
+import { useThemeContext } from '../../context-providers/ThemeProvider';
 import ThemeButton from './ThemeButton';
 import UserMenu from './UserMenu';
 

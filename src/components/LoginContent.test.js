@@ -1,11 +1,19 @@
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import App from '../App';
+import ThemeProvider from '../ThemeProvider';
+import LoginContent from './LoginContent';
 
 beforeAll(() => {
-  render(<App />);
-  const loginLink = screen.getByText(/Login/);
-  userEvent.click(loginLink);
+  render(
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginContent />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
+  );
 });
 
 describe('login page content', () => {

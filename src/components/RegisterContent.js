@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useThemeContext } from '../ThemeProvider';
-import Section from './Section';
-import Fieldset from './Fieldset';
-import Input from './Input';
-import Label from './Label';
-import FormActions from './FormActions';
+import Section from './shared/Section';
+import Fieldset from './shared/Fieldset';
+import Input from './shared/Input';
+import Label from './shared/Label';
+import FormActions from './shared/FormActions';
 
 function RegisterContent() {
   const { theme } = useThemeContext();

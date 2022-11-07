@@ -1,13 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useThemeContext } from '../ThemeProvider';
-import Section from './Section';
-import Fieldset from './Fieldset';
-import Input from './Input';
-import Label from './Label';
-import FormActions from './FormActions';
+import Section from './shared/Section';
+import Fieldset from './shared/Fieldset';
+import Input from './shared/Input';
+import Label from './shared/Label';
+import FormActions from './shared/FormActions';
 
 function LoginContent() {
   const { theme } = useThemeContext();
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   function clearForm(event) {
     event.preventDefault();
@@ -21,8 +23,12 @@ function LoginContent() {
     event.preventDefault();
     const form = document.querySelector('.login-form');
     if (form) {
-      console.log('validate form');
+      setLoginSuccess(true);
     }
+  }
+
+  if (loginSuccess) {
+    return <Navigate replace to="/dashboard/tasks"></Navigate>
   }
 
   return (

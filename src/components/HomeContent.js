@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useThemeContext } from '../ThemeProvider';
-import Section from './Section';
-import SectionP from './SectionP';
+import Section from './shared/Section';
+import SectionP from './shared/SectionP';
 
 function HomeContent() {
   const { theme } = useThemeContext();

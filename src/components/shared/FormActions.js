@@ -1,4 +1,4 @@
-import { useThemeContext } from '../ThemeProvider';
+import { useThemeContext } from '../../ThemeProvider';
 
 function FormActions({ actions }) {
   const { theme } = useThemeContext();

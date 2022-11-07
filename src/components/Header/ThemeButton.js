@@ -1,6 +1,6 @@
-import { useThemeContext } from '../ThemeProvider';
-import NightIcon from '../assets/icons/night.svg';
-import DayIcon from '../assets/icons/day.svg';
+import { useThemeContext } from '../../ThemeProvider';
+import NightIcon from '../../assets/icons/night.svg';
+import DayIcon from '../../assets/icons/day.svg';
 
 function ThemeButton() {
   const { theme, isDarkMode, toggleTheme } = useThemeContext();

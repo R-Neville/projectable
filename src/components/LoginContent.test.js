@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import ThemeProvider from '../ThemeProvider';
 import LoginContent from './LoginContent';

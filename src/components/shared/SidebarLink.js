@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useThemeContext } from '../../ThemeProvider';
 
-function SidebarLink({ lightSrc, darkSrc, to, title }) {
+function SidebarLink({ lightSrc, darkSrc, to, title, testID }) {
   const { isDarkMode } = useThemeContext();
 
   return (
@@ -10,6 +10,7 @@ function SidebarLink({ lightSrc, darkSrc, to, title }) {
       to={to}
       title={title}
       style={{ backgroundColor: 'inherit' }}
+      data-testid={testID}
     >
       <img alt="" src={isDarkMode ? darkSrc : lightSrc} />
     </Link>

@@ -15,18 +15,21 @@ const linkData = [
     title: 'Tasks',
     lightSrc: TasksIconDark,
     darkSrc: TasksIconLight,
+    testID: "dashboard-tasks-tab",
   },
   {
     to: '/dashboard/projects',
     title: 'Projects',
     lightSrc: ProjectsIconDark,
     darkSrc: ProjectsIconLight,
+    testID: "dashboard-projects-tab",
   },
   {
     to: '/dashboard/settings',
     title: 'Projects',
     lightSrc: SettingsIconDark,
     darkSrc: SettingsIconLight,
+    testID: "dashboard-settings-tab",
   },
 ];
 
@@ -38,6 +41,7 @@ function DashboardContent() {
         to={linkInfo.to}
         lightSrc={linkInfo.lightSrc}
         darkSrc={linkInfo.darkSrc}
+        testID={linkInfo.testID}
       />
     );
   });

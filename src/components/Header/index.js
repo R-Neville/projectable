@@ -1,5 +1,6 @@
 import { useThemeContext } from '../../ThemeProvider';
 import ThemeButton from './ThemeButton';
+import UserMenu from './UserMenu';
 
 function Header() {
   const { theme } = useThemeContext();
@@ -23,6 +24,7 @@ function Header() {
         P
       </h1>
       <ThemeButton />
+      <UserMenu />
     </header>
   );
 }

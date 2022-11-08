@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useThemeContext } from '../../context-providers/ThemeProvider';
+import { useAuthContext } from '../../context-providers/AuthProvider';
 import UserMenuAction from './UserMenuAction';
 import UserIconDark from '../../assets/icons/user-dark.svg';
 import UserIconLight from '../../assets/icons/user-light.svg';
@@ -8,6 +9,7 @@ import UserIconLight from '../../assets/icons/user-light.svg';
 function UserMenu() {
   const navigate = useNavigate();
   const { theme, isDarkMode } = useThemeContext();
+  const { loggedIn, logout } = useAuthContext();
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const onUserMenuButtonClick = (event) => {
@@ -36,10 +38,13 @@ function UserMenu() {
     navigate('/dashboard');
   };
 
-  const onLogoutActionClick = () => {
+  const onLogoutActionClick = async () => {
     setDropdownVisible(false);
+    await logout();
     navigate('/login');
   };
+
+  if (!loggedIn) return null;
 
   return (
     <div className="user-menu relative">

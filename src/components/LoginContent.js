@@ -1,6 +1,6 @@
 import { Link, Navigate } from 'react-router-dom';
-import { useState } from 'react';
 import { useThemeContext } from '../context-providers/ThemeProvider';
+import { useAuthContext } from '../context-providers/AuthProvider';
 import Section from './shared/Section';
 import Fieldset from './shared/Fieldset';
 import Input from './shared/Input';
@@ -9,9 +9,9 @@ import FormActions from './shared/FormActions';
 
 function LoginContent() {
   const { theme } = useThemeContext();
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const { loggedIn, login } = useAuthContext();
 
-  function clearForm(event) {
+  const clearForm = (event) => {
     event.preventDefault();
     const form = document.querySelector('.login-form');
     if (form) {
@@ -19,15 +19,15 @@ function LoginContent() {
     }
   }
 
-  function validateForm(event) {
+  const validateForm = async (event) => {
     event.preventDefault();
     const form = document.querySelector('.login-form');
     if (form) {
-      setLoginSuccess(true);
+      await login();
     }
   }
 
-  if (loginSuccess) {
+  if (loggedIn) {
     return <Navigate replace to="/dashboard/tasks"></Navigate>
   }
 

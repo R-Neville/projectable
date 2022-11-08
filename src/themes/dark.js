@@ -5,6 +5,8 @@ const dark = {
   fgAccent: '#DBDBE3',
   bgHighlight: '#6F7C91',
   fgHighlight: '#DBDBE3',
+  bgError: '#FADBD8',
+  fgError: '#A93226',
 };
 
 export default dark;

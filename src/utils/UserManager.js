@@ -1,9 +1,14 @@
+import axios from 'axios';
+
 const TOKEN_KEY = 'TOKEN';
+const HEROKU = 'https://projectable-api.herokuapp.com';
+const ROOT_URL =
+  process.env.NODE_ENV === 'production' ? HEROKU : 'http://localhost:3001';
 
 export default class UserManager {
   constructor() {
-    this._idToken = this._loadToken();
-    if (this._idToken) {
+    this._token = this._loadToken();
+    if (this._token) {
       this._getUser();
     } else {
       this._user = null;
@@ -15,28 +20,43 @@ export default class UserManager {
   }
 
   get token() {
-    return this._idToken;
+    return this._token;
   }
 
-  async login() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('login');
-        this._setToken('DUMMY_TOKEN');
-        this._user = {};
-        resolve();
-      }, 1000);
-    });
+  async register(username, email, password, confirmPassword) {
+    try {
+      const response = await axios.post(`${ROOT_URL}/users/register`, {
+        username, email, password, confirmPassword
+      });
+      const { error } = response.data;
+      if (error) return error;
+      this._user = response.data;
+      this._setToken(this._user.token);
+      return null;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async login(email, password) {
+    try {
+      const response = await axios.post(`${ROOT_URL}/users/login`, {
+        email,
+        password,
+      });
+      const { error } = response.data;
+      if (error) return error;
+      this._user = response.data;
+      this._setToken(this._user.token);
+      return null;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async logout() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('logout');
-        this._user = null;
-        resolve();
-      }, 1000);
-    });
+    this._user = null;
+    this._setToken('');
   }
 
   _loadToken() {
@@ -44,16 +64,11 @@ export default class UserManager {
   }
 
   _setToken(token) {
+    this._token = token;
     window.localStorage.setItem(TOKEN_KEY, token);
   }
 
   async _getUser() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('get user');
-        this._user = {};
-        resolve();
-      }, 1000);
-    });
+    console.log('get user');
   }
 }

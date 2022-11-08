@@ -8,6 +8,7 @@ function FormActions({ actions }) {
       <button
         key={i}
         className="p-3 w-28 rounded m-3"
+        type={action.type}
         onClick={action.onClick}
         style={{ backgroundColor: theme.bgHighlight, color: theme.fgHighlight }}
       >

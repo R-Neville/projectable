@@ -56,9 +56,14 @@ function RegisterContent() {
       ) {
         setRegistrationError('Required fields are empty');
       } else if (confirmPassword !== password) {
-        setRegistrationError('Passwords don\'t match')
-      }else {
-        const error = await register(username, email, password, confirmPassword);
+        setRegistrationError("Passwords don't match");
+      } else {
+        const error = await register(
+          username,
+          email,
+          password,
+          confirmPassword
+        );
         if (error) {
           setRegistrationError(error);
         }
@@ -74,7 +79,7 @@ function RegisterContent() {
     <div className="flex flex-col p-4">
       <Section
         content={
-          <form className="register-form w-full">
+          <form className="register-form w-full" onSubmit={validateForm}>
             {registrationError && (
               <FormError
                 text={registrationError}
@@ -123,8 +128,8 @@ function RegisterContent() {
             />
             <FormActions
               actions={[
-                { text: 'Clear', onClick: clearForm },
-                { text: 'Submit', onClick: validateForm },
+                { text: 'Clear', onClick: clearForm, type: 'reset' },
+                { text: 'Submit', onClick: validateForm, type: 'submit' },
               ]}
             />
             <p style={{ color: theme.fgPrimary }}>

@@ -60,7 +60,7 @@ function LoginContent() {
     <div className="flex flex-col p-4">
       <Section
         content={
-          <form className="login-form w-full">
+          <form className="login-form w-full" onSubmit={validateForm}>
             {loginError && (
               <FormError
                 text={loginError}
@@ -89,8 +89,8 @@ function LoginContent() {
             />
             <FormActions
               actions={[
-                { text: 'Clear', onClick: clearForm },
-                { text: 'Submit', onClick: validateForm },
+                { text: 'Clear', onClick: clearForm, type: 'reset' },
+                { text: 'Submit', onClick: validateForm, type: 'submit' },
               ]}
             />
             <p style={{ color: theme.fgPrimary }}>

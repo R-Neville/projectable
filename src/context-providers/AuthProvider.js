@@ -6,7 +6,8 @@ export const useAuthContext = () => useContext(AuthContext);
 
 function AuthProvider({ children }) {
   const userManager = new UserManager();
-  const [loggedIn, setLoggedIn] = useState(false);
+  const tokenPresent = userManager.token !== null;
+  const [loggedIn, setLoggedIn] = useState(tokenPresent);
 
   const login = async () => {
     await userManager.login();

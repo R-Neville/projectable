@@ -13,6 +13,8 @@ function UserMenu() {
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const onUserMenuButtonClick = (event) => {
+    event.stopPropagation();
+
     const container = event.target.closest('.user-menu');
 
     // This function is used to hide the
@@ -38,9 +40,9 @@ function UserMenu() {
     navigate('/dashboard');
   };
 
-  const onLogoutActionClick = async () => {
+  const onLogoutActionClick = () => {
     setDropdownVisible(false);
-    await logout();
+    logout();
     navigate('/login');
   };
 

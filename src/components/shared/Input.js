@@ -1,6 +1,6 @@
 import { useThemeContext } from '../../context-providers/ThemeProvider';
 
-function Input({ type, name }) {
+function Input({ type, name, onChange }) {
   const { theme } = useThemeContext();
 
   return (
@@ -9,6 +9,8 @@ function Input({ type, name }) {
       type={type}
       name={name}
       style={{ backgroundColor: theme.bgHighlight, color: theme.fgHighlight }}
+      onChange={onChange}
+      onInput={onChange}
     />
   );
 }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useThemeContext } from '../ThemeProvider';
+import { useThemeContext } from '../context-providers/ThemeProvider';
 import Section from './shared/Section';
 import Fieldset from './shared/Fieldset';
 import Input from './shared/Input';

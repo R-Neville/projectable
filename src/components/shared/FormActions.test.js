@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ThemeProvider from '../../ThemeProvider';
+import ThemeProvider from '../../context-providers/ThemeProvider';
 import themes from '../../themes';
 import FormActions from './FormActions';
 

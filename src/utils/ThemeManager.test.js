@@ -1,4 +1,4 @@
-import { ThemeManager } from '.';
+import ThemeManager from './ThemeManager';
 
 describe("ThemeManager can be used to set user's theme preference", () => {
   test('instantiation without errors', () => {

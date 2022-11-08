@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useThemeContext } from '../../ThemeProvider';
+import { useThemeContext } from '../../context-providers/ThemeProvider';
 
 function SidebarLink({ lightSrc, darkSrc, to, title, testID }) {
   const { isDarkMode } = useThemeContext();

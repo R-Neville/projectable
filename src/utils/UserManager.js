@@ -1,9 +1,5 @@
-import axios from 'axios';
-
+import projectableAPI from '../config/axiosConfig';
 const TOKEN_KEY = 'TOKEN';
-const HEROKU = 'https://projectable-api.herokuapp.com';
-const ROOT_URL =
-  process.env.NODE_ENV === 'production' ? HEROKU : 'http://localhost:3001';
 
 export default class UserManager {
   constructor() {
@@ -25,8 +21,11 @@ export default class UserManager {
 
   async register(username, email, password, confirmPassword) {
     try {
-      const response = await axios.post(`${ROOT_URL}/users/register`, {
-        username, email, password, confirmPassword
+      const response = await projectableAPI.post('/users/register', {
+        username,
+        email,
+        password,
+        confirmPassword,
       });
       const { error } = response.data;
       if (error) return error;
@@ -40,7 +39,7 @@ export default class UserManager {
 
   async login(email, password) {
     try {
-      const response = await axios.post(`${ROOT_URL}/users/login`, {
+      const response = await projectableAPI.post('/users/login', {
         email,
         password,
       });

@@ -12,6 +12,7 @@ import ProjectsIconLight from '../assets/icons/projects-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { getAllProjects } from '../services/projectsService';
+import showError from '../utils/showError';
 
 const linkData = [
   {
@@ -56,7 +57,7 @@ function DashboardContent() {
     async function loadProjects() {
       const data = await getAllProjects();
       if (data.error) {
-        console.log(data.error);
+        showError(data.error);
       } else {
         setProjects(data);
       }
@@ -90,7 +91,7 @@ function DashboardContent() {
               ]}
             >
               <CardList>
-                {projects.map((p, i) => {
+                {projects && projects.map((p, i) => {
                   return (
                     <Card
                       key={i}

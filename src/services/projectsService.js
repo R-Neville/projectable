@@ -1,8 +1,12 @@
 import projectableAPI from '../config/axiosConfig';
 
 export const getAllProjects = async () => {
-  const data = await projectableAPI.get('/api/projects');
-  return data;
+  try {
+    const response = await projectableAPI.get('/api/projects');
+    return response.data;
+  } catch (error) {
+    return { error: error.message };
+  }
 };
 
 export const getProject = async (projectId) => {

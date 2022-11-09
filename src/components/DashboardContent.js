@@ -5,6 +5,7 @@ import SidebarLink from './shared/SidebarLink';
 import Frame from './shared/Frame';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
+import FormModal from './shared/FormModal';
 import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
 import ProjectsIconDark from '../assets/icons/projects-dark.svg';
@@ -39,6 +40,7 @@ const linkData = [
 
 function DashboardContent() {
   const [projects, setProjects] = useState([]);
+  const [isOpen, setIsOpen] = useState(false)
 
   const links = linkData.map((linkInfo, i) => {
     return (
@@ -74,6 +76,12 @@ function DashboardContent() {
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
+      <FormModal
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        Modal
+      </FormModal>
       <Routes>
         <Route index element={<Frame title="My Tasks"></Frame>} />
         <Route path="/tasks" element={<Frame title="My Tasks"></Frame>} />
@@ -85,7 +93,7 @@ function DashboardContent() {
               actions={[
                 {
                   text: 'New',
-                  onClick: () => console.log('show new project modal'),
+                  onClick: () => setIsOpen(true),
                 },
               ]}
             >

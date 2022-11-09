@@ -1,5 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuthContext } from '../context-providers/AuthProvider';
+import { Routes, Route } from 'react-router-dom';
 import Sidebar from './shared/Sidebar';
 import SidebarLink from './shared/SidebarLink';
 import Frame from './shared/Frame';
@@ -35,12 +34,6 @@ const linkData = [
 ];
 
 function DashboardContent() {
-  const { loggedIn } = useAuthContext();
-
-  if (!loggedIn) {
-    return <Navigate replace to="/login"></Navigate>
-  }
-
   const links = linkData.map((linkInfo, index) => {
     return (
       <SidebarLink

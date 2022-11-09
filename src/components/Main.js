@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
+import { useAuthContext } from '../context-providers/AuthProvider';
+import ProtectedRoute from './ProjectedRoute';
 import Page from './shared/Page';
 import HomeContent from './HomeContent';
 import LoginContent from './LoginContent';
@@ -6,6 +8,8 @@ import RegisterContent from './RegisterContent';
 import DashboardContent from './DashboardContent';
 
 function Main() {
+  const { loggedIn } = useAuthContext();
+
   return (
     <Routes>
       <Route
@@ -22,7 +26,11 @@ function Main() {
       />
       <Route
         path="/dashboard/*"
-        element={<Page title="Dashboard" content={<DashboardContent />} />}
+        element={
+          <ProtectedRoute loggedIn={loggedIn}>
+            <Page title="Dashboard" content={<DashboardContent />} />
+          </ProtectedRoute>
+        }
       />
     </Routes>
   );

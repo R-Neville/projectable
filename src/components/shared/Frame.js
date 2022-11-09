@@ -1,19 +1,40 @@
 import { useThemeContext } from '../../context-providers/ThemeProvider';
 
-function Frame({ title, children }) {
+function Frame({ title, actions, children }) {
   const { theme } = useThemeContext();
+
+  let buttons;
+  if (actions) {
+    buttons = actions.map((action, i) => {
+      return (
+        <button
+          key={i}
+          className="px-3 py-2 rounded"
+          style={{ backgroundColor: theme.fgPrimary, color: theme.bgPrimary }}
+          onClick={action.onClick}
+        >
+          {action.text}
+        </button>
+      );
+    });
+  }
 
   return (
     <div className="flex flex-col p-4 w-full h-full">
-      <h2
-        className="w-full text-4xl"
-        style={{
-          borderBottom: `2px solid ${theme.fgAccent}`,
-          color: theme.fgAccent,
-        }}
+      <div
+        className="flex py-3"
+        style={{ borderBottom: `2px solid ${theme.fgPrimary}` }}
       >
-        {title}
-      </h2>
+        <h2
+          className="w-full mr-auto text-4xl"
+          style={{
+            color: theme.fgAccent,
+          }}
+        >
+          {title}
+        </h2>
+        <div>{buttons}</div>
+      </div>
       {children}
     </div>
   );

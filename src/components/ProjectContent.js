@@ -11,10 +11,33 @@ import { deleteProject, getProject } from '../services/projectsService';
 import showError from '../utils/showError';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
+import QuestionModal from './modals/QuestionModal';
 
 function ProjectContent() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [project, setProject] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const onDeleteModalConfirm = () => {
+    setShowDeleteModal(false);
+    deleteProject(id)
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(data.error);
+        } else {
+          navigate('/dashboard');
+        }
+      })
+      .catch((error) => {
+        showError(error.message);
+      });
+  };
+
+  const onDeleteModalCancel = () => {
+    setShowDeleteModal(false);
+  };
 
   const linkData = [
     {
@@ -50,39 +73,30 @@ function ProjectContent() {
       title: 'Delete Project',
       danger: true,
       onClick: () => {
-        deleteProject(id)
-          .then((response) => {
-            const { data } = response;
-            if (data.error) {
-              showError(data.error);
-            } else {
-              navigate('/dashboard');
-            }
-          })
-          .catch((error) => {
-            showError(error.message);
-          });
+        setShowDeleteModal(true);
       },
     },
   ];
 
-  const [project, setProject] = useState(null);
+  function loadProject() {
+    getProject(id)
+    .then((response) => {
+      const { data } = response;
+      if (data.error) {
+        showError(data.error);
+      } else {
+        setProject(data);
+      }
+    })
+    .catch((error) => {
+      showError(error.message);
+    });
+  }
+
 
   useEffect(() => {
-    getProject(id)
-      .then((response) => {
-        const { data } = response;
-        if (data.error) {
-          showError(data.error);
-        } else {
-          console.log(data);
-          setProject(data);
-        }
-      })
-      .catch((error) => {
-        showError(error.message);
-      });
-  }, [id]);
+    loadProject();
+  });
 
   return (
     <div className="flex flex-row w-full h-full">
@@ -113,6 +127,12 @@ function ProjectContent() {
           }
         ></Route>
       </Routes>
+      <QuestionModal
+        open={showDeleteModal}
+        message={`Delete '${project && project.name}' project???`}
+        onCancel={onDeleteModalCancel}
+        onConfirm={onDeleteModalConfirm}
+      />
     </div>
   );
 }

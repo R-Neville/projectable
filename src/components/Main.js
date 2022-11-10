@@ -6,6 +6,7 @@ import HomeContent from './HomeContent';
 import LoginContent from './LoginContent';
 import RegisterContent from './RegisterContent';
 import DashboardContent from './DashboardContent';
+import ProjectContent from './ProjectContent';
 
 function Main() {
   const { loggedIn } = useAuthContext();
@@ -29,6 +30,14 @@ function Main() {
         element={
           <ProtectedRoute loggedIn={loggedIn}>
             <Page title="Dashboard" content={<DashboardContent />} />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/project/:id/*"
+        element={
+          <ProtectedRoute loggedIn={loggedIn}>
+            <Page title="Project" content={<ProjectContent />} />
           </ProtectedRoute>
         }
       />

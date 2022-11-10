@@ -20,7 +20,7 @@ function ErrorModal({ open, message }) {
         className="fixed inset-0 bg-opacity-75 transition-opacity"
         style={{ backgroundColor: '#000A' }}
       >
-        <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full sm:items-center sm:p-0">
             <Section
               title="Oops! An error occurred..."

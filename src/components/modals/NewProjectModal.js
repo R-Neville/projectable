@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { createProject } from '../../services/projectsService';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import Section from '../shared/Section';
 import Fieldset from '../shared/Fieldset';
 import FormActions from '../shared/FormActions';
@@ -16,6 +17,8 @@ export default function NewProjectModal({ open, onClose, onDone }) {
     name: '',
     description: '',
   };
+
+  const navigate = useNavigate();
 
   const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState('');
@@ -35,7 +38,7 @@ export default function NewProjectModal({ open, onClose, onDone }) {
           if (data.error) {
             showError(data.error);
           } else {
-            console.log('project created');
+            navigate(`/project/${data._id}`);
           }
         })
         .catch((error) => {
@@ -53,7 +56,7 @@ export default function NewProjectModal({ open, onClose, onDone }) {
         className="fixed inset-0 bg-opacity-75 transition-opacity"
         style={{ backgroundColor: '#000A' }}
       >
-        <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full sm:items-center sm:p-0">
             <Section
               title="New Project"

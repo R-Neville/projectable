@@ -1,8 +1,8 @@
-export default function showError(message) {
+export default function showError(error) {
   const customEvent = new CustomEvent('show-error', {
     bubbles: true,
     detail: {
-      message,
+      error,
     },
   });
   document.dispatchEvent(customEvent);

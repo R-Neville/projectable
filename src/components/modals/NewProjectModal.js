@@ -36,13 +36,13 @@ export default function NewProjectModal({ open, onClose, onDone }) {
         .then((response) => {
           const { data } = response;
           if (data.error) {
-            showError(data.error);
+            showError(new Error(data.error));
           } else {
             navigate(`/project/${data._id}`);
           }
         })
         .catch((error) => {
-          showError(error.message);
+          showError(error);
         });
       onDone();
     }

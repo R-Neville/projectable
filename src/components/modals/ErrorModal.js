@@ -2,8 +2,16 @@ import { createPortal } from 'react-dom';
 import { useThemeContext } from '../../context-providers/ThemeProvider';
 import Section from '../shared/Section';
 
-function ErrorModal({ open, message }) {
+function ErrorModal({ open, error }) {
   const { theme } = useThemeContext();
+
+  let message;
+  if (error) {
+    message =
+      process.env.NODE_ENV === 'development'
+        ? JSON.stringify(error)
+        : error.message;
+  }
 
   const onOKButtonClick = () => {
     const customEvent = new CustomEvent('clear-error', {

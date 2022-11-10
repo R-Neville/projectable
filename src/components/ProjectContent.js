@@ -25,13 +25,13 @@ function ProjectContent() {
       .then((response) => {
         const { data } = response;
         if (data.error) {
-          showError(data.error);
+          showError(new Error(data.error));
         } else {
           navigate('/dashboard');
         }
       })
       .catch((error) => {
-        showError(error.message);
+        showError(error);
       });
   };
 
@@ -78,25 +78,26 @@ function ProjectContent() {
     },
   ];
 
-  function loadProject() {
-    getProject(id)
-    .then((response) => {
-      const { data } = response;
-      if (data.error) {
-        showError(data.error);
-      } else {
-        setProject(data);
-      }
-    })
-    .catch((error) => {
-      showError(error.message);
-    });
-  }
-
+  
 
   useEffect(() => {
+    const loadProject = () => {
+      getProject(id)
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(new Error(data.error));
+        } else {
+          setProject(data);
+        }
+      })
+      .catch((error) => {
+        showError(error);
+      });
+    };
+
     loadProject();
-  });
+  }, [id]);
 
   return (
     <div className="flex flex-row w-full h-full">

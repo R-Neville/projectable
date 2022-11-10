@@ -7,17 +7,17 @@ import Main from './components/Main';
 import ErrorModal from './components/modals/ErrorModal';
 
 function App() {
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [modalError, setModalError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
   const onShowError = (event) => {
-    const { message } = event.detail;
-    setErrorMessage(message);
+    const { error } = event.detail;
+    setModalError(error);
     setShowErrorModal(true);
   };
 
   const onClearError = () => {
-    setErrorMessage(null);
+    setModalError(null);
     setShowErrorModal(false);
   };
 
@@ -40,7 +40,7 @@ function App() {
             <Main />
           </BrowserRouter>
         </div>
-        <ErrorModal open={showErrorModal} message={errorMessage} />
+        <ErrorModal open={showErrorModal} error={modalError} />
       </AuthProvider>
     </ThemeProvider>
   );

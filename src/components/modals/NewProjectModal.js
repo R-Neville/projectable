@@ -1,45 +1,47 @@
 import React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { createProject } from '../../services/projectsService';
 import { createPortal } from 'react-dom';
-import Section from './Section';
-import Fieldset from './Fieldset';
-import FormActions from './FormActions';
-import Label from './Label';
-import Input from './Input';
-import TextArea from './TextArea';
-import FormError from './FormError';
+import Section from '../shared/Section';
+import Fieldset from '../shared/Fieldset';
+import FormActions from '../shared/FormActions';
+import Label from '../shared/Label';
+import Input from '../shared/Input';
+import TextArea from '../shared/TextArea';
+import FormError from '../shared/FormError';
+import showError from '../../utils/showError';
 
-export default function FormModal({ open, onClose }) {
+export default function NewProjectModal({ open, onClose, onDone }) {
   const initialFormState = {
     name: '',
     description: '',
   };
 
-  const navigate = useNavigate();
   const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState('');
 
   const onInputChange = (event) => {
-    console.log(event.target.value)
     setFormState({ ...formState, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (formState.name.length === 0 || formState.description.length === 0) {
       setFormError('Required fields are empty');
     } else {
-      createProject({ ...formState })
-        .then((project) => {
-          // set state here, Context maybe?
-          console.log(project)
-          navigate('/dashboard/projects');
+      createProject(formState)
+        .then((response) => {
+          const { data } = response;
+          if (data.error) {
+            showError(data.error);
+          } else {
+            console.log('project created');
+          }
         })
         .catch((error) => {
-          setFormError(error.message);
+          showError(error.message);
         });
+      onDone();
     }
   };
 
@@ -47,12 +49,19 @@ export default function FormModal({ open, onClose }) {
 
   return createPortal(
     <>
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity">
+      <div
+        className="fixed inset-0 bg-opacity-75 transition-opacity"
+        style={{ backgroundColor: '#000A' }}
+      >
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full sm:items-center sm:p-0">
             <Section
+              title="New Project"
               content={
-                <form action="" className="register-form  sm:my-8 sm:w-full sm:max-w-lg">
+                <form
+                  action=""
+                  className="register-form  sm:my-8 sm:w-full sm:max-w-lg"
+                >
                   {formError && (
                     <FormError
                       text={formError}
@@ -82,7 +91,7 @@ export default function FormModal({ open, onClose }) {
                         />
                       </>
                     }
-                 />
+                  />
                   <FormActions
                     actions={[
                       { text: 'Cancel', onClick: onClose, type: 'reset' },

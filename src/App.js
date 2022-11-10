@@ -4,18 +4,21 @@ import ThemeProvider from './context-providers/ThemeProvider';
 import AuthProvider from './context-providers/AuthProvider';
 import Header from './components/Header';
 import Main from './components/Main';
-import ErrorModal from './components/shared/ErrorModal';
+import ErrorModal from './components/modals/ErrorModal';
 
 function App() {
   const [errorMessage, setErrorMessage] = useState(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const onShowError = (event) => {
     const { message } = event.detail;
     setErrorMessage(message);
+    setShowErrorModal(true);
   };
 
-  const onClearError = (event) => {
+  const onClearError = () => {
     setErrorMessage(null);
+    setShowErrorModal(false);
   };
 
   useEffect(() => {
@@ -37,7 +40,7 @@ function App() {
             <Main />
           </BrowserRouter>
         </div>
-        {errorMessage && <ErrorModal message={errorMessage} />}
+        <ErrorModal open={showErrorModal} message={errorMessage} />
       </AuthProvider>
     </ThemeProvider>
   );

@@ -10,12 +10,15 @@ import FormActions from './shared/FormActions';
 import FormError from './shared/FormError';
 
 function RegisterContent() {
+  const initialFormState = {
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  };
   const { theme } = useThemeContext();
   const { loggedIn, register } = useAuthContext();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formState, setFormState] = useState(initialFormState);
   const [registrationError, setRegistrationError] = useState('');
 
   const clearForm = (event) => {
@@ -27,27 +30,13 @@ function RegisterContent() {
   };
 
   const onInputChange = (event) => {
-    switch (event.target.name) {
-      case 'username':
-        setUsername(event.target.value);
-        break;
-      case 'email':
-        setEmail(event.target.value);
-        break;
-      case 'password':
-        setPassword(event.target.value);
-        break;
-      case 'confirmPassword':
-        setConfirmPassword(event.target.value);
-        break;
-      default:
-        break;
-    }
+    setFormState({ ...formState, [event.target.name]: event.target.value });
   };
 
   const validateForm = async (event) => {
     event.preventDefault();
     const form = document.querySelector('.register-form');
+    const { username, email, password, confirmPassword } = formState;
     if (form) {
       if (
         username.length === 0 ||

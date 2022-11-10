@@ -10,10 +10,13 @@ import FormActions from './shared/FormActions';
 import FormError from './shared/FormError';
 
 function LoginContent() {
+  const initialFormState = {
+    email: '',
+    password: '',
+  };
   const { theme } = useThemeContext();
   const { loggedIn, login } = useAuthContext();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formState, setFormState] = useState(initialFormState);
   const [loginError, setLoginError] = useState(null);
 
   const clearForm = (event) => {
@@ -25,20 +28,12 @@ function LoginContent() {
   };
 
   const onInputChange = (event) => {
-    switch (event.target.name) {
-      case 'email':
-        setEmail(event.target.value);
-        break;
-      case 'password':
-        setPassword(event.target.value);
-        break;
-      default:
-        break;
-    }
+    setFormState({ ...formState, [event.target.name]: event.target.value });
   };
 
   const validateForm = async (event) => {
     event.preventDefault();
+    const { email, password } = formState;
     const form = document.querySelector('.login-form');
     if (form) {
       if (email.length === 0 || password.length === 0) {

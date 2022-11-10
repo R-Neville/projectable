@@ -1,41 +1,29 @@
 import projectableAPI from '../config/axiosConfig';
 
 export const getAllProjects = async () => {
-  const data = await projectableAPI.get('/api/projects');
-  return data;
+  return projectableAPI.get('/api/projects');
 };
 
 export const getProject = async (projectId) => {
-  const data = await projectableAPI.get(`/api/projects/${projectId}`);
-  return data;
+  return projectableAPI.get(`/api/projects/${projectId}`);
 };
 
 export const createProject = async (formData) => {
-  const data = await projectableAPI.post('/api/projects', formData);
-  return data;
+  return projectableAPI.post('/api/projects', formData);
 };
 
 export const updateProject = async (projectId, formData) => {
-  const data = await projectableAPI.put(`/api/projects/${projectId}`, formData);
-  return data;
+  return projectableAPI.put(`/api/projects/${projectId}`, formData);
 };
 
 export const addMember = async (projectId, member) => {
-  const data = await projectableAPI.put(
-    `/api/projects/${projectId}/members/new`,
-    member
-  );
-  return data;
+  return projectableAPI.put(`/api/projects/${projectId}/members/new`, member);
 };
 
 export const searchForUsers = async (query) => {
-  const data = await projectableAPI.get(
-    `/api/projects/members/search/email?=${query}`
-  );
-  return data;
+  return projectableAPI.get(`/api/projects/members/search/email?=${query}`);
 };
 
 export const deleteProject = async (projectId) => {
-  const data = await projectableAPI.delete(`/api/projects/${projectId}`);
-  return data;
+  return projectableAPI.delete(`/api/projects/${projectId}`);
 };

@@ -5,14 +5,15 @@ import SidebarLink from './shared/SidebarLink';
 import Frame from './shared/Frame';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
-import FormModal from './shared/FormModal';
+import NewProjectModal from './modals/NewProjectModal';
 import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
 import ProjectsIconDark from '../assets/icons/projects-dark.svg';
 import ProjectsIconLight from '../assets/icons/projects-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
-import { getAllProjects } from '../services/projectsService';
+import { deleteProject, getAllProjects } from '../services/projectsService';
+import showError from '../utils/showError';
 
 const linkData = [
   {
@@ -40,7 +41,7 @@ const linkData = [
 
 function DashboardContent() {
   const [projects, setProjects] = useState([]);
-  const [isOpen, setIsOpen] = useState(false)
+  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
 
   const links = linkData.map((linkInfo, i) => {
     return (
@@ -54,35 +55,57 @@ function DashboardContent() {
     );
   });
 
-  useEffect(() => {
-    async function loadProjects() {
-      const data = await getAllProjects();
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        console.log(data)
-        setProjects(data.data);
-      }
-    }
-    loadProjects();
-  }, [setProjects]);
+  function loadProjects() {
+    getAllProjects()
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(data.error);
+        } else {
+          setProjects(data);
+        }
+      })
+      .catch((error) => {
+        showError(error.message);
+      });
+  }
 
-  const projectCardMenuActions = [
-    {
-      text: 'test',
-      onClick: () => console.log('clicked'),
-    },
-  ];
+  useEffect(() => {
+    loadProjects();
+  }, []);
+
+  // function buildProjectCardMenuActions(id) {
+  //   return [
+  //     {
+  //       text: 'Delete',
+  //       onClick: () => {
+  //         deleteProject(id)
+  //           .then((response) => {
+  //             const { data } = response;
+  //             if (data.error) {
+  //               showError(data.error);
+  //             } else {
+  //               loadProjects();
+  //             }
+  //           })
+  //           .catch((error) => {
+  //             showError(error.message);
+  //           });
+  //       },
+  //     },
+  //   ];
+  // }
 
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
-      <FormModal
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
+      <NewProjectModal
+        open={showNewProjectModal}
+        onClose={() => setShowNewProjectModal(false)}
+        onDone={() => setShowNewProjectModal(false)}
       >
         Modal
-      </FormModal>
+      </NewProjectModal>
       <Routes>
         <Route index element={<Frame title="My Tasks"></Frame>} />
         <Route path="/tasks" element={<Frame title="My Tasks"></Frame>} />
@@ -94,21 +117,23 @@ function DashboardContent() {
               actions={[
                 {
                   text: 'New',
-                  onClick: () => setIsOpen(true),
+                  onClick: () => setShowNewProjectModal(true),
                 },
               ]}
             >
               <CardList>
-                {projects.map((p, i) => {
-                  return (
-                    <Card
-                      key={i}
-                      title={p.name}
-                      content={<span>Test Content</span>}
-                      menuActions={projectCardMenuActions}
-                    />
-                  );
-                })}
+                {projects &&
+                  projects.map((p, i) => {
+                    return (
+                      <Card
+                        key={i}
+                        title={p.name}
+                        content={<span>Test Content</span>}
+                        // menuActions={buildProjectCardMenuActions(p._id)}
+                        viewHref={`/project/${p._id}`}
+                      />
+                    );
+                  })}
               </CardList>
             </Frame>
           }

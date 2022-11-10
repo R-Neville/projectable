@@ -29,13 +29,13 @@ function DotMenu({ actions }) {
   const onDotMenuButtonClick = (event) => {
     event.stopPropagation();
 
-    const container = event.target.closest('.user-menu');
+    const container = event.target.closest('.dot-menu');
 
     // This function is used to hide the
     // dropdown when the document is clicked
     // outside the bounds of the user menu:
     const onClickAway = (event) => {
-      if (event.target.closest('.user-menu') !== container) {
+      if (event.target.closest('.dot-menu') !== container) {
         setDropdownVisible(false);
       }
     };

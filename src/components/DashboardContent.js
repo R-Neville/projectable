@@ -60,7 +60,8 @@ function DashboardContent() {
       if (data.error) {
         console.log(data.error);
       } else {
-        setProjects(data);
+        console.log(data)
+        setProjects(data.data);
       }
     }
     loadProjects();

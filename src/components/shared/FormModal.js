@@ -35,7 +35,7 @@ export default function FormModal({ open, onClose }) {
         .then((project) => {
           // set state here, Context maybe?
           console.log(project)
-          navigate('/projects');
+          navigate('/dashboard/projects');
         })
         .catch((error) => {
           setFormError(error.message);

@@ -64,6 +64,7 @@ function ProjectContent() {
         lightSrc={linkInfo.lightSrc}
         darkSrc={linkInfo.darkSrc}
         testID={linkInfo.testID}
+        title={linkInfo.title}
       />
     );
   });

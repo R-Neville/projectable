@@ -32,7 +32,7 @@ const linkData = [
   },
   {
     to: '/dashboard/settings',
-    title: 'Projects',
+    title: 'Settings',
     lightSrc: SettingsIconDark,
     darkSrc: SettingsIconLight,
     testID: 'dashboard-settings-tab',

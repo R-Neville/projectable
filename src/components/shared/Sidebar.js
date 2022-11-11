@@ -9,7 +9,7 @@ function Sidebar({ links}) {
     <>
       <div
         className={`flex flex-col h-full ease-in-out duration-300 translate-x-0 ${
-          showSideBar ? 'w-60' : 'w-16'
+          showSideBar ? 'w-80' : 'w-16'
         }`}
         style={{ backgroundColor: theme.bgHighlight }}
         onMouseEnter={() => setShowSideBar(true)}

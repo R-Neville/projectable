@@ -12,12 +12,16 @@ import showError from '../utils/showError';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
 import QuestionModal from './modals/QuestionModal';
+import NewTaskModal from './modals/NewTaskModal';
+import { useThemeContext } from '../context-providers/ThemeProvider';
 
 function ProjectContent() {
+  const { theme } = useThemeContext();
   const { id } = useParams();
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showNewTaskModal, setShowNewTaskModal] = useState(false);
 
   const onDeleteModalConfirm = () => {
     setShowDeleteModal(false);
@@ -37,6 +41,10 @@ function ProjectContent() {
 
   const onDeleteModalCancel = () => {
     setShowDeleteModal(false);
+  };
+
+  const onNewTaskModalCancel = () => {
+    setShowNewTaskModal(false);
   };
 
   const linkData = [
@@ -79,36 +87,58 @@ function ProjectContent() {
     },
   ];
 
-  
-
   useEffect(() => {
     const loadProject = () => {
       getProject(id)
-      .then((response) => {
-        const { data } = response;
-        if (data.error) {
-          showError(new Error(data.error));
-        } else {
-          setProject(data);
-        }
-      })
-      .catch((error) => {
-        showError(error);
-      });
+        .then((response) => {
+          const { data } = response;
+          if (data.error) {
+            showError(new Error(data.error));
+          } else {
+            setProject(data);
+          }
+        })
+        .catch((error) => {
+          showError(error);
+        });
     };
 
     loadProject();
   }, [id]);
 
+  const unassignedFrame = (
+    <Frame
+      title="Unassigned Tasks"
+      actions={[{ text: 'New', onClick: () => setShowNewTaskModal(true) }]}
+    >
+      {project && project.tasks.length > 0 ? (
+        project.tasks.map((task, i) => {
+          return (
+            <Card
+              key={i}
+              title={task.brief}
+              content={<span>{task.description}</span>}
+            />
+          );
+        })
+      ) : (
+        <p
+          className="p-4 text-2xl text-center"
+          style={{ color: theme.fgPrimary }}
+        >
+          Nothing to show yet
+        </p>
+      )}
+    </Frame>
+  );
+
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
+      <NewTaskModal open={showNewTaskModal} onClose={onNewTaskModalCancel} />
       <Routes>
-        <Route index element={<Frame title="Unassigned Tasks"></Frame>} />
-        <Route
-          path="/unassigned"
-          element={<Frame title="Unassigned Tasks"></Frame>}
-        />
+        <Route index element={unassignedFrame} />
+        <Route path="/unassigned" element={unassignedFrame} />
         <Route
           path="/settings"
           element={

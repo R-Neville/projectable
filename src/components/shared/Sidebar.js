@@ -1,15 +1,23 @@
 import { useThemeContext } from '../../context-providers/ThemeProvider';
+import { useState} from 'react';
 
-function Sidebar({ links }) {
+function Sidebar({ links}) {
   const { theme } = useThemeContext();
+  const [showSideBar, setShowSideBar] = useState(false);
 
   return (
-    <div
-      className="flex flex-col w-16 h-full"
-      style={{ backgroundColor: theme.bgHighlight }}
-    >
-      {links}
-    </div>
+    <>
+      <div
+        className={`flex flex-col h-full ease-in-out duration-300 translate-x-0 ${
+          showSideBar ? 'w-80' : 'w-16'
+        }`}
+        style={{ backgroundColor: theme.bgHighlight }}
+        onMouseEnter={() => setShowSideBar(true)}
+        onMouseLeave={() => setShowSideBar(false)}
+      >
+        {links}
+      </div>
+    </>
   );
 }
 

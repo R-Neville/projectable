@@ -12,7 +12,7 @@ import ProjectsIconDark from '../assets/icons/projects-dark.svg';
 import ProjectsIconLight from '../assets/icons/projects-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
-import { deleteProject, getAllProjects } from '../services/projectsService';
+import { getAllProjects } from '../services/projectsService';
 import showError from '../utils/showError';
 
 const linkData = [
@@ -55,22 +55,22 @@ function DashboardContent() {
     );
   });
 
-  function loadProjects() {
-    getAllProjects()
-      .then((response) => {
-        const { data } = response;
-        if (data.error) {
-          showError(data.error);
-        } else {
-          setProjects(data);
-        }
-      })
-      .catch((error) => {
-        showError(error.message);
-      });
-  }
-
   useEffect(() => {
+    const loadProjects = () => {
+      getAllProjects()
+        .then((response) => {
+          const { data } = response;
+          if (data.error) {
+            showError(new Error(data.error));
+          } else {
+            setProjects(data);
+          }
+        })
+        .catch((error) => {
+          showError(error);
+        });
+    };
+    
     loadProjects();
   }, []);
 

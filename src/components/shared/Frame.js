@@ -20,9 +20,9 @@ function Frame({ title, actions, children }) {
   }
 
   return (
-    <div className="flex flex-col p-4 w-full h-full">
+    <div className="flex flex-col items-center p-4 w-full h-full">
       <div
-        className="flex py-3"
+        className="flex w-full max-w-3xl py-3"
         style={{ borderBottom: `2px solid ${theme.fgPrimary}` }}
       >
         <h2
@@ -35,7 +35,7 @@ function Frame({ title, actions, children }) {
         </h2>
         <div>{buttons}</div>
       </div>
-      {children}
+      <div className="flex flex-col w-full max-w-3xl ">{children}</div>
     </div>
   );
 }

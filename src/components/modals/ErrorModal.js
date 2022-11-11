@@ -5,12 +5,10 @@ import Section from '../shared/Section';
 function ErrorModal({ open, error }) {
   const { theme } = useThemeContext();
 
-  let message;
+  let message = "";
   if (error) {
-    message =
-      process.env.NODE_ENV === 'development'
-        ? JSON.stringify(error)
-        : error.message;
+    message = error.message;
+    process.env.NODE_ENV === 'development' && console.error(error);    
   }
 
   const onOKButtonClick = () => {

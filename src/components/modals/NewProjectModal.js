@@ -10,7 +10,7 @@ import Label from '../shared/Label';
 import Input from '../shared/Input';
 import TextArea from '../shared/TextArea';
 import FormError from '../shared/FormError';
-import showError from '../../utils/showError';
+import { showError } from '../../utils/helpers';
 
 export default function NewProjectModal({ open, onClose, onDone }) {
   const initialFormState = {

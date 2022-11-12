@@ -77,28 +77,6 @@ function DashboardContent() {
     loadProjects();
   }, []);
 
-  // function buildProjectCardMenuActions(id) {
-  //   return [
-  //     {
-  //       text: 'Delete',
-  //       onClick: () => {
-  //         deleteProject(id)
-  //           .then((response) => {
-  //             const { data } = response;
-  //             if (data.error) {
-  //               showError(data.error);
-  //             } else {
-  //               loadProjects();
-  //             }
-  //           })
-  //           .catch((error) => {
-  //             showError(error.message);
-  //           });
-  //       },
-  //     },
-  //   ];
-  // }
-
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>

@@ -14,6 +14,7 @@ import Card from './shared/Card';
 import QuestionModal from './modals/QuestionModal';
 import NewTaskModal from './modals/NewTaskModal';
 import { useThemeContext } from '../context-providers/ThemeProvider';
+import { deleteTask } from '../services/tasksService';
 
 function ProjectContent() {
   const { theme } = useThemeContext();
@@ -22,8 +23,10 @@ function ProjectContent() {
   const [project, setProject] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
+  const [showConfirmDeleteTask, setShowConfirmDeleteTask] = useState(false);
+  const [currentTask, setCurrentTask] = useState(null);
 
-  const onDeleteModalConfirm = () => {
+  const onDeleteProjectModalConfirm = () => {
     setShowDeleteModal(false);
     deleteProject(id)
       .then((response) => {
@@ -39,17 +42,28 @@ function ProjectContent() {
       });
   };
 
-  const onDeleteModalCancel = () => {
-    setShowDeleteModal(false);
-  };
-
   const onNewTaskModalDone = () => {
     loadProject();
     setShowNewTaskModal(false);
   };
 
-  const onNewTaskModalCancel = () => {
-    setShowNewTaskModal(false);
+  const onDeleteTaskModalConfirm = () => {
+    deleteTask(project._id, currentTask._id)
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(new Error(data.error));
+        } else {
+          setCurrentTask(null);
+          setShowConfirmDeleteTask(false);
+          loadProject();
+        }
+      })
+      .catch((error) => {
+        showError(error);
+        setCurrentTask(null);
+        setShowConfirmDeleteTask(false);
+      });
   };
 
   const linkData = [
@@ -111,6 +125,18 @@ function ProjectContent() {
     loadProject();
   }, [loadProject]);
 
+  function buildTaskCardMenuActions(task) {
+    return [
+      {
+        text: 'Delete',
+        onClick: () => {
+          setCurrentTask(task);
+          setShowConfirmDeleteTask(true);
+        },
+      },
+    ];
+  }
+
   const unassignedFrame = (
     <Frame
       title="Unassigned Tasks"
@@ -132,6 +158,7 @@ function ProjectContent() {
                   </span>
                 </div>
               }
+              menuActions={buildTaskCardMenuActions(task)}
             />
           );
         })
@@ -152,8 +179,17 @@ function ProjectContent() {
       <NewTaskModal
         open={showNewTaskModal}
         projectId={project && project._id}
-        onClose={onNewTaskModalCancel}
+        onClose={() => setShowNewTaskModal(false)}
         onDone={onNewTaskModalDone}
+      />
+      <QuestionModal
+        open={showConfirmDeleteTask}
+        message={`Delete task?`}
+        onCancel={() => {
+          setCurrentTask(null);
+          setShowConfirmDeleteTask(false);
+        }}
+        onConfirm={onDeleteTaskModalConfirm}
       />
       <Routes>
         <Route index element={unassignedFrame} />
@@ -180,9 +216,9 @@ function ProjectContent() {
       </Routes>
       <QuestionModal
         open={showDeleteModal}
-        message={`Delete '${project && project.name}' project???`}
-        onCancel={onDeleteModalCancel}
-        onConfirm={onDeleteModalConfirm}
+        message={`Delete '${project && project.name}' project?`}
+        onCancel={() => setShowDeleteModal(false)}
+        onConfirm={onDeleteProjectModalConfirm}
       />
     </div>
   );

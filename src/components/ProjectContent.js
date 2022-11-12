@@ -8,7 +8,7 @@ import TasksIconLight from '../assets/icons/tasks-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { deleteProject, getProject } from '../services/projectsService';
-import { showError } from '../utils/helpers';
+import { showError, dateFromTimestamp } from '../utils/helpers';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
 import QuestionModal from './modals/QuestionModal';
@@ -94,17 +94,17 @@ function ProjectContent() {
 
   const loadProject = useCallback(() => {
     getProject(id)
-    .then((response) => {
-      const { data } = response;
-      if (data.error) {
-        showError(new Error(data.error));
-      } else {
-        setProject(data);
-      }
-    })
-    .catch((error) => {
-      showError(error);
-    });
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(new Error(data.error));
+        } else {
+          setProject(data);
+        }
+      })
+      .catch((error) => {
+        showError(error);
+      });
   }, [id]);
 
   useEffect(() => {
@@ -122,7 +122,16 @@ function ProjectContent() {
             <Card
               key={i}
               title={task.brief}
-              content={<span>{`@${task.createdBy}`}</span>}
+              content={
+                <div className="flex justify-between">
+                  <span
+                    style={{ color: theme.fgPrimary }}
+                  >{`@${task.createdBy}`}</span>
+                  <span style={{ color: theme.fgPrimary }}>
+                    {dateFromTimestamp(task.createdAt)}
+                  </span>
+                </div>
+              }
             />
           );
         })

@@ -9,10 +9,11 @@ import Input from '../shared/Input';
 import TextArea from '../shared/TextArea';
 import FormError from '../shared/FormError';
 import showError from '../../utils/showError';
+import { createTask } from '../../services/tasksService';
 
-export default function NewTaskModal({ open, onClose }) {
+export default function NewTaskModal({ open, onClose, projectId, onDone }) {
   const initialFormState = {
-    name: '',
+    brief: '',
     description: '',
   };
 
@@ -25,8 +26,23 @@ export default function NewTaskModal({ open, onClose }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("New Task");
-    onClose();
+    if (formState.brief.length === 0 || formState.description.length === 0) {
+      setFormError('Required fields are empty');
+    } else {
+      createTask(projectId, formState)
+        .then((response) => {
+          const { data } = response;
+          if (data.error) {
+            showError(new Error(data.error));
+          } else {
+            onDone();
+          }
+        })
+        .catch((error) => {
+          showError(error);
+          onClose();
+        });
+    }
   };
 
   if (!open) return null;

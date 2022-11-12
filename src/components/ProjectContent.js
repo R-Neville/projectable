@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import Sidebar from './shared/Sidebar';
 import SidebarLink from './shared/SidebarLink';
@@ -41,6 +41,11 @@ function ProjectContent() {
 
   const onDeleteModalCancel = () => {
     setShowDeleteModal(false);
+  };
+
+  const onNewTaskModalDone = () => {
+    loadProject();
+    setShowNewTaskModal(false);
   };
 
   const onNewTaskModalCancel = () => {
@@ -87,24 +92,24 @@ function ProjectContent() {
     },
   ];
 
-  useEffect(() => {
-    const loadProject = () => {
-      getProject(id)
-        .then((response) => {
-          const { data } = response;
-          if (data.error) {
-            showError(new Error(data.error));
-          } else {
-            setProject(data);
-          }
-        })
-        .catch((error) => {
-          showError(error);
-        });
-    };
-
-    loadProject();
+  const loadProject = useCallback(() => {
+    getProject(id)
+    .then((response) => {
+      const { data } = response;
+      if (data.error) {
+        showError(new Error(data.error));
+      } else {
+        setProject(data);
+      }
+    })
+    .catch((error) => {
+      showError(error);
+    });
   }, [id]);
+
+  useEffect(() => {
+    loadProject();
+  }, [loadProject]);
 
   const unassignedFrame = (
     <Frame
@@ -117,7 +122,7 @@ function ProjectContent() {
             <Card
               key={i}
               title={task.brief}
-              content={<span>{task.description}</span>}
+              content={<span>{`@${task.createdBy}`}</span>}
             />
           );
         })
@@ -135,7 +140,12 @@ function ProjectContent() {
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
-      <NewTaskModal open={showNewTaskModal} onClose={onNewTaskModalCancel} />
+      <NewTaskModal
+        open={showNewTaskModal}
+        projectId={project && project._id}
+        onClose={onNewTaskModalCancel}
+        onDone={onNewTaskModalDone}
+      />
       <Routes>
         <Route index element={unassignedFrame} />
         <Route path="/unassigned" element={unassignedFrame} />

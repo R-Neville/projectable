@@ -50,57 +50,42 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
   return createPortal(
     <>
       <div
-        className="fixed inset-0 bg-opacity-75 transition-opacity"
+        className="fixed inset-0 bg-opacity-75 z-50 transition-opacity"
         style={{ backgroundColor: '#000A' }}
       >
-        <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full sm:items-center sm:p-0">
-            <Section
-              title="New Task"
-              content={
-                <form
-                  action=""
-                  className="register-form sm:my-8 sm:w-full sm:max-w-lg"
-                >
-                  {formError && (
-                    <FormError
-                      text={formError}
-                      onDismiss={() => setFormError('')}
-                    />
-                  )}
-                  <Fieldset
-                    content={
-                      <>
-                        <Label text="Task Brief" />
-                        <Input
-                          type="text"
-                          name="brief"
-                          onChange={onInputChange}
-                        />
-                      </>
-                    }
+            <Section title="New Task">
+              <form
+                action=""
+                className="register-form sm:my-8 sm:w-full sm:max-w-lg"
+              >
+                {formError && (
+                  <FormError
+                    text={formError}
+                    onDismiss={() => setFormError('')}
                   />
-                  <Fieldset
-                    content={
-                      <>
-                        <Label text="Task Description" />
-                        <TextArea
-                          type="text"
-                          name="description"
-                          onChange={onInputChange}
-                        />
-                      </>
-                    }
+                )}
+                <Fieldset>
+                  <Label text="Task Brief" />
+                  <Input type="text" name="brief" onChange={onInputChange} />
+                </Fieldset>
+                <Fieldset>
+                  <Label text="Task Description" />
+                  <TextArea
+                    type="text"
+                    name="description"
+                    onChange={onInputChange}
                   />
-                  <FormActions
-                    actions={[
-                      { text: 'Cancel', onClick: onClose, type: 'reset' },
-                      { text: 'Submit', onClick: handleSubmit, type: 'submit' },
-                    ]}
-                  />
-                </form>
-              }
-            />
+                </Fieldset>
+                <FormActions
+                  actions={[
+                    { text: 'Cancel', onClick: onClose, type: 'reset' },
+                    { text: 'Submit', onClick: handleSubmit, type: 'submit' },
+                  ]}
+                />
+              </form>
+            </Section>
           </div>
         </div>
       </div>

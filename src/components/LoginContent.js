@@ -53,50 +53,33 @@ function LoginContent() {
 
   return (
     <div className="flex flex-col p-4">
-      <Section
-        content={
-          <form className="login-form w-full" onSubmit={validateForm}>
-            {loginError && (
-              <FormError
-                text={loginError}
-                onDismiss={() => setLoginError('')}
-              />
-            )}
-            <Fieldset
-              content={
-                <>
-                  <Label text="Email" />
-                  <Input type="email" name="email" onChange={onInputChange} />
-                </>
-              }
-            />
-            <Fieldset
-              content={
-                <>
-                  <Label text="Password" />
-                  <Input
-                    type="password"
-                    name="password"
-                    onChange={onInputChange}
-                  />
-                </>
-              }
-            />
-            <FormActions
-              actions={[
-                { text: 'Clear', onClick: clearForm, type: 'reset' },
-                { text: 'Submit', onClick: validateForm, type: 'submit' },
-              ]}
-            />
-            <p style={{ color: theme.fgPrimary }}>
-              Don't have an account?{' '}
-              <Link to="/register" className="underline">
-                Register
-              </Link>
-            </p>
-          </form>
-        }
-      />
+      <Section>
+        <form className="login-form w-full" onSubmit={validateForm}>
+          {loginError && (
+            <FormError text={loginError} onDismiss={() => setLoginError('')} />
+          )}
+          <Fieldset>
+            <Label text="Email" />
+            <Input type="email" name="email" onChange={onInputChange} />
+          </Fieldset>
+          <Fieldset>
+            <Label text="Password" />
+            <Input type="password" name="password" onChange={onInputChange} />
+          </Fieldset>
+          <FormActions
+            actions={[
+              { text: 'Clear', onClick: clearForm, type: 'reset' },
+              { text: 'Submit', onClick: validateForm, type: 'submit' },
+            ]}
+          />
+          <p style={{ color: theme.fgPrimary }}>
+            Don't have an account?{' '}
+            <Link to="/register" className="underline">
+              Register
+            </Link>
+          </p>
+        </form>
+      </Section>
     </div>
   );
 }

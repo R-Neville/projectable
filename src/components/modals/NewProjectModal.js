@@ -58,52 +58,37 @@ export default function NewProjectModal({ open, onClose, onDone }) {
       >
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full sm:items-center sm:p-0">
-            <Section
-              title="New Project"
-              content={
-                <form
-                  action=""
-                  className="register-form  sm:my-8 sm:w-full sm:max-w-lg"
-                >
-                  {formError && (
-                    <FormError
-                      text={formError}
-                      onDismiss={() => setFormError('')}
-                    />
-                  )}
-                  <Fieldset
-                    content={
-                      <>
-                        <Label text=" Project Name" />
-                        <Input
-                          type="text"
-                          name="name"
-                          onChange={onInputChange}
-                        />
-                      </>
-                    }
+            <Section title="New Project">
+              <form
+                action=""
+                className="register-form  sm:my-8 sm:w-full sm:max-w-lg"
+              >
+                {formError && (
+                  <FormError
+                    text={formError}
+                    onDismiss={() => setFormError('')}
                   />
-                  <Fieldset
-                    content={
-                      <>
-                        <Label text="Project Description" />
-                        <TextArea
-                          type="text"
-                          name="description"
-                          onChange={onInputChange}
-                        />
-                      </>
-                    }
+                )}
+                <Fieldset>
+                  <Label text=" Project Name" />
+                  <Input type="text" name="name" onChange={onInputChange} />
+                </Fieldset>
+                <Fieldset>
+                  <Label text="Project Description" />
+                  <TextArea
+                    type="text"
+                    name="description"
+                    onChange={onInputChange}
                   />
-                  <FormActions
-                    actions={[
-                      { text: 'Cancel', onClick: onClose, type: 'reset' },
-                      { text: 'Submit', onClick: handleSubmit, type: 'submit' },
-                    ]}
-                  />
-                </form>
-              }
-            />
+                </Fieldset>
+                <FormActions
+                  actions={[
+                    { text: 'Cancel', onClick: onClose, type: 'reset' },
+                    { text: 'Submit', onClick: handleSubmit, type: 'submit' },
+                  ]}
+                />
+              </form>
+            </Section>
           </div>
         </div>
       </div>

@@ -17,6 +17,7 @@ import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
 import { deleteTask } from '../services/tasksService';
 import { apiErrors } from '../config/axiosConfig';
+import TaskModal from './modals/TaskModal';
 
 function ProjectContent() {
   const { theme } = useThemeContext();
@@ -28,6 +29,7 @@ function ProjectContent() {
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [showConfirmDeleteTask, setShowConfirmDeleteTask] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
+  const [showTaskModal, setShowTaskModal] = useState(false);
 
   const onDeleteProjectModalConfirm = () => {
     setShowDeleteModal(false);
@@ -140,6 +142,13 @@ function ProjectContent() {
   function buildTaskCardMenuActions(task) {
     return [
       {
+        text: 'Show Details',
+        onClick: () => {
+          setCurrentTask(task);
+          setShowTaskModal(true);
+        },
+      },
+      {
         text: 'Delete',
         onClick: () => {
           setCurrentTask(task);
@@ -202,6 +211,14 @@ function ProjectContent() {
           setShowConfirmDeleteTask(false);
         }}
         onConfirm={onDeleteTaskModalConfirm}
+      />
+      <TaskModal
+        open={showTaskModal}
+        onClose={() => {
+          setShowTaskModal(false);
+          setCurrentTask(null);
+        }}
+        task={currentTask}
       />
       <Routes>
         <Route index element={unassignedFrame} />

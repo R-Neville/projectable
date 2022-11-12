@@ -5,10 +5,10 @@ import Section from '../shared/Section';
 function ErrorModal({ open, error }) {
   const { theme } = useThemeContext();
 
-  let message = "";
+  let message = '';
   if (error) {
     message = error.message;
-    process.env.NODE_ENV === 'development' && console.error(error);    
+    process.env.NODE_ENV === 'development' && console.error(error);
   }
 
   const onOKButtonClick = () => {
@@ -23,34 +23,29 @@ function ErrorModal({ open, error }) {
   return createPortal(
     <>
       <div
-        className="fixed inset-0 bg-opacity-75 transition-opacity"
+        className="fixed inset-0 bg-opacity-75 z-50 transition-opacity"
         style={{ backgroundColor: '#000A' }}
       >
-        <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full sm:items-center sm:p-0">
-            <Section
-              title="Oops! An error occurred..."
-              content={
-                <>
-                  <p
-                    className="p-3 text-center"
-                    style={{ color: theme.fgHighlight }}
-                  >
-                    {message}
-                  </p>
-                  <button
-                    className="py-2 px-3 w-20 rounded"
-                    style={{
-                      backgroundColor: theme.fgHighlight,
-                      color: theme.bgHighlight,
-                    }}
-                    onClick={onOKButtonClick}
-                  >
-                    OK
-                  </button>
-                </>
-              }
-            />
+            <Section title="Oops! An error occurred...">
+              <p
+                className="p-3 text-center"
+                style={{ color: theme.fgHighlight }}
+              >
+                {message}
+              </p>
+              <button
+                className="py-2 px-3 w-20 rounded"
+                style={{
+                  backgroundColor: theme.fgHighlight,
+                  color: theme.bgHighlight,
+                }}
+                onClick={onOKButtonClick}
+              >
+                OK
+              </button>
+            </Section>
           </div>
         </div>
       </div>

@@ -66,70 +66,49 @@ function RegisterContent() {
 
   return (
     <div className="flex flex-col p-4">
-      <Section
-        content={
-          <form className="register-form w-full" onSubmit={validateForm}>
-            {registrationError && (
-              <FormError
-                text={registrationError}
-                onDismiss={() => setRegistrationError('')}
-              />
-            )}
-            <Fieldset
-              content={
-                <>
-                  <Label text="Username" />
-                  <Input type="text" name="username" onChange={onInputChange} />
-                </>
-              }
+      <Section>
+        <form className="register-form w-full" onSubmit={validateForm}>
+          {registrationError && (
+            <FormError
+              text={registrationError}
+              onDismiss={() => setRegistrationError('')}
             />
-            <Fieldset
-              content={
-                <>
-                  <Label text="Email" />
-                  <Input type="email" name="email" onChange={onInputChange} />
-                </>
-              }
+          )}
+          <Fieldset>
+            <Label text="Username" />
+            <Input type="text" name="username" onChange={onInputChange} />
+          </Fieldset>
+
+          <Fieldset>
+            <Label text="Email" />
+            <Input type="email" name="email" onChange={onInputChange} />
+          </Fieldset>
+          <Fieldset>
+            <Label text="Password" />
+            <Input type="password" name="password" onChange={onInputChange} />
+          </Fieldset>
+          <Fieldset>
+            <Label text="Confirm Password" />
+            <Input
+              type="password"
+              name="confirmPassword"
+              onChange={onInputChange}
             />
-            <Fieldset
-              content={
-                <>
-                  <Label text="Password" />
-                  <Input
-                    type="password"
-                    name="password"
-                    onChange={onInputChange}
-                  />
-                </>
-              }
-            />
-            <Fieldset
-              content={
-                <>
-                  <Label text="Confirm Password" />
-                  <Input
-                    type="password"
-                    name="confirmPassword"
-                    onChange={onInputChange}
-                  />
-                </>
-              }
-            />
-            <FormActions
-              actions={[
-                { text: 'Clear', onClick: clearForm, type: 'reset' },
-                { text: 'Submit', onClick: validateForm, type: 'submit' },
-              ]}
-            />
-            <p style={{ color: theme.fgPrimary }}>
-              Already have an account?{' '}
-              <Link to="/login" className="underline">
-                Login
-              </Link>
-            </p>
-          </form>
-        }
-      />
+          </Fieldset>
+          <FormActions
+            actions={[
+              { text: 'Clear', onClick: clearForm, type: 'reset' },
+              { text: 'Submit', onClick: validateForm, type: 'submit' },
+            ]}
+          />
+          <p style={{ color: theme.fgPrimary }}>
+            Already have an account?{' '}
+            <Link to="/login" className="underline">
+              Login
+            </Link>
+          </p>
+        </form>
+      </Section>
     </div>
   );
 }

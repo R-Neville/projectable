@@ -1,6 +1,6 @@
 import { useThemeContext } from '../../context-providers/ThemeProvider';
 
-function Section({ title, content }) {
+function Section({ title, children }) {
   const { theme } = useThemeContext();
   return (
     <section
@@ -15,7 +15,7 @@ function Section({ title, content }) {
           {title}
         </h2>
       ) : null}
-      {content}
+      {children}
     </section>
   );
 }

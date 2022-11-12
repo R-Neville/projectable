@@ -15,6 +15,8 @@ import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { getAllProjects } from '../services/projectsService';
 import { showError, dateFromTimestamp } from '../utils/helpers';
 import { useThemeContext } from '../context-providers/ThemeProvider';
+import { useAuthContext } from '../context-providers/AuthProvider';
+import { apiErrors } from '../config/axiosConfig';
 
 const linkData = [
   {
@@ -42,6 +44,7 @@ const linkData = [
 
 function DashboardContent() {
   const { theme } = useThemeContext();
+  const { logout } = useAuthContext();
   const [projects, setProjects] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
 
@@ -59,23 +62,22 @@ function DashboardContent() {
   });
 
   useEffect(() => {
-    const loadProjects = () => {
-      getAllProjects()
-        .then((response) => {
-          const { data } = response;
-          if (data.error) {
-            showError(new Error(data.error));
-          } else {
-            setProjects(data);
-          }
-        })
-        .catch((error) => {
-          showError(error);
-        });
-    };
-
-    loadProjects();
-  }, []);
+    getAllProjects()
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(new Error(data.error));
+        } else {
+          setProjects(data);
+        }
+      })
+      .catch((error) => {
+        if (error.code === apiErrors.BAD_REQUEST) {
+          logout();
+        }
+        showError(error);
+      });
+  }, [logout]);
 
   return (
     <div className="flex flex-row w-full h-full">

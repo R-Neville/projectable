@@ -14,10 +14,13 @@ import Card from './shared/Card';
 import QuestionModal from './modals/QuestionModal';
 import NewTaskModal from './modals/NewTaskModal';
 import { useThemeContext } from '../context-providers/ThemeProvider';
+import { useAuthContext } from '../context-providers/AuthProvider';
 import { deleteTask } from '../services/tasksService';
+import { apiErrors } from '../config/axiosConfig';
 
 function ProjectContent() {
   const { theme } = useThemeContext();
+  const { logout } = useAuthContext();
   const { id } = useParams();
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
@@ -38,6 +41,9 @@ function ProjectContent() {
         }
       })
       .catch((error) => {
+        if (error.code === apiErrors.BAD_REQUEST) {
+          logout();
+        }
         showError(error);
       });
   };
@@ -60,6 +66,9 @@ function ProjectContent() {
         }
       })
       .catch((error) => {
+        if (error.code === apiErrors.BAD_REQUEST) {
+          logout();
+        }
         showError(error);
         setCurrentTask(null);
         setShowConfirmDeleteTask(false);
@@ -117,9 +126,12 @@ function ProjectContent() {
         }
       })
       .catch((error) => {
+        if (error.code === apiErrors.BAD_REQUEST) {
+          logout();
+        }
         showError(error);
       });
-  }, [id]);
+  }, [id, logout]);
 
   useEffect(() => {
     loadProject();

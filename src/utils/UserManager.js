@@ -4,9 +4,7 @@ const TOKEN_KEY = 'TOKEN';
 export default class UserManager {
   constructor() {
     this._token = this._loadToken();
-    if (this._token) {
-      this._getUser();
-    } else {
+    if (!this._token) {
       this._user = null;
     }
   }
@@ -33,7 +31,7 @@ export default class UserManager {
       this._setToken(this._user.token);
       return null;
     } catch (error) {
-      console.log(error);
+      return error.message;
     }
   }
 
@@ -49,7 +47,7 @@ export default class UserManager {
       this._setToken(this._user.token);
       return null;
     } catch (error) {
-      console.log(error);
+      return error.message;
     }
   }
 
@@ -65,9 +63,5 @@ export default class UserManager {
   _setToken(token) {
     this._token = token;
     window.localStorage.setItem(TOKEN_KEY, token);
-  }
-
-  async _getUser() {
-    console.log('get user');
   }
 }

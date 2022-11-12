@@ -20,4 +20,8 @@ projectableAPI.interceptors.request.use((req) => {
   return req;
 });
 
+export const apiErrors = {
+  BAD_REQUEST: 'ERR_BAD_REQUEST',
+};
+
 export default projectableAPI;

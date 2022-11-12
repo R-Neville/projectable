@@ -7,14 +7,15 @@ export const useAuthContext = () => useContext(AuthContext);
 function AuthProvider({ children }) {
   const userManager = new UserManager();
   const tokenPresent = !!userManager.token;
-  const [loggedIn, setLoggedIn] = useState(tokenPresent); // TODO: Validate token first.
+  const [loggedIn, setLoggedIn] = useState(tokenPresent);
 
   const login = async (email, password) => {
     const error = await userManager.login(email, password);
     if (error) {
       return error;
     }
-    return setLoggedIn(true);
+    setLoggedIn(true);
+    return null;
   };
 
   const logout = () => {
@@ -23,7 +24,12 @@ function AuthProvider({ children }) {
   };
 
   const register = async (username, email, password, confirmPassword) => {
-    const error = await userManager.register(username, email, password, confirmPassword);
+    const error = await userManager.register(
+      username,
+      email,
+      password,
+      confirmPassword
+    );
     if (error) {
       return error;
     }
@@ -31,7 +37,9 @@ function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ userManager, loggedIn, login, logout, register }}>
+    <AuthContext.Provider
+      value={{ userManager, loggedIn, login, logout, register }}
+    >
       {children}
     </AuthContext.Provider>
   );

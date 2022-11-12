@@ -21,7 +21,7 @@ import TaskModal from './modals/TaskModal';
 
 function ProjectContent() {
   const { theme } = useThemeContext();
-  const { logout } = useAuthContext();
+  const { logout, userManager } = useAuthContext();
   const { id } = useParams();
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
@@ -85,14 +85,17 @@ function ProjectContent() {
       darkSrc: TasksIconLight,
       testID: 'project-unassigned-tab',
     },
-    {
+  ];
+
+  if (project && userManager.user === project.userId) {
+    linkData.push({
       to: `/project/${id}/settings`,
       title: 'Project Settings',
       lightSrc: SettingsIconDark,
       darkSrc: SettingsIconLight,
       testID: 'project-settings-tab',
-    },
-  ];
+    });
+  }
 
   const links = linkData.map((linkInfo, i) => {
     return (
@@ -140,7 +143,7 @@ function ProjectContent() {
   }, [loadProject]);
 
   function buildTaskCardMenuActions(task) {
-    return [
+    const actions = [
       {
         text: 'Show Details',
         onClick: () => {
@@ -148,14 +151,21 @@ function ProjectContent() {
           setShowTaskModal(true);
         },
       },
-      {
-        text: 'Delete',
-        onClick: () => {
-          setCurrentTask(task);
-          setShowConfirmDeleteTask(true);
-        },
-      },
     ];
+    if (userManager.user === task.userId) {
+      return [
+        ...actions,
+        {
+          text: 'Delete',
+          onClick: () => {
+            setCurrentTask(task);
+            setShowConfirmDeleteTask(true);
+          },
+        },
+      ];
+    }
+
+    return actions;
   }
 
   const unassignedFrame = (
@@ -223,25 +233,27 @@ function ProjectContent() {
       <Routes>
         <Route index element={unassignedFrame} />
         <Route path="/unassigned" element={unassignedFrame} />
-        <Route
-          path="/settings"
-          element={
-            <Frame title="Settings">
-              <CardList>
-                {settingsOptions.map((settingsOption, i) => {
-                  return (
-                    <Card
-                      key={i}
-                      title={settingsOption.title}
-                      danger={settingsOption.danger}
-                      onClick={settingsOption.onClick}
-                    />
-                  );
-                })}
-              </CardList>
-            </Frame>
-          }
-        ></Route>
+        {project && userManager.user === project.userId && (
+          <Route
+            path="/settings"
+            element={
+              <Frame title="Settings">
+                <CardList>
+                  {settingsOptions.map((settingsOption, i) => {
+                    return (
+                      <Card
+                        key={i}
+                        title={settingsOption.title}
+                        danger={settingsOption.danger}
+                        onClick={settingsOption.onClick}
+                      />
+                    );
+                  })}
+                </CardList>
+              </Frame>
+            }
+          ></Route>
+        )}
       </Routes>
       <QuestionModal
         open={showDeleteModal}

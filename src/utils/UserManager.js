@@ -1,67 +1,30 @@
-import projectableAPI from '../config/axiosConfig';
 const TOKEN_KEY = 'TOKEN';
+const USER_KEY = 'USER';
 
 export default class UserManager {
   constructor() {
-    this._token = this._loadToken();
-    if (!this._token) {
-      this._user = null;
-    }
+    if (!this.token) this.user = '';
+    if (!this.user) this.token = '';
   }
 
   get user() {
-    return this._user;
+    return window.localStorage.getItem(USER_KEY);
+  }
+
+  set user(userId) {
+    window.localStorage.setItem(USER_KEY, userId);
   }
 
   get token() {
-    return this._token;
-  }
-
-  async register(username, email, password, confirmPassword) {
-    try {
-      const response = await projectableAPI.post('/users/register', {
-        username,
-        email,
-        password,
-        confirmPassword,
-      });
-      const { error } = response.data;
-      if (error) return error;
-      this._user = response.data;
-      this._setToken(this._user.token);
-      return null;
-    } catch (error) {
-      return error.message;
-    }
-  }
-
-  async login(email, password) {
-    try {
-      const response = await projectableAPI.post('/users/login', {
-        email,
-        password,
-      });
-      const { error } = response.data;
-      if (error) return error;
-      this._user = response.data;
-      this._setToken(this._user.token);
-      return null;
-    } catch (error) {
-      return error.message;
-    }
-  }
-
-  async logout() {
-    this._user = null;
-    this._setToken('');
-  }
-
-  _loadToken() {
     return window.localStorage.getItem(TOKEN_KEY);
   }
 
-  _setToken(token) {
-    this._token = token;
+  set token(token) {
     window.localStorage.setItem(TOKEN_KEY, token);
+  }
+
+  reset() {
+    this.user = '';
+    this.token = '';
   }
 }

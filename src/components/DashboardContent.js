@@ -113,12 +113,22 @@ function DashboardContent() {
                         title={p.name}
                         content={
                           <>
-                            <span style={{ color: theme.fgPrimary }}>
-                              {dateFromTimestamp(p.createdAt)}
-                            </span>
+                            <p
+                              className="p-3 pt-0"
+                              style={{ color: theme.fgPrimary }}
+                            >
+                              {p.description}
+                            </p>
+                            <div className="flex justify-between">
+                              <h3 style={{ color: theme.fgPrimary }}>
+                                {`@${p.createdBy}`}
+                              </h3>
+                              <span style={{ color: theme.fgPrimary }}>
+                                {dateFromTimestamp(p.createdAt)}
+                              </span>
+                            </div>
                           </>
                         }
-                        // menuActions={buildProjectCardMenuActions(p._id)}
                         viewHref={`/project/${p._id}`}
                       />
                     );

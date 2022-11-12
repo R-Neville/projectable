@@ -21,7 +21,7 @@ import { apiErrors } from '../../config/axiosConfig';
 
 function TaskModal({ open, task, onClose }) {
   const { theme } = useThemeContext();
-  const { logout } = useAuthContext();
+  const { logout, userManager } = useAuthContext();
   const [comments, setComments] = useState([]);
   const [commentContent, setCommentContent] = useState('');
   const [formError, setFormError] = useState('');
@@ -54,28 +54,35 @@ function TaskModal({ open, task, onClose }) {
   if (!open) return null;
 
   const buildCommentMenuActions = (comment) => {
-    return [
-      {
-        text: 'Delete',
-        onClick: () => {
-          deleteTaskComment(comment._id)
-            .then((response) => {
-              const { data } = response;
-              if (data.error) {
-                showError(new Error(data.error));
-              } else {
-                loadComments();
-              }
-            })
-            .catch((error) => {
-              if (error.code === apiErrors.BAD_REQUEST) {
-                logout();
-              }
-              showError(error);
-            });
+    const actions = [];
+
+    if (userManager.user === comment.userId) {
+      return [
+        ...actions,
+        {
+          text: 'Delete',
+          onClick: () => {
+            deleteTaskComment(comment._id)
+              .then((response) => {
+                const { data } = response;
+                if (data.error) {
+                  showError(new Error(data.error));
+                } else {
+                  loadComments();
+                }
+              })
+              .catch((error) => {
+                if (error.code === apiErrors.BAD_REQUEST) {
+                  logout();
+                }
+                showError(error);
+              });
+          },
         },
-      },
-    ];
+      ]
+    }
+
+    return actions;
   };
 
   return createPortal(

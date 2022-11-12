@@ -13,7 +13,8 @@ import ProjectsIconLight from '../assets/icons/projects-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { getAllProjects } from '../services/projectsService';
-import showError from '../utils/showError';
+import { showError, dateFromTimestamp } from '../utils/helpers';
+import { useThemeContext } from '../context-providers/ThemeProvider';
 
 const linkData = [
   {
@@ -40,6 +41,7 @@ const linkData = [
 ];
 
 function DashboardContent() {
+  const { theme } = useThemeContext();
   const [projects, setProjects] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
 
@@ -71,7 +73,7 @@ function DashboardContent() {
           showError(error);
         });
     };
-    
+
     loadProjects();
   }, []);
 
@@ -129,7 +131,13 @@ function DashboardContent() {
                       <Card
                         key={i}
                         title={p.name}
-                        content={<span>Test Content</span>}
+                        content={
+                          <>
+                            <span style={{ color: theme.fgPrimary }}>
+                              {dateFromTimestamp(p.createdAt)}
+                            </span>
+                          </>
+                        }
                         // menuActions={buildProjectCardMenuActions(p._id)}
                         viewHref={`/project/${p._id}`}
                       />

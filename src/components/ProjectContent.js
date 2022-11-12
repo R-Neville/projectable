@@ -8,7 +8,7 @@ import TasksIconLight from '../assets/icons/tasks-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { deleteProject, getProject } from '../services/projectsService';
-import showError from '../utils/showError';
+import { showError } from '../utils/helpers';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
 import QuestionModal from './modals/QuestionModal';

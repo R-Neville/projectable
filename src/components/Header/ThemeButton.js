@@ -17,7 +17,7 @@ function ThemeButton() {
     >
       <img
         alt={isDarkMode ? 'Moon Icon' : 'Sun Icon'}
-        src={isDarkMode ? NightIcon : DayIcon}
+        src={isDarkMode ? DayIcon : NightIcon}
         className="w-full h-full"
       />
     </button>

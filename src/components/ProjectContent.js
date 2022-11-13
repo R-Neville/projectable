@@ -118,6 +118,9 @@ function ProjectContent() {
         setShowDeleteModal(true);
       },
     },
+    {
+      title: 'Add members',
+    }
   ];
 
   const loadProject = useCallback(() => {

@@ -35,7 +35,7 @@ function Frame({ title, actions, children }) {
         </h2>
         <div>{buttons}</div>
       </div>
-      <div className="flex flex-col w-full max-w-3xl ">{children}</div>
+      <div className="flex flex-col w-full max-w-3xl">{children}</div>
     </div>
   );
 }

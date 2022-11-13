@@ -1,13 +1,13 @@
 import projectableAPI from '../config/axiosConfig';
 
-export const getTaskComments = (taskId) => {
-  return projectableAPI.get('/api/comments', { params: { taskId } });
+export const getTaskComments = (projectId, taskId) => {
+  return projectableAPI.get(`/api/projects/${projectId}/tasks/${taskId}/comments`);
 };
 
-export const deleteTaskComment = (commentId) => {
-  return projectableAPI.delete(`/api/comments/${commentId}`);
+export const deleteTaskComment = (projectId, taskId, commentId) => {
+  return projectableAPI.delete(`/api/projects/${projectId}/tasks/${taskId}/comments/${commentId}`);
 };
 
-export const createTaskComment = (taskId, content) => {
-  return projectableAPI.post('/api/comments', { taskId, content });
+export const createTaskComment = (projectId, taskId, content) => {
+  return projectableAPI.post(`/api/projects/${projectId}/tasks/${taskId}/comments`, { content });
 };

@@ -223,12 +223,13 @@ function ProjectContent() {
         onConfirm={onDeleteTaskModalConfirm}
       />
       <TaskModal
-        open={showTaskModal}
+        open={currentTask && showTaskModal}
         onClose={() => {
           setShowTaskModal(false);
           setCurrentTask(null);
         }}
-        task={currentTask}
+        taskId={currentTask && currentTask._id}
+        projectId={project && project._id}
       />
       <Routes>
         <Route index element={unassignedFrame} />

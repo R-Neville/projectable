@@ -10,7 +10,6 @@ import TextArea from '../shared/TextArea';
 import { useCallback, useEffect, useState } from 'react';
 import {
   deleteTaskComment,
-  getTaskComments,
   createTaskComment,
 } from '../../services/commentsService';
 import { dateFromTimestamp, showError } from '../../utils/helpers';
@@ -18,40 +17,75 @@ import DotMenu from '../shared/DotMenu';
 import FormActions from '../shared/FormActions';
 import FormError from '../shared/FormError';
 import { apiErrors } from '../../config/axiosConfig';
+import { getTask } from '../../services/tasksService';
 
-function TaskModal({ open, task, onClose }) {
+function TaskModal({ open, taskId, projectId, onClose }) {
   const { theme } = useThemeContext();
   const { logout, userManager } = useAuthContext();
-  const [comments, setComments] = useState([]);
   const [commentContent, setCommentContent] = useState('');
   const [formError, setFormError] = useState('');
+  const [taskState, setTaskState] = useState(null);
 
-  const loadComments = useCallback(() => {
-    if (task) {
-      getTaskComments(task._id)
-        .then((response) => {
-          const { data } = response;
-          console.log(data);
-          if (data.error) {
-            showError(new Error(data.error));
-          } else {
-            setComments(data);
-          }
-        })
-        .catch((error) => {
-          if (error.code === apiErrors.BAD_REQUEST) {
-            logout();
-          }
-          showError(error);
-        });
+  const loadTask = useCallback(() => {
+    if (taskId && projectId) {
+      getTask(projectId, taskId)
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(new Error(data.error));
+        } else {
+          setTaskState(data);
+        }
+      })
+      .catch((error) => {
+        if (error.code === apiErrors.BAD_REQUEST) {
+          logout();
+        }
+        showError(error);
+      });
     }
-  }, [task, logout]);
+  }, [taskId, projectId, logout]);
 
   useEffect(() => {
-    loadComments();
-  }, [loadComments]);
+    loadTask();
+  }, [loadTask])
 
-  if (!open) return null;
+  if (!open ) return null;
+
+  const commentFormActions = [
+    {
+      text: 'Clear',
+      type: 'reset',
+    },
+    {
+      text: 'Submit',
+      type: 'submit',
+      onClick: (event) => {
+        event.preventDefault();
+        if (commentContent.length === 0) {
+          setFormError('Comment is empty');
+        } else {
+          createTaskComment(taskState.projectId, taskState._id, commentContent)
+            .then((response) => {
+              const { data } = response;
+              if (data.error) {
+                showError(new Error(data.error));
+              } else {
+                setCommentContent('');
+                event.target.closest('form').reset();
+                loadTask();
+              }
+            })
+            .catch((error) => {
+              if (error.code === apiErrors.BAD_REQUEST) {
+                logout();
+              }
+              showError(error);
+            });
+        }
+      },
+    },
+  ]
 
   const buildCommentMenuActions = (comment) => {
     const actions = [];
@@ -62,13 +96,13 @@ function TaskModal({ open, task, onClose }) {
         {
           text: 'Delete',
           onClick: () => {
-            deleteTaskComment(comment._id)
+            deleteTaskComment(taskState.projectId, taskState._id, comment._id)
               .then((response) => {
                 const { data } = response;
                 if (data.error) {
                   showError(new Error(data.error));
                 } else {
-                  loadComments();
+                  loadTask();
                 }
               })
               .catch((error) => {
@@ -79,7 +113,7 @@ function TaskModal({ open, task, onClose }) {
               });
           },
         },
-      ]
+      ];
     }
 
     return actions;
@@ -93,8 +127,8 @@ function TaskModal({ open, task, onClose }) {
       >
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex flex-col min-h-full sm:items-center sm:p-0">
-            <Section title={task.brief}>
-              <SectionP text={task.description} />
+            <Section title={taskState && taskState.brief}>
+              <SectionP text={taskState && taskState.description} />
               <div className="flex justify-end items-center w-full">
                 <Link
                   className="p-3 w-28 rounded m-3"
@@ -102,7 +136,7 @@ function TaskModal({ open, task, onClose }) {
                     backgroundColor: theme.bgHighlight,
                     color: theme.fgHighlight,
                   }}
-                  to={`/project/${task.projectId}`}
+                  to={`/project/${taskState && taskState.projectId}`}
                   onClick={onClose}
                 >
                   View Project
@@ -119,8 +153,8 @@ function TaskModal({ open, task, onClose }) {
                 </button>
               </div>
             </Section>
-            {comments.length > 0 ? (
-              comments.map((comment, i) => {
+            {taskState && taskState.comments.length > 0 ? (
+              taskState.comments.map((comment, i) => {
                 return (
                   <div
                     key={i}
@@ -136,7 +170,10 @@ function TaskModal({ open, task, onClose }) {
                     <p style={{ color: theme.fgHighlight }}>
                       {comment.content}
                     </p>
-                    <span className="ml-auto" style={{ color: theme.fgHighlight }}>
+                    <span
+                      className="ml-auto"
+                      style={{ color: theme.fgHighlight }}
+                    >
                       {dateFromTimestamp(comment.createdAt)}
                     </span>
                   </div>
@@ -163,39 +200,7 @@ function TaskModal({ open, task, onClose }) {
                   />
                 </Fieldset>
                 <FormActions
-                  actions={[
-                    {
-                      text: 'Clear',
-                      type: 'reset',
-                    },
-                    {
-                      text: 'Submit',
-                      type: 'submit',
-                      onClick: (event) => {
-                        event.preventDefault();
-                        if (commentContent.length === 0) {
-                          setFormError('Comment is empty');
-                        } else {
-                          createTaskComment(task._id, commentContent)
-                            .then((response) => {
-                              const { data } = response;
-                              if (data.error) {
-                                showError(new Error(data.error));
-                              } else {
-                                event.target.closest('form').reset();
-                                loadComments();
-                              }
-                            })
-                            .catch((error) => {
-                              if (error.code === apiErrors.BAD_REQUEST) {
-                                logout();
-                              }
-                              showError(error);
-                            });
-                        }
-                      },
-                    },
-                  ]}
+                  actions={commentFormActions}
                 />
               </form>
             </Section>

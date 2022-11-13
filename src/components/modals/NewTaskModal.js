@@ -1,8 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { createProject } from '../../services/projectsService';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
 import Section from '../shared/Section';
 import Fieldset from '../shared/Fieldset';
 import FormActions from '../shared/FormActions';
@@ -11,14 +9,13 @@ import Input from '../shared/Input';
 import TextArea from '../shared/TextArea';
 import FormError from '../shared/FormError';
 import { showError } from '../../utils/helpers';
+import { createTask } from '../../services/tasksService';
 
-export default function NewProjectModal({ open, onClose, onDone }) {
+export default function NewTaskModal({ open, onClose, projectId, onDone }) {
   const initialFormState = {
-    name: '',
+    brief: '',
     description: '',
   };
-
-  const navigate = useNavigate();
 
   const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState('');
@@ -29,22 +26,22 @@ export default function NewProjectModal({ open, onClose, onDone }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (formState.name.length === 0 || formState.description.length === 0) {
+    if (formState.brief.length === 0 || formState.description.length === 0) {
       setFormError('Required fields are empty');
     } else {
-      createProject(formState)
+      createTask(projectId, formState)
         .then((response) => {
           const { data } = response;
           if (data.error) {
             showError(new Error(data.error));
           } else {
-            navigate(`/project/${data._id}`);
+            onDone();
           }
         })
         .catch((error) => {
           showError(error);
+          onClose();
         });
-      onDone();
     }
   };
 
@@ -53,15 +50,15 @@ export default function NewProjectModal({ open, onClose, onDone }) {
   return createPortal(
     <>
       <div
-        className="fixed inset-0 bg-opacity-75 transition-opacity"
+        className="fixed inset-0 bg-opacity-75 z-50 transition-opacity"
         style={{ backgroundColor: '#000A' }}
       >
-        <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full sm:items-center sm:p-0">
-            <Section title="New Project">
+            <Section title="New Task">
               <form
                 action=""
-                className="register-form  sm:my-8 sm:w-full sm:max-w-lg"
+                className="register-form sm:my-8 sm:w-full sm:max-w-lg"
               >
                 {formError && (
                   <FormError
@@ -70,11 +67,11 @@ export default function NewProjectModal({ open, onClose, onDone }) {
                   />
                 )}
                 <Fieldset>
-                  <Label text=" Project Name" />
-                  <Input type="text" name="name" onChange={onInputChange} />
+                  <Label text="Task Brief" />
+                  <Input type="text" name="brief" onChange={onInputChange} />
                 </Fieldset>
                 <Fieldset>
-                  <Label text="Project Description" />
+                  <Label text="Task Description" />
                   <TextArea
                     type="text"
                     name="description"

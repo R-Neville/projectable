@@ -7,6 +7,7 @@ import LoginContent from './LoginContent';
 import RegisterContent from './RegisterContent';
 import DashboardContent from './DashboardContent';
 import ProjectContent from './ProjectContent';
+import NoMatch from './NoMatch';
 
 function Main() {
   const { loggedIn } = useAuthContext();
@@ -41,6 +42,7 @@ function Main() {
           </ProtectedRoute>
         }
       />
+      <Route path="*" element={<Page title="404 Not Found" content={<NoMatch/>} />}/>
     </Routes>
   );
 }

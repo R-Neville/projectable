@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   deleteTaskComment,
   createTaskComment,
+  updateTaskComment,
 } from '../../services/commentsService';
 import { dateFromTimestamp, showError } from '../../utils/helpers';
 import DotMenu from '../shared/DotMenu';
@@ -23,34 +24,37 @@ function TaskModal({ open, taskId, projectId, onClose }) {
   const { theme } = useThemeContext();
   const { logout, userManager } = useAuthContext();
   const [commentContent, setCommentContent] = useState('');
+  const [editedContent, setEditedContent] = useState('');
   const [formError, setFormError] = useState('');
+  const [editFormError, setEditFormError] = useState('');
   const [taskState, setTaskState] = useState(null);
+  const [commentId, setCommentId] = useState(null);
 
   const loadTask = useCallback(() => {
     if (taskId && projectId) {
       getTask(projectId, taskId)
-      .then((response) => {
-        const { data } = response;
-        if (data.error) {
-          showError(new Error(data.error));
-        } else {
-          setTaskState(data);
-        }
-      })
-      .catch((error) => {
-        if (error.code === apiErrors.BAD_REQUEST) {
-          logout();
-        }
-        showError(error);
-      });
+        .then((response) => {
+          const { data } = response;
+          if (data.error) {
+            showError(new Error(data.error));
+          } else {
+            setTaskState(data);
+          }
+        })
+        .catch((error) => {
+          if (error.code === apiErrors.BAD_REQUEST) {
+            logout();
+          }
+          showError(error);
+        });
     }
   }, [taskId, projectId, logout]);
 
   useEffect(() => {
     loadTask();
-  }, [loadTask])
+  }, [loadTask]);
 
-  if (!open ) return null;
+  if (!open) return null;
 
   const commentFormActions = [
     {
@@ -85,7 +89,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
         }
       },
     },
-  ]
+  ];
 
   const buildCommentMenuActions = (comment) => {
     const actions = [];
@@ -93,6 +97,13 @@ function TaskModal({ open, taskId, projectId, onClose }) {
     if (userManager.user === comment.userId) {
       return [
         ...actions,
+        {
+          text: 'Edit',
+          onClick: () => {
+            setCommentId(comment._id);
+            setEditedContent(comment.content);
+          },
+        },
         {
           text: 'Delete',
           onClick: () => {
@@ -155,7 +166,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
             </Section>
             {taskState && taskState.comments.length > 0 ? (
               taskState.comments.map((comment, i) => {
-                return (
+                return commentId !== comment._id ? (
                   <div
                     key={i}
                     className="flex flex-col p-3 w-full max-w-2xl rounded my-3"
@@ -177,6 +188,69 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                       {dateFromTimestamp(comment.createdAt)}
                     </span>
                   </div>
+                ) : (
+                  <Section key={i}>
+                    <form className="flex flex-col w-full">
+                      {editFormError && (
+                        <FormError
+                          text={editFormError}
+                          onDismiss={() => setEditFormError('')}
+                        />
+                      )}
+                      <Fieldset>
+                        <TextArea
+                          value={editedContent}
+                          onChange={(event) => {
+                            setEditedContent(event.target.value);
+                          }}
+                        />
+                      </Fieldset>
+                      <FormActions
+                        actions={[
+                          {
+                            text: 'Cancel',
+                            type: 'reset',
+                            onClick: () => {
+                              setEditFormError('');
+                              setCommentId(null);
+                            },
+                          },
+                          {
+                            text: 'Save',
+                            type: 'submit',
+                            onClick: (event) => {
+                              event.preventDefault();
+                              if (editedContent.length === 0) {
+                                setEditFormError('Comment empty');
+                              } else {
+                                updateTaskComment(
+                                  projectId,
+                                  taskId,
+                                  comment._id,
+                                  editedContent
+                                ).then((response) => {
+                                  const { data } = response;
+                                  if (data.error) {
+                                    showError(new Error(data.error));
+                                  } else {
+                                    loadTask();
+                                    setEditFormError('');
+                                    setEditedContent('');
+                                    setCommentId(null);
+                                  }
+                                }).catch((error) => {
+                                  if (error.code === apiErrors.BAD_REQUEST) {
+                                    logout();
+                                  }
+                                  showError(error);
+                                });
+                              }
+                            },
+                          },
+                        ]}
+                      />
+                    </form>
+                  </Section>
                 );
               })
             ) : (
@@ -199,9 +273,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                     onChange={(event) => setCommentContent(event.target.value)}
                   />
                 </Fieldset>
-                <FormActions
-                  actions={commentFormActions}
-                />
+                <FormActions actions={commentFormActions} />
               </form>
             </Section>
           </div>

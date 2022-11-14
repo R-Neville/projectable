@@ -13,6 +13,7 @@ import ProjectsIconLight from '../assets/icons/projects-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { getAllProjects } from '../services/projectsService';
+import { getAllAssignedTasks } from '../services/tasksService';
 import { showError, dateFromTimestamp } from '../utils/helpers';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
@@ -46,6 +47,7 @@ function DashboardContent() {
   const { theme } = useThemeContext();
   const { logout } = useAuthContext();
   const [projects, setProjects] = useState([]);
+  const [assignedTasks, setAssignedTasks] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const navigate = useNavigate();
 
@@ -80,6 +82,24 @@ function DashboardContent() {
       });
   }, [logout]);
 
+  useEffect(() => {
+    getAllAssignedTasks()
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(new Error(data.error));
+        } else {
+          setAssignedTasks(data);
+        }
+      })
+      .catch((error) => {
+        if (error.code === apiErrors.BAD_REQUEST) {
+          logout();
+        }
+        showError(error);
+      });
+  }, [logout]);
+
   const buildProjectCardMenuActions = (project) => {
     return [
       {
@@ -103,7 +123,43 @@ function DashboardContent() {
       </NewProjectModal>
       <Routes>
         <Route index element={<Frame title="My Tasks"></Frame>} />
-        <Route path="/tasks" element={<Frame title="My Tasks"></Frame>} />
+        <Route
+          path="/tasks"
+          element={
+            <Frame title="My Tasks">
+              <CardList>
+                {assignedTasks.length > 0 ? (
+                  assignedTasks.map((task, i) =>{
+                    return (
+                      <Card
+                      key={i}
+                        title={task.brief}
+                        content={
+                          <div className="flex justify-between">
+                            <span
+                              style={{ color: theme.fgPrimary }}
+                            >{`@${task.createdBy}`}</span>
+                            <span style={{ color: theme.fgPrimary }}>
+                              {dateFromTimestamp(task.createdAt)}
+                            </span>
+                          </div>
+                        }
+                      />
+                    );
+                  })
+                ) 
+                : (
+                  <p
+                    className="p-4 text-2xl text-center"
+                    style={{ color: theme.fgPrimary }}
+                  >
+                    You don't have any assigned tasks
+                  </p>
+                )}
+              </CardList>
+            </Frame>
+          }
+        />
         <Route
           path="/projects"
           element={

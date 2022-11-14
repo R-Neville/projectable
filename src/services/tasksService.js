@@ -4,6 +4,10 @@ export const getAllTasks = (projectId) => {
   return projectableAPI.get(`api/projects/${projectId}/tasks`);
 };
 
+export const getAllAssignedTasks = ()=>{
+  return projectableAPI.get('/api/tasks')
+}
+
 export const getTask = (projectId, taskId) => {
   return projectableAPI.get(`api/projects/${projectId}/tasks/${taskId}`);
 };

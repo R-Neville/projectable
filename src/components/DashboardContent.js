@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from './shared/Sidebar';
 import SidebarLink from './shared/SidebarLink';
 import Frame from './shared/Frame';
@@ -47,6 +47,7 @@ function DashboardContent() {
   const { logout } = useAuthContext();
   const [projects, setProjects] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+  const navigate = useNavigate();
 
   const links = linkData.map((linkInfo, i) => {
     return (
@@ -79,6 +80,17 @@ function DashboardContent() {
       });
   }, [logout]);
 
+  const buildProjectCardMenuActions = (project) => {
+    return [
+      {
+        text: 'View Project',
+        onClick: () => {
+          navigate(`/project/${project._id}`);
+        },
+      },
+    ];
+  };
+
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
@@ -105,12 +117,13 @@ function DashboardContent() {
               ]}
             >
               <CardList>
-                {projects &&
+                {projects.length > 0 ? (
                   projects.map((p, i) => {
                     return (
                       <Card
                         key={i}
                         title={p.name}
+                        menuActions={buildProjectCardMenuActions(p)}
                         content={
                           <>
                             <p
@@ -129,10 +142,17 @@ function DashboardContent() {
                             </div>
                           </>
                         }
-                        viewHref={`/project/${p._id}`}
                       />
                     );
-                  })}
+                  })
+                ) : (
+                  <p
+                    className="p-4 text-2xl text-center"
+                    style={{ color: theme.fgPrimary }}
+                  >
+                    You don't have any projects yet
+                  </p>
+                )}
               </CardList>
             </Frame>
           }

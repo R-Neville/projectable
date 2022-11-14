@@ -19,6 +19,7 @@ import { useAuthContext } from '../context-providers/AuthProvider';
 import { deleteTask } from '../services/tasksService';
 import { apiErrors } from '../config/axiosConfig';
 import TaskModal from './modals/TaskModal';
+import EditTaskModal from './modals/EditTaskModal';
 
 function ProjectContent() {
   const { theme } = useThemeContext();
@@ -32,6 +33,7 @@ function ProjectContent() {
   const [currentTask, setCurrentTask] = useState(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showMemberModal, setShowMemberModal] = useState(false)
+  const [showEditTaskModal, setShowEditTaskModal] = useState(false);
 
   const onDeleteProjectModalConfirm = () => {
     setShowDeleteModal(false);
@@ -164,6 +166,13 @@ function ProjectContent() {
       return [
         ...actions,
         {
+          text: 'Edit',
+          onClick: () => {
+            setCurrentTask(task);
+            setShowEditTaskModal(true);
+          },
+        },
+        {
           text: 'Delete',
           onClick: () => {
             setCurrentTask(task);
@@ -238,6 +247,15 @@ function ProjectContent() {
         }}
         taskId={currentTask && currentTask._id}
         projectId={project && project._id}
+      />
+      <EditTaskModal
+        open={currentTask && showEditTaskModal}
+        onClose={() => {
+          setShowEditTaskModal(false);
+          setCurrentTask(null);
+        }}
+        onDone={() => loadProject()}
+        task={currentTask}
       />
       <Routes>
         <Route index element={unassignedFrame} />

@@ -61,7 +61,7 @@ export default function NewProjectModal({ open, onClose, onDone }) {
             <Section title="New Project">
               <form
                 action=""
-                className="register-form  sm:my-8 sm:w-full sm:max-w-lg"
+                className="register-form sm:my-8 sm:w-full sm:max-w-lg"
               >
                 {formError && (
                   <FormError

@@ -2,7 +2,7 @@ import React from 'react'
 import { useThemeContext } from '../../context-providers/ThemeProvider';
 
 
-export default function TextArea({type, name, onChange}) {
+export default function TextArea({type, name, value, onChange}) {
     const { theme } = useThemeContext();
 
   return (
@@ -13,6 +13,7 @@ export default function TextArea({type, name, onChange}) {
       onInput={onChange}
       name={name}
       type={type}
+      value={value}
     />
   );
 }

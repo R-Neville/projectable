@@ -13,6 +13,7 @@ import CardList from './shared/CardList';
 import Card from './shared/Card';
 import QuestionModal from './modals/QuestionModal';
 import NewTaskModal from './modals/NewTaskModal';
+import MemberModal from './modals/MemberModal';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
 import { deleteTask } from '../services/tasksService';
@@ -30,6 +31,7 @@ function ProjectContent() {
   const [showConfirmDeleteTask, setShowConfirmDeleteTask] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showMemberModal, setShowMemberModal] = useState(false)
 
   const onDeleteProjectModalConfirm = () => {
     setShowDeleteModal(false);
@@ -119,7 +121,10 @@ function ProjectContent() {
       },
     },
     {
-      title: 'Add members',
+      title: 'Add Members',
+      onClick: ()=>{
+        setShowMemberModal(true)
+      }
     }
   ];
 
@@ -265,6 +270,7 @@ function ProjectContent() {
         onCancel={() => setShowDeleteModal(false)}
         onConfirm={onDeleteProjectModalConfirm}
       />
+      <MemberModal open={showMemberModal} onClose={()=> setShowMemberModal(false)} projectId={id} />
     </div>
   );
 }

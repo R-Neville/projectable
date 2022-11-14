@@ -11,3 +11,7 @@ export const deleteTaskComment = (projectId, taskId, commentId) => {
 export const createTaskComment = (projectId, taskId, content) => {
   return projectableAPI.post(`/api/projects/${projectId}/tasks/${taskId}/comments`, { content });
 };
+
+export const updateTaskComment = (projectId, taskId, commentId, content) => {
+  return projectableAPI.put(`/api/projects/${projectId}/tasks/${taskId}/comments/${commentId}`, { content });
+}

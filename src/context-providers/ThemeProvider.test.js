@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ThemeProvider, { useThemeContext } from './ThemeProvider';
-import themes from './themes';
+import themes from '../themes';
 
 const ThemeTestComponent = () => {
   const { theme, toggleTheme } = useThemeContext();

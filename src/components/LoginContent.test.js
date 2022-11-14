@@ -3,15 +3,18 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import ThemeProvider from '../context-providers/ThemeProvider';
 import LoginContent from './LoginContent';
+import AuthProvider from '../context-providers/AuthProvider';
 
-beforeAll(() => {
+beforeEach(() => {
   render(
     <ThemeProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LoginContent />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LoginContent />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   );
 });

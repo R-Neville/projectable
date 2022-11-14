@@ -2,18 +2,21 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import ThemeProvider from '../context-providers/ThemeProvider';
+import AuthProvider from '../context-providers/AuthProvider';
 import DashboardContent from './DashboardContent';
 
 beforeEach(() => {
   render(
     <ThemeProvider>
-      <Router>
-        <Link to="/dashboard">Test Link</Link>
-        <Routes>
-          <Route path="/" element={<></>} />
-          <Route path="/dashboard/*" element={<DashboardContent />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Link to="/dashboard">Test Link</Link>
+          <Routes>
+            <Route path="/" element={<></>} />
+            <Route path="/dashboard/*" element={<DashboardContent />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   );
 });

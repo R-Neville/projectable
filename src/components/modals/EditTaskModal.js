@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useThemeContext } from '../../context-providers/ThemeProvider';
 import Section from '../shared/Section';
@@ -20,8 +20,10 @@ function EditTaskModal({ open, onClose, onDone, task }) {
   };
   const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState(null);
+  const brief = useCallback(() => task.brief, [task]);
+  const description = useCallback(() => task.description, [task]);
 
-  if (!open) return null;
+  if (!open || !task) return null;
 
   const onFormInputChange = (event) => {
     setFormState({ ...formState, [event.target.name]: event.target.value });
@@ -40,26 +42,40 @@ function EditTaskModal({ open, onClose, onDone, task }) {
       type: 'submit',
       onClick: (event) => {
         event.preventDefault();
+
+        const formData = {
+          brief: brief(),
+          description: description(),
+        };
+
         if (
           formState.brief.length === 0 &&
           formState.description.length === 0
         ) {
-          setFormError('Required fields are empty');
-        } else {
-          updateTask(task.projectId, task._id, formState)
-            .then((response) => {
-              const { data } = response;
-              if (data.error) {
-                showError(new Error(data.error));
-              } else {
-                onClose();
-                onDone();
-              }
-            })
-            .catch((error) => {
-              showError(error);
-            });
+          return setFormError('Required fields are empty');
         }
+
+        if (formState.brief.length > 0) {
+          formData.brief = formState.brief;
+        }
+
+        if (formState.description.length > 0) {
+          formData.description = formState.description;
+        }
+
+        updateTask(task.projectId, task._id, formData)
+          .then((response) => {
+            const { data } = response;
+            if (data.error) {
+              showError(new Error(data.error));
+            } else {
+              onClose();
+              onDone();
+            }
+          })
+          .catch((error) => {
+            showError(error);
+          });
       },
     },
   ];
@@ -98,7 +114,7 @@ function EditTaskModal({ open, onClose, onDone, task }) {
                   </p>
                   <TextArea name="description" onChange={onFormInputChange} />
                 </Fieldset>
-                <FormActions actions={formActions} />
+                <FormActions key={task._id} actions={formActions} />
               </form>
             </Section>
           </div>

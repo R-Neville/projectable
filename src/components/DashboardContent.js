@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from './shared/Sidebar';
 import SidebarLink from './shared/SidebarLink';
 import Frame from './shared/Frame';
@@ -47,6 +47,7 @@ function DashboardContent() {
   const { logout } = useAuthContext();
   const [projects, setProjects] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+  const navigate = useNavigate();
 
   const links = linkData.map((linkInfo, i) => {
     return (
@@ -78,6 +79,17 @@ function DashboardContent() {
         showError(error);
       });
   }, [logout]);
+
+  const buildProjectCardMenuActions = (project) => {
+    return [
+      {
+        text: 'View Project',
+        onClick: () => {
+          navigate(`/project/${project._id}`);
+        },
+      },
+    ];
+  };
 
   return (
     <div className="flex flex-row w-full h-full">
@@ -111,6 +123,7 @@ function DashboardContent() {
                       <Card
                         key={i}
                         title={p.name}
+                        menuActions={buildProjectCardMenuActions(p)}
                         content={
                           <>
                             <p
@@ -129,7 +142,6 @@ function DashboardContent() {
                             </div>
                           </>
                         }
-                        viewHref={`/project/${p._id}`}
                       />
                     );
                   })

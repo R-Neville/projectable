@@ -7,6 +7,8 @@ import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
+import UserIconDark from '../assets/icons/user-dark.svg';
+import UserIconLight from '../assets/icons/user-light.svg';
 import { deleteProject, getProject } from '../services/projectsService';
 import { showError, dateFromTimestamp } from '../utils/helpers';
 import CardList from './shared/CardList';
@@ -32,8 +34,10 @@ function ProjectContent() {
   const [showConfirmDeleteTask, setShowConfirmDeleteTask] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
-  const [showMemberModal, setShowMemberModal] = useState(false)
+  const [showMemberModal, setShowMemberModal] = useState(false);
   const [showEditTaskModal, setShowEditTaskModal] = useState(false);
+  const [currentMember, setCurrentMember] = useState(null);
+  const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(null);
 
   const onDeleteProjectModalConfirm = () => {
     setShowDeleteModal(false);
@@ -81,6 +85,10 @@ function ProjectContent() {
       });
   };
 
+  const onRemoveMemberModalConfirm = () => {
+    console.log('Remove member');
+  };
+
   const linkData = [
     {
       to: `/project/${id}/unassigned`,
@@ -88,6 +96,13 @@ function ProjectContent() {
       lightSrc: TasksIconDark,
       darkSrc: TasksIconLight,
       testID: 'project-unassigned-tab',
+    },
+    {
+      to: `/project/${id}/members`,
+      title: 'Project Members',
+      lightSrc: UserIconDark,
+      darkSrc: UserIconLight,
+      testID: 'project-members-tab',
     },
   ];
 
@@ -124,10 +139,10 @@ function ProjectContent() {
     },
     {
       title: 'Add Members',
-      onClick: ()=>{
-        setShowMemberModal(true)
-      }
-    }
+      onClick: () => {
+        setShowMemberModal(true);
+      },
+    },
   ];
 
   const loadProject = useCallback(() => {
@@ -221,6 +236,55 @@ function ProjectContent() {
     </Frame>
   );
 
+  function buildMemberCardMenuActions(member) {
+    const actions = [
+      {
+        text: 'View Details',
+        onClick: () => {
+          console.log('view member details');
+        },
+      },
+    ];
+
+    if (userManager.user === project.userId) {
+      return [
+        ...actions,
+        {
+          text: 'Remove member',
+          onClick: () => {
+            setCurrentMember(member);
+            setShowRemoveMemberModal(true);
+          },
+        },
+      ];
+    }
+
+    return actions;
+  }
+
+  const membersFrame = (
+    <Frame title="Project Members">
+      {project && project.members.length > 0 ? (
+        project.members.map((member, i) => {
+          return (
+            <Card
+              key={i}
+              title={member.email}
+              menuActions={buildMemberCardMenuActions(member)}
+            />
+          );
+        })
+      ) : (
+        <p
+          className="p-4 text-2xl text-center"
+          style={{ color: theme.fgPrimary }}
+        >
+          Nothing to show yet
+        </p>
+      )}
+    </Frame>
+  );
+
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
@@ -257,9 +321,21 @@ function ProjectContent() {
         onDone={() => loadProject()}
         task={currentTask}
       />
+      <QuestionModal
+        open={currentMember && showRemoveMemberModal}
+        message={`Remove ${
+          currentMember && currentMember.email
+        } from this project?`}
+        onCancel={() => {
+          setCurrentMember(null);
+          setShowRemoveMemberModal(false);
+        }}
+        onConfirm={onRemoveMemberModalConfirm}
+      />
       <Routes>
         <Route index element={unassignedFrame} />
         <Route path="/unassigned" element={unassignedFrame} />
+        <Route path="/members" element={membersFrame} />
         {project && userManager.user === project.userId && (
           <Route
             path="/settings"
@@ -288,7 +364,11 @@ function ProjectContent() {
         onCancel={() => setShowDeleteModal(false)}
         onConfirm={onDeleteProjectModalConfirm}
       />
-      <MemberModal open={showMemberModal} onClose={()=> setShowMemberModal(false)} projectId={id} />
+      <MemberModal
+        open={showMemberModal}
+        onClose={() => setShowMemberModal(false)}
+        projectId={id}
+      />
     </div>
   );
 }

@@ -105,7 +105,7 @@ function DashboardContent() {
               ]}
             >
               <CardList>
-                {projects &&
+                {projects.length > 0 ? (
                   projects.map((p, i) => {
                     return (
                       <Card
@@ -132,7 +132,15 @@ function DashboardContent() {
                         viewHref={`/project/${p._id}`}
                       />
                     );
-                  })}
+                  })
+                ) : (
+                  <p
+                    className="p-4 text-2xl text-center"
+                    style={{ color: theme.fgPrimary }}
+                  >
+                    You don't have any projects yet
+                  </p>
+                )}
               </CardList>
             </Frame>
           }

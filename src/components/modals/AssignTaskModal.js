@@ -17,7 +17,7 @@ function AssignTaskModal({ open, project, task, onClose, onDone }) {
   if (!open) return null;
 
   const options = project.members.map((member) => {
-    return { value: member._id, label: member.email };
+    return { value: member.uid, label: member.email };
   });
 
   options.push({ value: userManager.user, label: 'Me' });

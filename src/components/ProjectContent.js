@@ -133,16 +133,16 @@ function ProjectContent() {
 
   const settingsOptions = [
     {
+      title: 'Add Members',
+      onClick: () => {
+        setShowMemberModal(true);
+      },
+    },
+    {
       title: 'Delete Project',
       danger: true,
       onClick: () => {
         setShowDeleteModal(true);
-      },
-    },
-    {
-      title: 'Add Members',
-      onClick: () => {
-        setShowMemberModal(true);
       },
     },
   ];
@@ -154,6 +154,7 @@ function ProjectContent() {
         if (data.error) {
           showError(new Error(data.error));
         } else {
+          console.log(data);
           setProject(data);
         }
       })

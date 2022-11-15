@@ -50,8 +50,8 @@ function DashboardContent() {
   const [projects, setProjects] = useState([]);
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
-  const [showTaskModal, setShowTaskModal] = useState(false)
-  const [currentTask, setCurrentTask]= useState()
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [currentTask, setCurrentTask] = useState();
   const navigate = useNavigate();
 
   const links = linkData.map((linkInfo, i) => {
@@ -92,6 +92,7 @@ function DashboardContent() {
         if (data.error) {
           showError(new Error(data.error));
         } else {
+          console.log(data);
           setAssignedTasks(data);
         }
       })
@@ -137,7 +138,15 @@ function DashboardContent() {
       >
         Modal
       </NewProjectModal>
-      <TaskModal />
+      <TaskModal
+        open={currentTask && showTaskModal}
+        taskId={currentTask && currentTask._id}
+        projectId={currentTask && currentTask.projectId}
+        onClose={() => {
+          setCurrentTask(null);
+          setShowTaskModal(false);
+        }}
+      />
       <Routes>
         <Route index element={<Frame title="My Tasks"></Frame>} />
         <Route

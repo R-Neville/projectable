@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { searchUsers, addMember } from '../../services/projectsService';
 import { createPortal } from 'react-dom';
 import AsyncSelect from 'react-select/async';
@@ -7,9 +7,9 @@ import Section from '../shared/Section';
 import FormError from '../shared/FormError';
 import { showError } from '../../utils/helpers';
 
-export default function MemberModal({ open, onClose, projectId }) {
+export default function MemberModal({ open, onClose, projectId, onDone }) {
   const [selectedUser, setSelectedUser] = useState(null);
-  const [formError, setFormError]=useState('')
+  const [formError, setFormError] = useState('');
   const { theme } = useThemeContext();
 
   const loadOptions = (query, callback) => {
@@ -30,19 +30,21 @@ export default function MemberModal({ open, onClose, projectId }) {
     setSelectedUser(query);
   };
 
-  const handleSubmit = async (event)=>{
-    event.preventDefault()
-    if(selectedUser === null){
-      setFormError('enter a user email to add to project')
-    }else{
-      addMember(projectId, selectedUser.value).then((result)=>{
-        console.log(result)
-        onClose()
-      }).catch((error)=>{
-        showError(error)
-      })
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (selectedUser === null) {
+      setFormError('enter a user email to add to project');
+    } else {
+      addMember(projectId, selectedUser.value)
+        .then(() => {
+          onDone();
+          onClose();
+        })
+        .catch((error) => {
+          showError(error);
+        });
     }
-  }
+  };
 
   if (!open) return null;
 

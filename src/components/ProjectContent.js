@@ -22,6 +22,7 @@ import { deleteTask } from '../services/tasksService';
 import { apiErrors } from '../config/axiosConfig';
 import TaskModal from './modals/TaskModal';
 import EditTaskModal from './modals/EditTaskModal';
+import AssignTaskModal from './modals/AssignTaskModal';
 
 function ProjectContent() {
   const { theme } = useThemeContext();
@@ -38,6 +39,7 @@ function ProjectContent() {
   const [showEditTaskModal, setShowEditTaskModal] = useState(false);
   const [currentMember, setCurrentMember] = useState(null);
   const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(null);
+  const [showAssignModal, setShowAssignModal] = useState(false);
 
   const onDeleteProjectModalConfirm = () => {
     setShowDeleteModal(false);
@@ -131,16 +133,16 @@ function ProjectContent() {
 
   const settingsOptions = [
     {
+      title: 'Add Members',
+      onClick: () => {
+        setShowMemberModal(true);
+      },
+    },
+    {
       title: 'Delete Project',
       danger: true,
       onClick: () => {
         setShowDeleteModal(true);
-      },
-    },
-    {
-      title: 'Add Members',
-      onClick: () => {
-        setShowMemberModal(true);
       },
     },
   ];
@@ -152,6 +154,7 @@ function ProjectContent() {
         if (data.error) {
           showError(new Error(data.error));
         } else {
+          console.log(data);
           setProject(data);
         }
       })
@@ -174,6 +177,13 @@ function ProjectContent() {
         onClick: () => {
           setCurrentTask(task);
           setShowTaskModal(true);
+        },
+      },
+      {
+        text: 'Assign To',
+        onClick: () => {
+          setCurrentTask(task);
+          setShowAssignModal(true);
         },
       },
     ];
@@ -205,26 +215,28 @@ function ProjectContent() {
       title="Unassigned Tasks"
       actions={[{ text: 'New', onClick: () => setShowNewTaskModal(true) }]}
     >
-      {project && project.tasks.length > 0 ? (
-        project.tasks.map((task, i) => {
-          return (
-            <Card
-              key={i}
-              title={task.brief}
-              content={
-                <div className="flex justify-between">
-                  <span
-                    style={{ color: theme.fgPrimary }}
-                  >{`@${task.createdBy}`}</span>
-                  <span style={{ color: theme.fgPrimary }}>
-                    {dateFromTimestamp(task.createdAt)}
-                  </span>
-                </div>
-              }
-              menuActions={buildTaskCardMenuActions(task)}
-            />
-          );
-        })
+      {project && project.tasks.filter((t) => !t.assignedTo).length > 0 ? (
+        project.tasks
+          .filter((t) => !t.assignedTo)
+          .map((task, i) => {
+            return (
+              <Card
+                key={i}
+                title={task.brief}
+                content={
+                  <div className="flex justify-between">
+                    <span
+                      style={{ color: theme.fgPrimary }}
+                    >{`@${task.createdBy}`}</span>
+                    <span style={{ color: theme.fgPrimary }}>
+                      {dateFromTimestamp(task.createdAt)}
+                    </span>
+                  </div>
+                }
+                menuActions={buildTaskCardMenuActions(task)}
+              />
+            );
+          })
       ) : (
         <p
           className="p-4 text-2xl text-center"
@@ -288,6 +300,32 @@ function ProjectContent() {
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
+      <Routes>
+        <Route index element={unassignedFrame} />
+        <Route path="/unassigned" element={unassignedFrame} />
+        <Route path="/members" element={membersFrame} />
+        {project && userManager.user === project.userId && (
+          <Route
+            path="/settings"
+            element={
+              <Frame title="Settings">
+                <CardList>
+                  {settingsOptions.map((settingsOption, i) => {
+                    return (
+                      <Card
+                        key={i}
+                        title={settingsOption.title}
+                        danger={settingsOption.danger}
+                        onClick={settingsOption.onClick}
+                      />
+                    );
+                  })}
+                </CardList>
+              </Frame>
+            }
+          ></Route>
+        )}
+      </Routes>
       <NewTaskModal
         open={showNewTaskModal}
         projectId={project && project._id}
@@ -332,32 +370,16 @@ function ProjectContent() {
         }}
         onConfirm={onRemoveMemberModalConfirm}
       />
-      <Routes>
-        <Route index element={unassignedFrame} />
-        <Route path="/unassigned" element={unassignedFrame} />
-        <Route path="/members" element={membersFrame} />
-        {project && userManager.user === project.userId && (
-          <Route
-            path="/settings"
-            element={
-              <Frame title="Settings">
-                <CardList>
-                  {settingsOptions.map((settingsOption, i) => {
-                    return (
-                      <Card
-                        key={i}
-                        title={settingsOption.title}
-                        danger={settingsOption.danger}
-                        onClick={settingsOption.onClick}
-                      />
-                    );
-                  })}
-                </CardList>
-              </Frame>
-            }
-          ></Route>
-        )}
-      </Routes>
+      <AssignTaskModal
+        open={currentTask && showAssignModal}
+        onClose={() => {
+          setCurrentTask(null);
+          setShowAssignModal(false);
+        }}
+        onDone={() => loadProject()}
+        project={project}
+        task={currentTask}
+      />
       <QuestionModal
         open={showDeleteModal}
         message={`Delete '${project && project.name}' project?`}
@@ -368,6 +390,7 @@ function ProjectContent() {
         open={showMemberModal}
         onClose={() => setShowMemberModal(false)}
         projectId={id}
+        onDone={() => loadProject()}
       />
     </div>
   );

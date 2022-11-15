@@ -5,6 +5,7 @@ import SidebarLink from './shared/SidebarLink';
 import Frame from './shared/Frame';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
+import TaskModal from './modals/TaskModal';
 import NewProjectModal from './modals/NewProjectModal';
 import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
@@ -49,6 +50,8 @@ function DashboardContent() {
   const [projects, setProjects] = useState([]);
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false)
+  const [currentTask, setCurrentTask]= useState()
   const navigate = useNavigate();
 
   const links = linkData.map((linkInfo, i) => {
@@ -111,6 +114,19 @@ function DashboardContent() {
     ];
   };
 
+  function buildTaskCardMenuActions(task) {
+    const actions = [
+      {
+        text: 'Show Details',
+        onClick: () => {
+          setCurrentTask(task);
+          setShowTaskModal(true);
+        },
+      },
+    ];
+    return actions;
+  }
+
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
@@ -121,6 +137,7 @@ function DashboardContent() {
       >
         Modal
       </NewProjectModal>
+      <TaskModal />
       <Routes>
         <Route index element={<Frame title="My Tasks"></Frame>} />
         <Route
@@ -129,10 +146,10 @@ function DashboardContent() {
             <Frame title="My Tasks">
               <CardList>
                 {assignedTasks.length > 0 ? (
-                  assignedTasks.map((task, i) =>{
+                  assignedTasks.map((task, i) => {
                     return (
                       <Card
-                      key={i}
+                        key={i}
                         title={task.brief}
                         content={
                           <div className="flex justify-between">
@@ -144,11 +161,11 @@ function DashboardContent() {
                             </span>
                           </div>
                         }
+                        menuActions={buildTaskCardMenuActions(task)}
                       />
                     );
                   })
-                ) 
-                : (
+                ) : (
                   <p
                     className="p-4 text-2xl text-center"
                     style={{ color: theme.fgPrimary }}

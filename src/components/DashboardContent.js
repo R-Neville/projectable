@@ -5,6 +5,7 @@ import SidebarLink from './shared/SidebarLink';
 import Frame from './shared/Frame';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
+import TaskModal from './modals/TaskModal';
 import NewProjectModal from './modals/NewProjectModal';
 import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
@@ -13,6 +14,7 @@ import ProjectsIconLight from '../assets/icons/projects-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { getAllProjects } from '../services/projectsService';
+import { getAllAssignedTasks } from '../services/tasksService';
 import { showError, dateFromTimestamp } from '../utils/helpers';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
@@ -46,7 +48,10 @@ function DashboardContent() {
   const { theme } = useThemeContext();
   const { logout } = useAuthContext();
   const [projects, setProjects] = useState([]);
+  const [assignedTasks, setAssignedTasks] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false)
+  const [currentTask, setCurrentTask]= useState()
   const navigate = useNavigate();
 
   const links = linkData.map((linkInfo, i) => {
@@ -80,6 +85,24 @@ function DashboardContent() {
       });
   }, [logout]);
 
+  useEffect(() => {
+    getAllAssignedTasks()
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          showError(new Error(data.error));
+        } else {
+          setAssignedTasks(data);
+        }
+      })
+      .catch((error) => {
+        if (error.code === apiErrors.BAD_REQUEST) {
+          logout();
+        }
+        showError(error);
+      });
+  }, [logout]);
+
   const buildProjectCardMenuActions = (project) => {
     return [
       {
@@ -91,6 +114,19 @@ function DashboardContent() {
     ];
   };
 
+  function buildTaskCardMenuActions(task) {
+    const actions = [
+      {
+        text: 'Show Details',
+        onClick: () => {
+          setCurrentTask(task);
+          setShowTaskModal(true);
+        },
+      },
+    ];
+    return actions;
+  }
+
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
@@ -101,9 +137,46 @@ function DashboardContent() {
       >
         Modal
       </NewProjectModal>
+      <TaskModal />
       <Routes>
         <Route index element={<Frame title="My Tasks"></Frame>} />
-        <Route path="/tasks" element={<Frame title="My Tasks"></Frame>} />
+        <Route
+          path="/tasks"
+          element={
+            <Frame title="My Tasks">
+              <CardList>
+                {assignedTasks.length > 0 ? (
+                  assignedTasks.map((task, i) => {
+                    return (
+                      <Card
+                        key={i}
+                        title={task.brief}
+                        content={
+                          <div className="flex justify-between">
+                            <span
+                              style={{ color: theme.fgPrimary }}
+                            >{`@${task.createdBy}`}</span>
+                            <span style={{ color: theme.fgPrimary }}>
+                              {dateFromTimestamp(task.createdAt)}
+                            </span>
+                          </div>
+                        }
+                        menuActions={buildTaskCardMenuActions(task)}
+                      />
+                    );
+                  })
+                ) : (
+                  <p
+                    className="p-4 text-2xl text-center"
+                    style={{ color: theme.fgPrimary }}
+                  >
+                    You don't have any assigned tasks
+                  </p>
+                )}
+              </CardList>
+            </Frame>
+          }
+        />
         <Route
           path="/projects"
           element={

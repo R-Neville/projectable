@@ -18,7 +18,7 @@ import DotMenu from '../shared/DotMenu';
 import FormActions from '../shared/FormActions';
 import FormError from '../shared/FormError';
 import { apiErrors } from '../../config/axiosConfig';
-import { getTask } from '../../services/tasksService';
+import { getTask, updateTask } from '../../services/tasksService';
 
 function TaskModal({ open, taskId, projectId, onClose }) {
   const { theme } = useThemeContext();
@@ -138,11 +138,49 @@ function TaskModal({ open, taskId, projectId, onClose }) {
       >
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex flex-col min-h-full sm:items-center sm:p-0">
-            <Section title={taskState && taskState.brief}>
+            <Section
+              title={
+                taskState &&
+                `${taskState.brief} ${taskState.completed ? '(COMPLETED)' : ''}`
+              }
+            >
               <SectionP text={taskState && taskState.description} />
-              <div className="flex justify-end items-center w-full">
+              <div className="flex flex-col sm:flex-row justify-end items-center w-full">
+                {taskState &&
+                  !taskState.completed &&
+                  userManager.user === taskState.assignedTo && (
+                    <button
+                      className="p-3 w-full sm:w-auto rounded m-3"
+                      style={{
+                        backgroundColor: theme.bgHighlight,
+                        color: theme.fgHighlight,
+                      }}
+                      onClick={() => {
+                        updateTask(taskState.projectId, taskState._id, {
+                          ...taskState,
+                          completed: true,
+                        })
+                          .then((response) => {
+                            const { data } = response;
+                            if (data.error) {
+                              showError(new Error(data.error));
+                            } else {
+                              loadTask();
+                            }
+                          })
+                          .catch((error) => {
+                            if (error.code === apiErrors.BAD_REQUEST) {
+                              logout();
+                            }
+                            showError(error);
+                          });
+                      }}
+                    >
+                      Mark as Complete
+                    </button>
+                  )}
                 <Link
-                  className="p-3 w-28 rounded m-3"
+                  className="p-3 w-full sm:w-auto rounded m-3 text-center"
                   style={{
                     backgroundColor: theme.bgHighlight,
                     color: theme.fgHighlight,
@@ -153,7 +191,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                   View Project
                 </Link>
                 <button
-                  className="p-3 w-28 rounded m-3"
+                  className="p-3 w-full sm:w-auto rounded m-3"
                   style={{
                     backgroundColor: theme.bgHighlight,
                     color: theme.fgHighlight,
@@ -228,22 +266,24 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                                   taskId,
                                   comment._id,
                                   editedContent
-                                ).then((response) => {
-                                  const { data } = response;
-                                  if (data.error) {
-                                    showError(new Error(data.error));
-                                  } else {
-                                    loadTask();
-                                    setEditFormError('');
-                                    setEditedContent('');
-                                    setCommentId(null);
-                                  }
-                                }).catch((error) => {
-                                  if (error.code === apiErrors.BAD_REQUEST) {
-                                    logout();
-                                  }
-                                  showError(error);
-                                });
+                                )
+                                  .then((response) => {
+                                    const { data } = response;
+                                    if (data.error) {
+                                      showError(new Error(data.error));
+                                    } else {
+                                      loadTask();
+                                      setEditFormError('');
+                                      setEditedContent('');
+                                      setCommentId(null);
+                                    }
+                                  })
+                                  .catch((error) => {
+                                    if (error.code === apiErrors.BAD_REQUEST) {
+                                      logout();
+                                    }
+                                    showError(error);
+                                  });
                               }
                             },
                           },

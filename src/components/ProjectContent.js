@@ -55,7 +55,7 @@ function ProjectContent() {
         }
       })
       .catch((error) => {
-        if (error.code === apiErrors.BAD_REQUEST) {
+        if (apiErrors.hasOwnProperty(error.code)) {
           logout();
         }
         showError(error);
@@ -80,7 +80,7 @@ function ProjectContent() {
         }
       })
       .catch((error) => {
-        if (error.code === apiErrors.BAD_REQUEST) {
+        if (apiErrors.hasOwnProperty(error.code)) {
           logout();
         }
         showError(error);
@@ -168,7 +168,7 @@ function ProjectContent() {
         }
       })
       .catch((error) => {
-        if (error.code === apiErrors.BAD_REQUEST) {
+        if (apiErrors.hasOwnProperty(error.code)) {
           logout();
         }
         showError(error);

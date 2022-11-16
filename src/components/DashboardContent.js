@@ -78,7 +78,7 @@ function DashboardContent() {
         }
       })
       .catch((error) => {
-        if (error.code === apiErrors.BAD_REQUEST) {
+        if (apiErrors.hasOwnProperty(error.code)) {
           logout();
         }
         showError(error);
@@ -92,12 +92,11 @@ function DashboardContent() {
         if (data.error) {
           showError(new Error(data.error));
         } else {
-          console.log(data);
           setAssignedTasks(data);
         }
       })
       .catch((error) => {
-        if (error.code === apiErrors.BAD_REQUEST) {
+        if (apiErrors.hasOwnProperty(error.code)) {
           logout();
         }
         showError(error);
@@ -144,7 +143,7 @@ function DashboardContent() {
               }
             })
             .catch((error) => {
-              if (error.code === apiErrors.BAD_REQUEST) {
+              if (apiErrors.hasOwnProperty(error.code)) {
                 logout();
               }
               showError(error);

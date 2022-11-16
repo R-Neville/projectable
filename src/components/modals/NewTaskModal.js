@@ -43,7 +43,7 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
           }
         })
         .catch((error) => {
-          if (error.code === apiErrors.BAD_REQUEST) {
+          if (apiErrors.hasOwnProperty(error.code)) {
             logout();
           }
           onClose();

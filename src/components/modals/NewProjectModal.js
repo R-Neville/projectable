@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { createProject } from '../../services/projectsService';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../context-providers/AuthProvider';
 import Section from '../shared/Section';
 import Fieldset from '../shared/Fieldset';
 import FormActions from '../shared/FormActions';
@@ -11,6 +12,7 @@ import Input from '../shared/Input';
 import TextArea from '../shared/TextArea';
 import FormError from '../shared/FormError';
 import { showError } from '../../utils/helpers';
+import { apiErrors } from '../../config/axiosConfig';
 
 export default function NewProjectModal({ open, onClose, onDone }) {
   const initialFormState = {
@@ -19,6 +21,7 @@ export default function NewProjectModal({ open, onClose, onDone }) {
   };
 
   const navigate = useNavigate();
+  const { logout } = useAuthContext();
 
   const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState('');
@@ -42,6 +45,9 @@ export default function NewProjectModal({ open, onClose, onDone }) {
           }
         })
         .catch((error) => {
+          if (apiErrors.hasOwnProperty(error.code)) {
+            logout();
+          }
           showError(error);
         });
       onDone();

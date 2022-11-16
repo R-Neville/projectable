@@ -42,7 +42,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
           }
         })
         .catch((error) => {
-          if (error.code === apiErrors.BAD_REQUEST) {
+          if (apiErrors.hasOwnProperty(error.code)) {
             logout();
           }
           showError(error);
@@ -81,7 +81,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
               }
             })
             .catch((error) => {
-              if (error.code === apiErrors.BAD_REQUEST) {
+              if (apiErrors.hasOwnProperty(error.code)) {
                 logout();
               }
               showError(error);
@@ -117,7 +117,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                 }
               })
               .catch((error) => {
-                if (error.code === apiErrors.BAD_REQUEST) {
+                if (apiErrors.hasOwnProperty(error.code)) {
                   logout();
                 }
                 showError(error);
@@ -169,7 +169,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                             }
                           })
                           .catch((error) => {
-                            if (error.code === apiErrors.BAD_REQUEST) {
+                            if (apiErrors.hasOwnProperty(error.code)) {
                               logout();
                             }
                             showError(error);
@@ -279,7 +279,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                                     }
                                   })
                                   .catch((error) => {
-                                    if (error.code === apiErrors.BAD_REQUEST) {
+                                    if (apiErrors.hasOwnProperty(error.code)) {
                                       logout();
                                     }
                                     showError(error);

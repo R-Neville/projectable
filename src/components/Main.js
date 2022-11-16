@@ -8,9 +8,26 @@ import RegisterContent from './RegisterContent';
 import DashboardContent from './DashboardContent';
 import ProjectContent from './ProjectContent';
 import NoMatch from './NoMatch';
+import { useEffect, useState } from 'react';
 
 function Main() {
   const { loggedIn } = useAuthContext();
+
+  const [projectName, setProjectName] = useState('');
+
+  useEffect(() => {
+    const onSetProjectName = (event) => {
+      event.stopPropagation();
+      const { name } = event.detail;
+      setProjectName(name);
+    };
+
+    document.addEventListener('set-project-name', onSetProjectName);
+
+    return () => {
+      document.removeEventListener('set-project-name', onSetProjectName);
+    };
+  }, []);
 
   return (
     <Routes>
@@ -38,11 +55,14 @@ function Main() {
         path="/project/:id/*"
         element={
           <ProtectedRoute loggedIn={loggedIn}>
-            <Page title="Project" content={<ProjectContent />} />
+            <Page title={`${projectName} Project`} content={<ProjectContent />} />
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Page title="404 Not Found" content={<NoMatch/>} />}/>
+      <Route
+        path="*"
+        element={<Page title="404 Not Found" content={<NoMatch />} />}
+      />
     </Routes>
   );
 }

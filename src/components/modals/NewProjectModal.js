@@ -11,8 +11,7 @@ import Label from '../shared/Label';
 import Input from '../shared/Input';
 import TextArea from '../shared/TextArea';
 import FormError from '../shared/FormError';
-import { showError } from '../../utils/helpers';
-import { apiErrors } from '../../config/axiosConfig';
+import { showError, buildAxiosErrorHandler } from '../../utils/helpers';
 
 export default function NewProjectModal({ open, onClose, onDone }) {
   const initialFormState = {
@@ -44,12 +43,7 @@ export default function NewProjectModal({ open, onClose, onDone }) {
             navigate(`/project/${data._id}`);
           }
         })
-        .catch((error) => {
-          if (apiErrors.hasOwnProperty(error.code)) {
-            logout();
-          }
-          showError(error);
-        });
+        .catch(buildAxiosErrorHandler(logout));
       onDone();
     }
   };

@@ -12,7 +12,11 @@ import UserIconLight from '../assets/icons/user-light.svg';
 import CompletedIconDark from '../assets/icons/completed-dark.svg';
 import CompletedIconLight from '../assets/icons/completed-light.svg';
 import { deleteProject, getProject } from '../services/projectsService';
-import { showError, dateFromTimestamp } from '../utils/helpers';
+import {
+  showError,
+  dateFromTimestamp,
+  buildAxiosErrorHandler,
+} from '../utils/helpers';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
 import QuestionModal from './modals/QuestionModal';
@@ -21,7 +25,6 @@ import MemberModal from './modals/MemberModal';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
 import { deleteTask } from '../services/tasksService';
-import { apiErrors } from '../config/axiosConfig';
 import TaskModal from './modals/TaskModal';
 import EditTaskModal from './modals/EditTaskModal';
 import AssignTaskModal from './modals/AssignTaskModal';
@@ -54,12 +57,7 @@ function ProjectContent() {
           navigate('/dashboard');
         }
       })
-      .catch((error) => {
-        if (apiErrors.hasOwnProperty(error.code)) {
-          logout();
-        }
-        showError(error);
-      });
+      .catch(buildAxiosErrorHandler(logout));
   };
 
   const onNewTaskModalDone = () => {
@@ -79,14 +77,12 @@ function ProjectContent() {
           loadProject();
         }
       })
-      .catch((error) => {
-        if (apiErrors.hasOwnProperty(error.code)) {
-          logout();
-        }
-        showError(error);
-        setCurrentTask(null);
-        setShowConfirmDeleteTask(false);
-      });
+      .catch(
+        buildAxiosErrorHandler(logout, () => {
+          setCurrentTask(null);
+          setShowConfirmDeleteTask(false);
+        })
+      );
   };
 
   const onRemoveMemberModalConfirm = () => {
@@ -167,12 +163,7 @@ function ProjectContent() {
           setProject(data);
         }
       })
-      .catch((error) => {
-        if (apiErrors.hasOwnProperty(error.code)) {
-          logout();
-        }
-        showError(error);
-      });
+      .catch(buildAxiosErrorHandler(logout));
   }, [id, logout]);
 
   useEffect(() => {

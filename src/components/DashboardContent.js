@@ -15,10 +15,13 @@ import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { getAllProjects } from '../services/projectsService';
 import { deleteTask, getAllAssignedTasks } from '../services/tasksService';
-import { showError, dateFromTimestamp } from '../utils/helpers';
+import {
+  showError,
+  buildAxiosErrorHandler,
+  dateFromTimestamp,
+} from '../utils/helpers';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
-import { apiErrors } from '../config/axiosConfig';
 
 const linkData = [
   {
@@ -77,12 +80,7 @@ function DashboardContent() {
           setProjects(data);
         }
       })
-      .catch((error) => {
-        if (apiErrors.hasOwnProperty(error.code)) {
-          logout();
-        }
-        showError(error);
-      });
+      .catch(buildAxiosErrorHandler(logout));
   }, [logout]);
 
   const loadAssignedTasks = useCallback(() => {
@@ -95,12 +93,7 @@ function DashboardContent() {
           setAssignedTasks(data);
         }
       })
-      .catch((error) => {
-        if (apiErrors.hasOwnProperty(error.code)) {
-          logout();
-        }
-        showError(error);
-      });
+      .catch(buildAxiosErrorHandler(logout));
   }, [logout]);
 
   useEffect(() => {
@@ -113,6 +106,14 @@ function DashboardContent() {
         text: 'View Project',
         onClick: () => {
           navigate(`/project/${project._id}`);
+          document.dispatchEvent(
+            new CustomEvent('set-project-name', {
+              bubbles: true,
+              detail: {
+                name: project.name,
+              },
+            })
+          );
         },
       },
     ];
@@ -142,12 +143,7 @@ function DashboardContent() {
                 loadAssignedTasks();
               }
             })
-            .catch((error) => {
-              if (apiErrors.hasOwnProperty(error.code)) {
-                logout();
-              }
-              showError(error);
-            });
+            .catch(buildAxiosErrorHandler(logout));
         },
       });
     }

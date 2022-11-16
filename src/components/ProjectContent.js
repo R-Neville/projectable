@@ -9,6 +9,8 @@ import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import UserIconDark from '../assets/icons/user-dark.svg';
 import UserIconLight from '../assets/icons/user-light.svg';
+import CompletedIconDark from '../assets/icons/completed-dark.svg';
+import CompletedIconLight from '../assets/icons/completed-light.svg';
 import { deleteProject, getProject } from '../services/projectsService';
 import { showError, dateFromTimestamp } from '../utils/helpers';
 import CardList from './shared/CardList';
@@ -106,6 +108,13 @@ function ProjectContent() {
       darkSrc: UserIconLight,
       testID: 'project-members-tab',
     },
+    {
+      to: `/project/${id}/completed`,
+      title: 'Completed Tasks',
+      lightSrc: CompletedIconDark,
+      darkSrc: CompletedIconLight,
+      testID: 'project-completed-tab',
+    },
   ];
 
   if (project && userManager.user === project.userId) {
@@ -179,24 +188,31 @@ function ProjectContent() {
           setShowTaskModal(true);
         },
       },
-      {
+    ];
+
+    if (!task.assigned && !task.completed) {
+      actions.push({
         text: 'Assign To',
         onClick: () => {
           setCurrentTask(task);
           setShowAssignModal(true);
         },
-      },
-    ];
+      });
+    }
+
     if (userManager.user === task.userId) {
-      return [
-        ...actions,
-        {
+      if (!task.completed) {
+        actions.push({
           text: 'Edit',
           onClick: () => {
             setCurrentTask(task);
             setShowEditTaskModal(true);
           },
-        },
+        });
+      }
+
+      return [
+        ...actions,
         {
           text: 'Delete',
           onClick: () => {
@@ -297,6 +313,41 @@ function ProjectContent() {
     </Frame>
   );
 
+  const completedFrame = (
+    <Frame title="Completed Tasks">
+      {project && project.tasks.filter((t) => t.completed).length > 0 ? (
+        project.tasks
+          .filter((t) => t.completed)
+          .map((task, i) => {
+            return (
+              <Card
+                key={i}
+                title={task.brief}
+                content={
+                  <div className="flex justify-between">
+                    <span
+                      style={{ color: theme.fgPrimary }}
+                    >{`@${task.createdBy}`}</span>
+                    <span style={{ color: theme.fgPrimary }}>
+                      {dateFromTimestamp(task.createdAt)}
+                    </span>
+                  </div>
+                }
+                menuActions={buildTaskCardMenuActions(task)}
+              />
+            );
+          })
+      ) : (
+        <p
+          className="p-4 text-2xl text-center"
+          style={{ color: theme.fgPrimary }}
+        >
+          Nothing to show yet
+        </p>
+      )}
+    </Frame>
+  );
+
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
@@ -304,6 +355,7 @@ function ProjectContent() {
         <Route index element={unassignedFrame} />
         <Route path="/unassigned" element={unassignedFrame} />
         <Route path="/members" element={membersFrame} />
+        <Route path="/completed" element={completedFrame} />
         {project && userManager.user === project.userId && (
           <Route
             path="/settings"

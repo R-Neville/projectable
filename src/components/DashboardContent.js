@@ -155,6 +155,43 @@ function DashboardContent() {
     return actions;
   }
 
+  const tasksFrame = (
+    <Frame title="My Tasks">
+      <CardList>
+        {assignedTasks.filter((t) => !t.completed).length > 0 ? (
+          assignedTasks
+            .filter((t) => !t.completed)
+            .map((task, i) => {
+              return (
+                <Card
+                  key={i}
+                  title={task.brief}
+                  content={
+                    <div className="flex justify-between">
+                      <span
+                        style={{ color: theme.fgPrimary }}
+                      >{`@${task.createdBy}`}</span>
+                      <span style={{ color: theme.fgPrimary }}>
+                        {dateFromTimestamp(task.createdAt)}
+                      </span>
+                    </div>
+                  }
+                  menuActions={buildTaskCardMenuActions(task)}
+                />
+              );
+            })
+        ) : (
+          <p
+            className="p-4 text-2xl text-center"
+            style={{ color: theme.fgPrimary }}
+          >
+            You don't have any assigned tasks
+          </p>
+        )}
+      </CardList>
+    </Frame>
+  );
+
   return (
     <div className="flex flex-row w-full h-full">
       <Sidebar links={links}></Sidebar>
@@ -175,44 +212,8 @@ function DashboardContent() {
         }}
       />
       <Routes>
-        <Route index element={<Frame title="My Tasks"></Frame>} />
-        <Route
-          path="/tasks"
-          element={
-            <Frame title="My Tasks">
-              <CardList>
-                {assignedTasks.length > 0 ? (
-                  assignedTasks.map((task, i) => {
-                    return (
-                      <Card
-                        key={i}
-                        title={task.brief}
-                        content={
-                          <div className="flex justify-between">
-                            <span
-                              style={{ color: theme.fgPrimary }}
-                            >{`@${task.createdBy}`}</span>
-                            <span style={{ color: theme.fgPrimary }}>
-                              {dateFromTimestamp(task.createdAt)}
-                            </span>
-                          </div>
-                        }
-                        menuActions={buildTaskCardMenuActions(task)}
-                      />
-                    );
-                  })
-                ) : (
-                  <p
-                    className="p-4 text-2xl text-center"
-                    style={{ color: theme.fgPrimary }}
-                  >
-                    You don't have any assigned tasks
-                  </p>
-                )}
-              </CardList>
-            </Frame>
-          }
-        />
+        <Route index element={tasksFrame} />
+        <Route path="/tasks" element={tasksFrame} />
         <Route
           path="/projects"
           element={

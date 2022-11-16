@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from './shared/Sidebar';
 import SidebarLink from './shared/SidebarLink';
@@ -14,7 +14,7 @@ import ProjectsIconLight from '../assets/icons/projects-light.svg';
 import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { getAllProjects } from '../services/projectsService';
-import { getAllAssignedTasks } from '../services/tasksService';
+import { deleteTask, getAllAssignedTasks } from '../services/tasksService';
 import { showError, dateFromTimestamp } from '../utils/helpers';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
@@ -46,7 +46,7 @@ const linkData = [
 
 function DashboardContent() {
   const { theme } = useThemeContext();
-  const { logout } = useAuthContext();
+  const { logout, userManager } = useAuthContext();
   const [projects, setProjects] = useState([]);
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
@@ -85,7 +85,7 @@ function DashboardContent() {
       });
   }, [logout]);
 
-  useEffect(() => {
+  const loadAssignedTasks = useCallback(() => {
     getAllAssignedTasks()
       .then((response) => {
         const { data } = response;
@@ -103,6 +103,10 @@ function DashboardContent() {
         showError(error);
       });
   }, [logout]);
+
+  useEffect(() => {
+    loadAssignedTasks();
+  }, [loadAssignedTasks]);
 
   const buildProjectCardMenuActions = (project) => {
     return [
@@ -125,8 +129,68 @@ function DashboardContent() {
         },
       },
     ];
+
+    if (task.userId === userManager.user) {
+      actions.push({
+        text: 'Delete',
+        onClick: () => {
+          deleteTask(task.projectId, task._id)
+            .then((response) => {
+              const { data } = response;
+              if (data.error) {
+                showError(new Error(data.error));
+              } else {
+                loadAssignedTasks();
+              }
+            })
+            .catch((error) => {
+              if (error.code === apiErrors.BAD_REQUEST) {
+                logout();
+              }
+              showError(error);
+            });
+        },
+      });
+    }
     return actions;
   }
+
+  const tasksFrame = (
+    <Frame title="My Tasks">
+      <CardList>
+        {assignedTasks.filter((t) => !t.completed).length > 0 ? (
+          assignedTasks
+            .filter((t) => !t.completed)
+            .map((task, i) => {
+              return (
+                <Card
+                  key={i}
+                  title={task.brief}
+                  content={
+                    <div className="flex justify-between">
+                      <span
+                        style={{ color: theme.fgPrimary }}
+                      >{`@${task.createdBy}`}</span>
+                      <span style={{ color: theme.fgPrimary }}>
+                        {dateFromTimestamp(task.createdAt)}
+                      </span>
+                    </div>
+                  }
+                  menuActions={buildTaskCardMenuActions(task)}
+                />
+              );
+            })
+        ) : (
+          <p
+            className="p-4 text-2xl text-center"
+            style={{ color: theme.fgPrimary }}
+          >
+            You don't have any assigned tasks
+          </p>
+        )}
+      </CardList>
+    </Frame>
+  );
 
   return (
     <div className="flex flex-row w-full h-full">
@@ -148,44 +212,8 @@ function DashboardContent() {
         }}
       />
       <Routes>
-        <Route index element={<Frame title="My Tasks"></Frame>} />
-        <Route
-          path="/tasks"
-          element={
-            <Frame title="My Tasks">
-              <CardList>
-                {assignedTasks.length > 0 ? (
-                  assignedTasks.map((task, i) => {
-                    return (
-                      <Card
-                        key={i}
-                        title={task.brief}
-                        content={
-                          <div className="flex justify-between">
-                            <span
-                              style={{ color: theme.fgPrimary }}
-                            >{`@${task.createdBy}`}</span>
-                            <span style={{ color: theme.fgPrimary }}>
-                              {dateFromTimestamp(task.createdAt)}
-                            </span>
-                          </div>
-                        }
-                        menuActions={buildTaskCardMenuActions(task)}
-                      />
-                    );
-                  })
-                ) : (
-                  <p
-                    className="p-4 text-2xl text-center"
-                    style={{ color: theme.fgPrimary }}
-                  >
-                    You don't have any assigned tasks
-                  </p>
-                )}
-              </CardList>
-            </Frame>
-          }
-        />
+        <Route index element={tasksFrame} />
+        <Route path="/tasks" element={tasksFrame} />
         <Route
           path="/projects"
           element={

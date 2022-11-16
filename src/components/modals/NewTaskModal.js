@@ -10,12 +10,16 @@ import TextArea from '../shared/TextArea';
 import FormError from '../shared/FormError';
 import { showError } from '../../utils/helpers';
 import { createTask } from '../../services/tasksService';
+import { useAuthContext } from '../../context-providers/AuthProvider';
+import { apiErrors } from '../../config/axiosConfig';
 
 export default function NewTaskModal({ open, onClose, projectId, onDone }) {
   const initialFormState = {
     brief: '',
     description: '',
   };
+
+  const { logout } = useAuthContext();
 
   const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState('');
@@ -39,8 +43,11 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
           }
         })
         .catch((error) => {
-          showError(error);
+          if (error.code === apiErrors.BAD_REQUEST) {
+            logout();
+          }
           onClose();
+          showError(error);
         });
     }
   };

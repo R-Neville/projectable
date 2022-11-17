@@ -267,7 +267,7 @@ function DashboardContent() {
             </Frame>
           }
         />
-        <Route path="/settings" element={<Frame title="My Settings"></Frame>} />
+        <Route path="/settings" element={<Frame title="My Settings"  ></Frame>} />
       </Routes>
     </div>
   );

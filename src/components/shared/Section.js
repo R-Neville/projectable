@@ -6,6 +6,7 @@ function Section({ title, children }) {
     <section
       className="flex flex-col items-center p-4 w-full max-w-2xl mr-auto ml-auto mt-4 mb-4 rounded"
       style={{ backgroundColor: theme.bgPrimary }}
+      data-testid="section"
     >
       {title ? (
         <h2

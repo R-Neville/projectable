@@ -6,7 +6,7 @@ function SidebarLink({ lightSrc, darkSrc, to, title, testID }) {
 
   return (
     <Link
-      className="flex items-center p-4 w-full text-lg hover:bg-gray-500 whitespace-nowrap overflow-x-hidden"
+      className="flex items-center p-3 w-full text-lg hover:bg-gray-500 whitespace-nowrap overflow-x-hidden"
       to={to}
       title={title}
       data-testid={testID}
@@ -17,7 +17,7 @@ function SidebarLink({ lightSrc, darkSrc, to, title, testID }) {
         className="w-10 max-w-15 h-10 max-h-15"
       />
       <div
-        className="p-4"
+        className="p-4 overflow-x-hidden"
         style={{
           color: theme.fgAccent,
         }}

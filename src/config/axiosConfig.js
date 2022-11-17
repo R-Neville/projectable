@@ -21,9 +21,15 @@ projectableAPI.interceptors.request.use((req) => {
   return req;
 });
 
-export const apiErrors = {
+export const errorCodes = {
   BAD_REQUEST: 'ERR_BAD_REQUEST',
   ERR_NETWORK: 'ERR_NETWORK',
 };
+
+export const fatalStatuses = [
+  401, // Unauthorized
+  403, // Forbidden
+  429, // Too many requests
+];
 
 export default projectableAPI;

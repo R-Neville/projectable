@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import UserManager from '../utils/UserManager';
-import projectableAPI from '../config/axiosConfig';
+import { logUserIn, registerUser } from '../services/authService';
 
 const AuthContext = createContext();
 export const useAuthContext = () => useContext(AuthContext);
@@ -11,20 +11,20 @@ function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(tokenPresent);
 
   const login = async (email, password) => {
-    try {
-      const response = await projectableAPI.post('/users/login', {
-        email,
-        password,
+    return logUserIn(email, password)
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          return data.error;
+        }
+        userManager.user = response.data.uid;
+        userManager.token = response.data.token;
+        setLoggedIn(true);
+        return null;
+      })
+      .catch((error) => {
+        return error.message;
       });
-      const { error } = response.data;
-      if (error) return error;
-      userManager.user = response.data.uid;
-      userManager.token = response.data.token;
-      setLoggedIn(true);
-      return null;
-    } catch (error) {
-      return error.message;
-    }
   };
 
   const logout = () => {
@@ -33,22 +33,21 @@ function AuthProvider({ children }) {
   };
 
   const register = async (username, email, password, confirmPassword) => {
-    try {
-      const response = await projectableAPI.post('/users/register', {
-        username,
-        email,
-        password,
-        confirmPassword,
+    return registerUser(username, email, password, confirmPassword)
+      .then((response) => {
+        const { data } = response;
+        if (data.error) {
+          return data.error;
+        }
+        userManager.user = response.data.uid;
+        userManager.token = response.data.token;
+        setLoggedIn(true);
+        return null;
+      })
+      .catch((error) => {
+        return error.message;
       });
-      const { error } = response.data;
-      if (error) return error;
-      userManager.user = response.data.uid;
-      userManager.token = response.data.token;
-      setLoggedIn(true);
-      return null;
-    } catch (error) {
-      return error.message;
-    }
+    
   };
 
   return (

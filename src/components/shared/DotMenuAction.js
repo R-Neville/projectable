@@ -18,6 +18,7 @@ function DotMenuAction({ text, onClick }) {
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      data-testid="dot-menu-action"
     >
       {text}
     </button>

@@ -13,7 +13,7 @@ beforeEach(() => {
           <Link to="/dashboard">Test Link</Link>
           <Routes>
             <Route path="/" element={<></>} />
-            <Route path="/dashboard/*" element={<DashboardContent />} />
+            <Route path="/dashboard/*" element={<DashboardContent dryRun />} />
           </Routes>
         </Router>
       </AuthProvider>

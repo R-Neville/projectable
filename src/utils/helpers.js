@@ -21,7 +21,7 @@ export function buildAxiosErrorHandler(onFatal, onDone) {
       onFatal();
     }
 
-    if (fatalStatuses.includes(error.status)) {
+    if (fatalStatuses.includes(error.response.status)) {
       onFatal();
     }
 

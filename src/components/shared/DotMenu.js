@@ -50,7 +50,7 @@ function DotMenu({ actions }) {
   };
 
   return (
-    <div className="dot-menu relative">
+    <div className="dot-menu relative" data-testid="dot-menu">
       <button
         type="button"
         className="flex flex-col justify-evenly items-center p-1 w-10 h-10 rounded-full"
@@ -66,6 +66,7 @@ function DotMenu({ actions }) {
             border: `1px solid ${theme.bgHighlight}`,
             backgroundColor: theme.fgHighlight,
           }}
+          data-testid="dot-menu-dropdown"
         >
           {actionEls}
         </div>

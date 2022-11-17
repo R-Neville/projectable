@@ -47,7 +47,7 @@ const linkData = [
   },
 ];
 
-function DashboardContent() {
+function DashboardContent({ dryRun }) {
   const { theme } = useThemeContext();
   const { logout, userManager } = useAuthContext();
   const [projects, setProjects] = useState([]);
@@ -71,7 +71,7 @@ function DashboardContent() {
   });
 
   useEffect(() => {
-    getAllProjects()
+    !dryRun && getAllProjects()
       .then((response) => {
         const { data } = response;
         if (data.error) {
@@ -84,7 +84,7 @@ function DashboardContent() {
   }, [logout]);
 
   const loadAssignedTasks = useCallback(() => {
-    getAllAssignedTasks()
+    !dryRun && getAllAssignedTasks()
       .then((response) => {
         const { data } = response;
         if (data.error) {

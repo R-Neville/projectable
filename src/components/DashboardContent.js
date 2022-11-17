@@ -19,6 +19,7 @@ import { showError, dateFromTimestamp } from '../utils/helpers';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
 import { apiErrors } from '../config/axiosConfig';
+import UserSettings from './UserSettings';
 
 const linkData = [
   {
@@ -92,7 +93,6 @@ function DashboardContent() {
         if (data.error) {
           showError(new Error(data.error));
         } else {
-          console.log(data);
           setAssignedTasks(data);
         }
       })
@@ -267,7 +267,14 @@ function DashboardContent() {
             </Frame>
           }
         />
-        <Route path="/settings" element={<Frame title="My Settings"  ></Frame>} />
+        <Route
+          path="/settings"
+          element={
+            <Frame title="My Settings">
+              <UserSettings />
+            </Frame>
+          }
+        />
       </Routes>
     </div>
   );

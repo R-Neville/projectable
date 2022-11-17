@@ -106,14 +106,6 @@ function DashboardContent() {
         text: 'View Project',
         onClick: () => {
           navigate(`/project/${project._id}`);
-          document.dispatchEvent(
-            new CustomEvent('set-project-name', {
-              bubbles: true,
-              detail: {
-                name: project.name,
-              },
-            })
-          );
         },
       },
     ];

@@ -55,7 +55,10 @@ function Main() {
         path="/project/:id/*"
         element={
           <ProtectedRoute loggedIn={loggedIn}>
-            <Page title={`${projectName} Project`} content={<ProjectContent />} />
+            <Page
+              title={projectName || 'Project'}
+              content={<ProjectContent />}
+            />
           </ProtectedRoute>
         }
       />

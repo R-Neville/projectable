@@ -1,4 +1,4 @@
-import { errorCodes, fatalStatuses } from "../config/axiosConfig";
+import { errorCodes, fatalStatuses } from '../config/axiosConfig';
 
 export function dateFromTimestamp(timestamp) {
   const date = new Date(timestamp);
@@ -6,13 +6,14 @@ export function dateFromTimestamp(timestamp) {
 }
 
 export function showError(error) {
-  const customEvent = new CustomEvent('show-error', {
-    bubbles: true,
-    detail: {
-      error,
-    },
-  });
-  document.dispatchEvent(customEvent);
+  document.dispatchEvent(
+    new CustomEvent('show-error', {
+      bubbles: true,
+      detail: {
+        error,
+      },
+    })
+  );
 }
 
 export function buildAxiosErrorHandler(onFatal, onDone) {

@@ -159,7 +159,14 @@ function ProjectContent() {
         if (data.error) {
           showError(new Error(data.error));
         } else {
-          console.log(data);
+          document.dispatchEvent(
+            new CustomEvent('set-project-name', {
+              bubbles: true,
+              detail: {
+                name: data.name,
+              },
+            })
+          );
           setProject(data);
         }
       })

@@ -18,6 +18,11 @@ export function showError(error) {
 
 export function buildAxiosErrorHandler(onFatal, onDone) {
   return (error) => {
+    if (!error.response) {
+      onFatal();
+      return showError(error);
+    }
+
     if (error.code === errorCodes.ERR_NETWORK) {
       onFatal();
     }

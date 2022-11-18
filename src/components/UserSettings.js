@@ -14,6 +14,7 @@ import Label from './shared/Label';
 import FormActions from './shared/FormActions';
 import FormError from './shared/FormError';
 import { useEffect } from 'react';
+import { buildAxiosErrorHandler } from '../utils/helpers';
 
 export default function UserSettings() {
   const initialFormState = {
@@ -35,17 +36,14 @@ export default function UserSettings() {
   useEffect(() => {
     getUserDetails()
       .then((userRecord) => {
-        console.log(userRecord);
         setFormState({
           ...formState,
           displayName: userRecord.data.displayName,
           email: userRecord.data.email,
         });
       })
-      .catch((error) => {
-        showError(error);
-      });
-  }, []);
+      .catch(buildAxiosErrorHandler(logout));
+  }, [logout]);
 
   const onSubmit = async () => {
     const { displayName, email, password, confirmPassword } = formState;
@@ -64,9 +62,7 @@ export default function UserSettings() {
         .then((updatedUserRecord) => {
 
         })
-        .catch((error) => {
-          showError(error);
-        });
+        .catch(buildAxiosErrorHandler(logout));
     }
   };
 
@@ -77,9 +73,7 @@ export default function UserSettings() {
         console.log(deletedUser);
         logout();
       })
-      .catch((error) => {
-        showError(error);
-      });
+      .catch(buildAxiosErrorHandler(logout));
   };
 
   return (

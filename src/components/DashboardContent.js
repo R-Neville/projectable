@@ -7,6 +7,7 @@ import CardList from './shared/CardList';
 import Card from './shared/Card';
 import TaskModal from './modals/TaskModal';
 import NewProjectModal from './modals/NewProjectModal';
+import QuestionModal from './modals/QuestionModal';
 import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
 import ProjectsIconDark from '../assets/icons/projects-dark.svg';
@@ -22,6 +23,7 @@ import {
 } from '../utils/helpers';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
+import UserSettings from './UserSettings';
 
 const linkData = [
   {
@@ -198,6 +200,7 @@ function DashboardContent({ dryRun }) {
           setShowTaskModal(false);
         }}
       />
+      
       <Routes>
         <Route index element={tasksFrame} />
         <Route path="/tasks" element={tasksFrame} />
@@ -254,7 +257,14 @@ function DashboardContent({ dryRun }) {
             </Frame>
           }
         />
-        <Route path="/settings" element={<Frame title="My Settings"></Frame>} />
+        <Route
+          path="/settings"
+          element={
+            <Frame title="My Settings">
+              <UserSettings  />
+            </Frame>
+          }
+        />
       </Routes>
     </div>
   );

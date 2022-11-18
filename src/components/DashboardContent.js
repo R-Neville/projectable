@@ -16,10 +16,13 @@ import SettingsIconDark from '../assets/icons/settings-dark.svg';
 import SettingsIconLight from '../assets/icons/settings-light.svg';
 import { getAllProjects } from '../services/projectsService';
 import { deleteTask, getAllAssignedTasks } from '../services/tasksService';
-import { showError, dateFromTimestamp } from '../utils/helpers';
+import {
+  showError,
+  buildAxiosErrorHandler,
+  dateFromTimestamp,
+} from '../utils/helpers';
 import { useThemeContext } from '../context-providers/ThemeProvider';
 import { useAuthContext } from '../context-providers/AuthProvider';
-import { apiErrors } from '../config/axiosConfig';
 import UserSettings from './UserSettings';
 
 const linkData = [
@@ -46,7 +49,7 @@ const linkData = [
   },
 ];
 
-function DashboardContent() {
+function DashboardContent({ dryRun }) {
   const { theme } = useThemeContext();
   const { logout, userManager } = useAuthContext();
   const [projects, setProjects] = useState([]);
@@ -70,7 +73,7 @@ function DashboardContent() {
   });
 
   useEffect(() => {
-    getAllProjects()
+    !dryRun && getAllProjects()
       .then((response) => {
         const { data } = response;
         if (data.error) {
@@ -79,16 +82,11 @@ function DashboardContent() {
           setProjects(data);
         }
       })
-      .catch((error) => {
-        if (error.code === apiErrors.BAD_REQUEST) {
-          logout();
-        }
-        showError(error);
-      });
+      .catch(buildAxiosErrorHandler(logout));
   }, [logout]);
 
   const loadAssignedTasks = useCallback(() => {
-    getAllAssignedTasks()
+    !dryRun && getAllAssignedTasks()
       .then((response) => {
         const { data } = response;
         if (data.error) {
@@ -97,12 +95,7 @@ function DashboardContent() {
           setAssignedTasks(data);
         }
       })
-      .catch((error) => {
-        if (error.code === apiErrors.BAD_REQUEST) {
-          logout();
-        }
-        showError(error);
-      });
+      .catch(buildAxiosErrorHandler(logout));
   }, [logout]);
 
   useEffect(() => {
@@ -144,12 +137,7 @@ function DashboardContent() {
                 loadAssignedTasks();
               }
             })
-            .catch((error) => {
-              if (error.code === apiErrors.BAD_REQUEST) {
-                logout();
-              }
-              showError(error);
-            });
+            .catch(buildAxiosErrorHandler(logout));
         },
       });
     }

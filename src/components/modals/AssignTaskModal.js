@@ -5,8 +5,7 @@ import Section from '../shared/Section';
 import Select from 'react-select';
 import FormActions from '../shared/FormActions';
 import { updateTask } from '../../services/tasksService';
-import { apiErrors } from '../../config/axiosConfig';
-import { showError } from '../../utils/helpers';
+import { showError, buildAxiosErrorHandler } from '../../utils/helpers';
 import FormError from '../shared/FormError';
 
 function AssignTaskModal({ open, project, task, onClose, onDone }) {
@@ -54,12 +53,7 @@ function AssignTaskModal({ open, project, task, onClose, onDone }) {
               onDone();
             }
           })
-          .catch((error) => {
-            if (error.code === apiErrors.BAD_REQUEST) {
-              logout();
-            }
-            showError(error);
-          });
+          .catch(buildAxiosErrorHandler(logout));
       },
     },
   ];

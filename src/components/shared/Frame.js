@@ -20,7 +20,10 @@ function Frame({ title, actions, children }) {
   }
 
   return (
-    <div className="flex flex-col items-center p-4 w-full h-full">
+    <div
+      className="flex flex-col items-center p-4 w-full h-full"
+      data-testid="frame"
+    >
       <div
         className="flex w-full max-w-3xl py-3"
         style={{ borderBottom: `2px solid ${theme.fgPrimary}` }}
@@ -30,6 +33,7 @@ function Frame({ title, actions, children }) {
           style={{
             color: theme.fgAccent,
           }}
+          data-testid="frame-title"
         >
           {title}
         </h2>

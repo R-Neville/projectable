@@ -8,10 +8,9 @@ import Label from '../shared/Label';
 import Input from '../shared/Input';
 import TextArea from '../shared/TextArea';
 import FormError from '../shared/FormError';
-import { showError } from '../../utils/helpers';
+import { showError, buildAxiosErrorHandler } from '../../utils/helpers';
 import { createTask } from '../../services/tasksService';
 import { useAuthContext } from '../../context-providers/AuthProvider';
-import { apiErrors } from '../../config/axiosConfig';
 
 export default function NewTaskModal({ open, onClose, projectId, onDone }) {
   const initialFormState = {
@@ -42,13 +41,9 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
             onDone();
           }
         })
-        .catch((error) => {
-          if (error.code === apiErrors.BAD_REQUEST) {
-            logout();
-          }
+        .catch(buildAxiosErrorHandler(logout, () => {
           onClose();
-          showError(error);
-        });
+        }));
     }
   };
 

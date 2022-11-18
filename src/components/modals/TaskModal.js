@@ -13,11 +13,14 @@ import {
   createTaskComment,
   updateTaskComment,
 } from '../../services/commentsService';
-import { dateFromTimestamp, showError } from '../../utils/helpers';
+import {
+  dateFromTimestamp,
+  showError,
+  buildAxiosErrorHandler,
+} from '../../utils/helpers';
 import DotMenu from '../shared/DotMenu';
 import FormActions from '../shared/FormActions';
 import FormError from '../shared/FormError';
-import { apiErrors } from '../../config/axiosConfig';
 import { getTask, updateTask } from '../../services/tasksService';
 
 function TaskModal({ open, taskId, projectId, onClose }) {
@@ -41,12 +44,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
             setTaskState(data);
           }
         })
-        .catch((error) => {
-          if (error.code === apiErrors.BAD_REQUEST) {
-            logout();
-          }
-          showError(error);
-        });
+        .catch(buildAxiosErrorHandler(logout));
     }
   }, [taskId, projectId, logout]);
 
@@ -80,12 +78,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                 loadTask();
               }
             })
-            .catch((error) => {
-              if (error.code === apiErrors.BAD_REQUEST) {
-                logout();
-              }
-              showError(error);
-            });
+            .catch(buildAxiosErrorHandler(logout));
         }
       },
     },
@@ -116,12 +109,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                   loadTask();
                 }
               })
-              .catch((error) => {
-                if (error.code === apiErrors.BAD_REQUEST) {
-                  logout();
-                }
-                showError(error);
-              });
+              .catch(buildAxiosErrorHandler(logout));
           },
         },
       ];
@@ -168,12 +156,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                               loadTask();
                             }
                           })
-                          .catch((error) => {
-                            if (error.code === apiErrors.BAD_REQUEST) {
-                              logout();
-                            }
-                            showError(error);
-                          });
+                          .catch(buildAxiosErrorHandler(logout));
                       }}
                     >
                       Mark as Complete
@@ -278,12 +261,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                                       setCommentId(null);
                                     }
                                   })
-                                  .catch((error) => {
-                                    if (error.code === apiErrors.BAD_REQUEST) {
-                                      logout();
-                                    }
-                                    showError(error);
-                                  });
+                                  .catch(buildAxiosErrorHandler(logout));
                               }
                             },
                           },

@@ -7,6 +7,7 @@ import CardList from './shared/CardList';
 import Card from './shared/Card';
 import TaskModal from './modals/TaskModal';
 import NewProjectModal from './modals/NewProjectModal';
+import QuestionModal from './modals/QuestionModal';
 import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
 import ProjectsIconDark from '../assets/icons/projects-dark.svg';
@@ -211,6 +212,7 @@ function DashboardContent() {
           setShowTaskModal(false);
         }}
       />
+      
       <Routes>
         <Route index element={tasksFrame} />
         <Route path="/tasks" element={tasksFrame} />
@@ -271,7 +273,7 @@ function DashboardContent() {
           path="/settings"
           element={
             <Frame title="My Settings">
-              <UserSettings />
+              <UserSettings  />
             </Frame>
           }
         />

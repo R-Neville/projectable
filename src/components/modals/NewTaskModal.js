@@ -11,18 +11,20 @@ import FormError from '../shared/FormError';
 import { showError, buildAxiosErrorHandler } from '../../utils/helpers';
 import { createTask } from '../../services/tasksService';
 import { useAuthContext } from '../../context-providers/AuthProvider';
+import { useThemeContext } from '../../context-providers/ThemeProvider'
 
 export default function NewTaskModal({ open, onClose, projectId, onDone }) {
   const initialFormState = {
     brief: '',
     description: '',
+    priority: '',
   };
 
   const { logout } = useAuthContext();
-
   const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState('');
-
+  const { theme } = useThemeContext();
+   
   const onInputChange = (event) => {
     setFormState({ ...formState, [event.target.name]: event.target.value });
   };
@@ -41,9 +43,11 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
             onDone();
           }
         })
-        .catch(buildAxiosErrorHandler(logout, () => {
-          onClose();
-        }));
+        .catch(
+          buildAxiosErrorHandler(logout, () => {
+            onClose();
+          })
+        );
     }
   };
 
@@ -79,6 +83,23 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
                     name="description"
                     onChange={onInputChange}
                   />
+                </Fieldset>
+                <Fieldset>
+                  <Label text="Priority" />
+                  <select
+                    className="my-2 bg-transparent border-solid border-1"
+                    name="priority"
+                    style={{
+                      backgroundColor: theme.bgHighlight,
+                      color: theme.fgHighlight,
+                    }}
+                    value={formState.priority}
+                    onChange={onInputChange}
+                  >
+                    <option value="high">high</option>
+                    <option value="medium">medium</option>
+                    <option value="low">low</option>
+                  </select>
                 </Fieldset>
                 <FormActions
                   actions={[

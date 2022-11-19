@@ -2,28 +2,28 @@ import { createContext, useContext, useState } from 'react';
 import ThemeManager from '../utils/ThemeManager';
 import themes from '../themes';
 
-const themeManager = new ThemeManager();
-let initialTheme;
-if (themeManager.theme === 'DARK') {
-  initialTheme = themes.dark;
-} else {
-  initialTheme = themes.light;
-}
-
 const ThemeContext = createContext();
 export const useThemeContext = () => useContext(ThemeContext);
 
 export default function ThemeProvider({ children }) {
+  const themeManager = new ThemeManager();
+  let initialTheme;
+  if (themeManager.theme === 'DARK') {
+    initialTheme = themes.dark;
+  } else {
+    initialTheme = themes.light;
+  }
+  
   const [theme, setTheme] = useState(initialTheme);
   const [isDarkMode, setIsDarkMode] = useState(theme === themes.dark);
 
   const toggleTheme = () => {
     if (theme === themes.light) {
-      setTheme(themes.dark);
       themeManager.goDark();
+      setTheme(themes.dark);
     } else {
-      setTheme(themes.light);
       themeManager.goLight();
+      setTheme(themes.light);
     }
     setIsDarkMode((prev) => !prev);
   };

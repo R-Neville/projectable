@@ -25,7 +25,7 @@ function Frame({ title, actions, children }) {
       data-testid="frame"
     >
       <div
-        className="flex w-full max-w-3xl py-3"
+        className="flex flex-col sm:flex-row w-full max-w-3xl py-3"
         style={{ borderBottom: `2px solid ${theme.fgPrimary}` }}
       >
         <h2
@@ -37,7 +37,7 @@ function Frame({ title, actions, children }) {
         >
           {title}
         </h2>
-        <div>{buttons}</div>
+        <div className="flex justify-end">{buttons}</div>
       </div>
       <div className="flex flex-col w-full max-w-3xl">{children}</div>
     </div>

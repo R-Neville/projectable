@@ -1,12 +1,20 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import ThemeProvider from '../../context-providers/ThemeProvider';
-import themes from '../../themes';
 import Input from './Input';
+
+const onChange = jest.fn();
 
 beforeEach(() => {
   render(
     <ThemeProvider>
-      <Input name={'test'} type={'text'} />
+      <Input
+        name={'test'}
+        type={'text'}
+        onChange={onChange}
+        placeholder="test"
+        value="test"
+      />
     </ThemeProvider>
   );
 });
@@ -27,11 +35,29 @@ describe('Input', () => {
     expect(input.type).toBe('text');
   });
 
-  test('has correct color and background color', () => {
+  test('has correct value', () => {
     const input = screen.getByRole('textbox');
-    expect(input).toHaveStyle({
-      color: themes.light.fgHighlight,
-      'background-color': themes.light.bgHighlight,
+    expect(input.value).toBe('test');
+  });
+
+  test('has correct placeholder', () => {
+    const input = screen.getByRole('textbox');
+    expect(input.placeholder).toBe('test');
+  });
+
+  test('onChange is called when "change" event is fired', () => {
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input);
+    setTimeout(() => {
+      expect(onChange).toBeCalled();
+    });
+  });
+
+  test('onChange is called when "input" event is fired', () => {
+    const input = screen.getByRole('textbox');
+    fireEvent.input(input);
+    setTimeout(() => {
+      expect(onChange).toBeCalled();
     });
   });
 });

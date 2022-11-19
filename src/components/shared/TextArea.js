@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
 import { useThemeContext } from '../../context-providers/ThemeProvider';
 
-
-export default function TextArea({type, name, value, onChange}) {
-    const { theme } = useThemeContext();
+export default function TextArea({ name, value, onChange }) {
+  const { theme } = useThemeContext();
 
   return (
     <textarea
@@ -12,7 +11,6 @@ export default function TextArea({type, name, value, onChange}) {
       onChange={onChange}
       onInput={onChange}
       name={name}
-      type={type}
       value={value}
     />
   );

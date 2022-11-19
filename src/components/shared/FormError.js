@@ -20,6 +20,7 @@ function FormError({ text, onDismiss }) {
         className="py-1 px-2 rounded mt-2"
         style={{ backgroundColor: theme.fgError, color: theme.bgError }}
         onClick={onButtonClick}
+        data-testid="dismiss-button"
       >
         Dismiss
       </button>

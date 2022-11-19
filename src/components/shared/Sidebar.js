@@ -1,7 +1,7 @@
 import { useThemeContext } from '../../context-providers/ThemeProvider';
-import { useState} from 'react';
+import { useState } from 'react';
 
-function Sidebar({ links}) {
+function Sidebar({ links }) {
   const { theme } = useThemeContext();
   const [showSideBar, setShowSideBar] = useState(false);
 

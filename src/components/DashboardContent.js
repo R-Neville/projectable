@@ -7,7 +7,6 @@ import CardList from './shared/CardList';
 import Card from './shared/Card';
 import TaskModal from './modals/TaskModal';
 import NewProjectModal from './modals/NewProjectModal';
-import QuestionModal from './modals/QuestionModal';
 import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
 import ProjectsIconDark from '../assets/icons/projects-dark.svg';
@@ -83,7 +82,7 @@ function DashboardContent({ dryRun }) {
         }
       })
       .catch(buildAxiosErrorHandler(logout));
-  }, [logout]);
+  }, [logout, dryRun]);
 
   const loadAssignedTasks = useCallback(() => {
     !dryRun && getAllAssignedTasks()
@@ -96,7 +95,7 @@ function DashboardContent({ dryRun }) {
         }
       })
       .catch(buildAxiosErrorHandler(logout));
-  }, [logout]);
+  }, [logout, dryRun]);
 
   useEffect(() => {
     loadAssignedTasks();

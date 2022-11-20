@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import Sidebar from './shared/Sidebar';
 import SidebarLink from './shared/SidebarLink';
 import Frame from './shared/Frame';
@@ -11,13 +11,12 @@ import UserIconDark from '../assets/icons/user-dark.svg';
 import UserIconLight from '../assets/icons/user-light.svg';
 import CompletedIconDark from '../assets/icons/completed-dark.svg';
 import CompletedIconLight from '../assets/icons/completed-light.svg';
-import { deleteProject, getProject } from '../services/projectsService';
+import { getProject, removeMember } from '../services/projectsService';
 import {
   showError,
   dateFromTimestamp,
   buildAxiosErrorHandler,
 } from '../utils/helpers';
-import CardList from './shared/CardList';
 import Card from './shared/Card';
 import QuestionModal from './modals/QuestionModal';
 import NewTaskModal from './modals/NewTaskModal';
@@ -29,14 +28,13 @@ import TaskModal from './modals/TaskModal';
 import EditTaskModal from './modals/EditTaskModal';
 import AssignTaskModal from './modals/AssignTaskModal';
 import ViewMemberModal from './modals/ViewMemberModal';
+import ProjectSettings from './ProjectSettings';
 
 function ProjectContent() {
   const { theme } = useThemeContext();
   const { logout, userManager } = useAuthContext();
   const { id } = useParams();
-  const navigate = useNavigate();
   const [project, setProject] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [showConfirmDeleteTask, setShowConfirmDeleteTask] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
@@ -47,20 +45,6 @@ function ProjectContent() {
   const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showViewMemberModal, setShowViewMemberModal] = useState(false);
-
-  const onDeleteProjectModalConfirm = () => {
-    setShowDeleteModal(false);
-    deleteProject(id)
-      .then((response) => {
-        const { data } = response;
-        if (data && data.error) {
-          showError(new Error(data.error));
-        } else {
-          navigate('/dashboard');
-        }
-      })
-      .catch(buildAxiosErrorHandler(logout));
-  };
 
   const onNewTaskModalDone = () => {
     loadProject();
@@ -88,7 +72,18 @@ function ProjectContent() {
   };
 
   const onRemoveMemberModalConfirm = () => {
-    console.log('Remove member');
+    removeMember(id, currentMember)
+      .then((response) => {
+        const { data } = response;
+        if (data && data.error) {
+          showError(new Error(data.error));
+        } else {
+          setCurrentMember(null);
+          setShowRemoveMemberModal(false);
+          loadProject();
+        }
+      })
+      .catch(buildAxiosErrorHandler(logout));
   };
 
   const linkData = [
@@ -137,16 +132,6 @@ function ProjectContent() {
       />
     );
   });
-
-  const settingsOptions = [
-    {
-      title: 'Delete Project',
-      danger: true,
-      onClick: () => {
-        setShowDeleteModal(true);
-      },
-    },
-  ];
 
   const loadProject = useCallback(() => {
     getProject(id)
@@ -384,22 +369,7 @@ function ProjectContent() {
         {project && userManager.user === project.userId && (
           <Route
             path="/settings"
-            element={
-              <Frame title="Settings">
-                <CardList>
-                  {settingsOptions.map((settingsOption, i) => {
-                    return (
-                      <Card
-                        key={i}
-                        title={settingsOption.title}
-                        danger={settingsOption.danger}
-                        onClick={settingsOption.onClick}
-                      />
-                    );
-                  })}
-                </CardList>
-              </Frame>
-            }
+            element={<ProjectSettings project={project} />}
           ></Route>
         )}
       </Routes>
@@ -434,7 +404,7 @@ function ProjectContent() {
           setCurrentTask(null);
         }}
         onDone={() => loadProject()}
-        task={currentTask}
+        task={currentTask || {}}
       />
       <QuestionModal
         open={currentMember && showRemoveMemberModal}
@@ -456,12 +426,6 @@ function ProjectContent() {
         onDone={() => loadProject()}
         project={project}
         task={currentTask}
-      />
-      <QuestionModal
-        open={showDeleteModal}
-        message={`Delete '${project && project.name}' project?`}
-        onCancel={() => setShowDeleteModal(false)}
-        onConfirm={onDeleteProjectModalConfirm}
       />
       <MemberModal
         open={showMemberModal}

@@ -1,6 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useThemeContext } from '../../context-providers/ThemeProvider';
 import { useAuthContext } from '../../context-providers/AuthProvider';
 import Section from '../shared/Section';
 import Fieldset from '../shared/Fieldset';
@@ -13,23 +12,30 @@ import { updateTask } from '../../services/tasksService';
 import { buildAxiosErrorHandler, showError } from '../../utils/helpers';
 
 function EditTaskModal({ open, onClose, onDone, task }) {
-  const { theme } = useThemeContext();
   const { logout } = useAuthContext();
-
-  const initialFormState = {
-    brief: '',
-    description: '',
-  };
-  const [formState, setFormState] = useState(initialFormState);
-  const [formError, setFormError] = useState(null);
   const brief = useCallback(() => task.brief, [task]);
   const description = useCallback(() => task.description, [task]);
-
-  if (!open || !task) return null;
+  const [formState, setFormState] = useState({
+    brief: brief(),
+    description: description(),
+  });
+  const [formError, setFormError] = useState(null);
 
   const onFormInputChange = (event) => {
     setFormState({ ...formState, [event.target.name]: event.target.value });
   };
+
+  useEffect(() => {
+    const { brief, description } = formState;
+    if (brief === undefined || description === undefined) {
+      setFormState({
+        ...formState,
+        ...{ brief: task.brief, description: task.description },
+      });
+    }
+  }, [task, formState]);
+
+  if (!open) return null;
 
   const formActions = [
     {
@@ -98,21 +104,20 @@ function EditTaskModal({ open, onClose, onDone, task }) {
                 )}
                 <Fieldset>
                   <Label text="Brief" />
-                  <p className="italic" style={{ color: theme.fgHighlight }}>
-                    {`"${task.brief}"`}
-                  </p>
                   <Input
                     name="brief"
                     type="text"
+                    value={formState.brief}
                     onChange={onFormInputChange}
                   />
                 </Fieldset>
                 <Fieldset>
                   <Label text="Description" />
-                  <p className="italic" style={{ color: theme.fgHighlight }}>
-                    {`"${task.description}"`}
-                  </p>
-                  <TextArea name="description" onChange={onFormInputChange} />
+                  <TextArea
+                    name="description"
+                    value={formState.description}
+                    onChange={onFormInputChange}
+                  />
                 </Fieldset>
                 <FormActions key={task._id} actions={formActions} />
               </form>

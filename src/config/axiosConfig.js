@@ -1,7 +1,7 @@
 import axios from 'axios';
 import UserManager from '../utils/UserManager';
 
-const HEROKU = 'http://projectable-api.herokuapp.com';
+const HEROKU = 'https://projectable-api.herokuapp.com';
 
 const userManager = new UserManager();
 

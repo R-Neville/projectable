@@ -5,7 +5,7 @@ const HEROKU = 'https://projectable-api.herokuapp.com';
 
 const userManager = new UserManager();
 
-const ROOT_URL =
+export const ROOT_URL =
   process.env.NODE_ENV === 'production' ? HEROKU : 'http://localhost:3001';
 
 const projectableAPI = axios.create({

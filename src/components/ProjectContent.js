@@ -239,6 +239,9 @@ function ProjectContent() {
                 title={task.brief}
                 content={
                   <div className="flex justify-between">
+                    <span style={{ color: theme.fgPrimary }}>
+                    {task.priority && `priority: ${task.priority}`}
+                    </span>
                     <span
                       style={{ color: theme.fgPrimary }}
                     >{`@${task.createdBy}`}</span>
@@ -323,6 +326,9 @@ function ProjectContent() {
                 title={task.brief}
                 content={
                   <div className="flex justify-between">
+                    <span style={{ color: theme.fgPrimary }}>
+                      {task.priority && `priority: ${task.priority}`}
+                    </span>
                     <span
                       style={{ color: theme.fgPrimary }}
                     >{`@${task.createdBy}`}</span>

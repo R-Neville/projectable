@@ -4,7 +4,7 @@ function Label({ text }) {
   const { theme } = useThemeContext();
 
   return (
-    <label style={{ color: theme.fgPrimary }}>
+    <label className='my-1' style={{ color: theme.fgPrimary }}>
       {text}
     </label>
   );

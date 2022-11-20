@@ -28,6 +28,7 @@ import { deleteTask } from '../services/tasksService';
 import TaskModal from './modals/TaskModal';
 import EditTaskModal from './modals/EditTaskModal';
 import AssignTaskModal from './modals/AssignTaskModal';
+import ViewMemberModal from './modals/ViewMemberModal';
 
 function ProjectContent() {
   const { theme } = useThemeContext();
@@ -45,13 +46,14 @@ function ProjectContent() {
   const [currentMember, setCurrentMember] = useState(null);
   const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showViewMemberModal, setShowViewMemberModal] = useState(false);
 
   const onDeleteProjectModalConfirm = () => {
     setShowDeleteModal(false);
     deleteProject(id)
       .then((response) => {
         const { data } = response;
-        if (data.error) {
+        if (data && data.error) {
           showError(new Error(data.error));
         } else {
           navigate('/dashboard');
@@ -69,7 +71,7 @@ function ProjectContent() {
     deleteTask(project._id, currentTask._id)
       .then((response) => {
         const { data } = response;
-        if (data.error) {
+        if (data && data.error) {
           showError(new Error(data.error));
         } else {
           setCurrentTask(null);
@@ -138,12 +140,6 @@ function ProjectContent() {
 
   const settingsOptions = [
     {
-      title: 'Add Members',
-      onClick: () => {
-        setShowMemberModal(true);
-      },
-    },
-    {
       title: 'Delete Project',
       danger: true,
       onClick: () => {
@@ -156,17 +152,19 @@ function ProjectContent() {
     getProject(id)
       .then((response) => {
         const { data } = response;
-        if (data.error) {
+        if (data && data.error) {
           showError(new Error(data.error));
         } else {
-          document.dispatchEvent(
-            new CustomEvent('set-project-name', {
-              bubbles: true,
-              detail: {
-                name: data.name,
-              },
-            })
-          );
+          if (data) {
+            document.dispatchEvent(
+              new CustomEvent('set-project-name', {
+                bubbles: true,
+                detail: {
+                  name: data.name,
+                },
+              })
+            );
+          }
           setProject(data);
         }
       })
@@ -175,6 +173,18 @@ function ProjectContent() {
 
   useEffect(() => {
     loadProject();
+
+    const showTask = (event) => {
+      const { task } = event.detail;
+      setCurrentTask(task);
+      setShowTaskModal(true);
+    };
+
+    document.addEventListener('show-task', showTask);
+
+    return () => {
+      document.removeEventListener('show-task', showTask);
+    };
   }, [loadProject]);
 
   function buildTaskCardMenuActions(task) {
@@ -240,7 +250,7 @@ function ProjectContent() {
                 content={
                   <div className="flex justify-between">
                     <span style={{ color: theme.fgPrimary }}>
-                    {task.priority && `priority: ${task.priority}`}
+                      {task.priority && `priority: ${task.priority}`}
                     </span>
                     <span
                       style={{ color: theme.fgPrimary }}
@@ -270,7 +280,8 @@ function ProjectContent() {
       {
         text: 'View Details',
         onClick: () => {
-          console.log('view member details');
+          setCurrentMember(member);
+          setShowViewMemberModal(true);
         },
       },
     ];
@@ -292,7 +303,17 @@ function ProjectContent() {
   }
 
   const membersFrame = (
-    <Frame title="Project Members">
+    <Frame
+      title="Project Members"
+      actions={[
+        {
+          text: 'Add',
+          onClick: () => {
+            setShowMemberModal(true);
+          },
+        },
+      ]}
+    >
       {project && project.members.length > 0 ? (
         project.members.map((member, i) => {
           return (
@@ -447,6 +468,21 @@ function ProjectContent() {
         onClose={() => setShowMemberModal(false)}
         projectId={id}
         onDone={() => loadProject()}
+      />
+      <ViewMemberModal
+        open={currentMember && showViewMemberModal}
+        onClose={() => {
+          setCurrentMember(null);
+          setShowViewMemberModal(false);
+        }}
+        member={currentMember}
+        tasks={
+          currentMember &&
+          project &&
+          project.tasks.filter((task) => {
+            return task.assignedTo === currentMember.uid && !task.completed;
+          })
+        }
       />
     </div>
   );

@@ -75,7 +75,7 @@ function DashboardContent({ dryRun }) {
     !dryRun && getAllProjects()
       .then((response) => {
         const { data } = response;
-        if (data.error) {
+        if (data && data.error) {
           showError(new Error(data.error));
         } else {
           setProjects(data);
@@ -88,7 +88,7 @@ function DashboardContent({ dryRun }) {
     !dryRun && getAllAssignedTasks()
       .then((response) => {
         const { data } = response;
-        if (data.error) {
+        if (data && data.error) {
           showError(new Error(data.error));
         } else {
           setAssignedTasks(data);
@@ -130,7 +130,7 @@ function DashboardContent({ dryRun }) {
           deleteTask(task.projectId, task._id)
             .then((response) => {
               const { data } = response;
-              if (data.error) {
+              if (data && data.error) {
                 showError(new Error(data.error));
               } else {
                 loadAssignedTasks();

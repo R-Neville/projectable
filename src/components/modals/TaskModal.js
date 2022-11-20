@@ -38,7 +38,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
       getTask(projectId, taskId)
         .then((response) => {
           const { data } = response;
-          if (data.error) {
+          if (data && data.error) {
             showError(new Error(data.error));
           } else {
             setTaskState(data);
@@ -70,7 +70,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
           createTaskComment(taskState.projectId, taskState._id, commentContent)
             .then((response) => {
               const { data } = response;
-              if (data.error) {
+              if (data && data.error) {
                 showError(new Error(data.error));
               } else {
                 setCommentContent('');
@@ -103,7 +103,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
             deleteTaskComment(taskState.projectId, taskState._id, comment._id)
               .then((response) => {
                 const { data } = response;
-                if (data.error) {
+                if (data && data.error) {
                   showError(new Error(data.error));
                 } else {
                   loadTask();
@@ -150,7 +150,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                         })
                           .then((response) => {
                             const { data } = response;
-                            if (data.error) {
+                            if (data && data.error) {
                               showError(new Error(data.error));
                             } else {
                               loadTask();
@@ -252,7 +252,7 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                                 )
                                   .then((response) => {
                                     const { data } = response;
-                                    if (data.error) {
+                                    if (data && data.error) {
                                       showError(new Error(data.error));
                                     } else {
                                       loadTask();

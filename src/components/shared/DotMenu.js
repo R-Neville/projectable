@@ -61,7 +61,7 @@ function DotMenu({ actions }) {
       </button>
       {dropdownVisible && (
         <div
-          className="dropdown flex flex-col absolute top-full right-0 z-50 w-48 rounded"
+          className="dropdown flex flex-col absolute top-full right-0 z-49 w-48 rounded"
           style={{
             border: `1px solid ${theme.bgHighlight}`,
             backgroundColor: theme.fgHighlight,

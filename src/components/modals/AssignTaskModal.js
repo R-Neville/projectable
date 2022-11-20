@@ -44,7 +44,7 @@ function AssignTaskModal({ open, project, task, onClose, onDone }) {
         updateTask(project._id, task._id, updatedTask)
           .then((response) => {
             const { data } = response;
-            if (data.error) {
+            if (data && data.error) {
               showError(new Error(data.error));
             } else {
               setFormError(null);

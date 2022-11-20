@@ -37,7 +37,7 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
       createTask(projectId, formState)
         .then((response) => {
           const { data } = response;
-          if (data.error) {
+          if (data && data.error) {
             showError(new Error(data.error));
           } else {
             onDone();

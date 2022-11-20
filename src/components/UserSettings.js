@@ -6,7 +6,6 @@ import {
   deleteUserAccount,
 } from '../services/userService';
 import QuestionModal from './modals/QuestionModal';
-import { showError } from '../utils/helpers';
 import Section from './shared/Section';
 import Fieldset from './shared/Fieldset';
 import Input from './shared/Input';
@@ -43,7 +42,7 @@ export default function UserSettings() {
         });
       })
       .catch(buildAxiosErrorHandler(logout));
-  }, [logout]);
+  }, [logout, formState]);
 
   const onSubmit = async () => {
     const { displayName, email, password, confirmPassword } = formState;
@@ -69,8 +68,7 @@ export default function UserSettings() {
   const onDelete = async (event) => {
     event.preventDefault();
     deleteUserAccount()
-      .then((deletedUser) => {
-        console.log(deletedUser);
+      .then(() => {
         logout();
       })
       .catch(buildAxiosErrorHandler(logout));

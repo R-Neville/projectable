@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useThemeContext } from '../../context-providers/ThemeProvider';
+import { useAuthContext } from '../../context-providers/AuthProvider';
 import Section from '../shared/Section';
 import Fieldset from '../shared/Fieldset';
 import Label from '../shared/Label';
@@ -9,10 +10,11 @@ import TextArea from '../shared/TextArea';
 import FormActions from '../shared/FormActions';
 import FormError from '../shared/FormError';
 import { updateTask } from '../../services/tasksService';
-import { showError } from '../../utils/helpers';
+import { buildAxiosErrorHandler, showError } from '../../utils/helpers';
 
 function EditTaskModal({ open, onClose, onDone, task }) {
   const { theme } = useThemeContext();
+  const { logout } = useAuthContext();
 
   const initialFormState = {
     brief: '',
@@ -66,16 +68,14 @@ function EditTaskModal({ open, onClose, onDone, task }) {
         updateTask(task.projectId, task._id, formData)
           .then((response) => {
             const { data } = response;
-            if (data.error) {
+            if (data && data.error) {
               showError(new Error(data.error));
             } else {
               onClose();
               onDone();
             }
           })
-          .catch((error) => {
-            showError(error);
-          });
+          .catch(buildAxiosErrorHandler(logout));
       },
     },
   ];

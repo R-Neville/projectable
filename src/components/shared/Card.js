@@ -6,7 +6,7 @@ function Card({ title, content, menuActions, onClick, danger }) {
 
   return (
     <div
-      className={`flex flex-col my-4 rounded ${onClick && 'cursor-pointer'}`}
+      className={`flex flex-col w-full my-4 rounded ${onClick && 'cursor-pointer'}`}
       style={
         danger
           ? {

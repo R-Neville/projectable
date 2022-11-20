@@ -37,7 +37,7 @@ export default function NewProjectModal({ open, onClose, onDone }) {
       createProject(formState)
         .then((response) => {
           const { data } = response;
-          if (data.error) {
+          if (data && data.error) {
             showError(new Error(data.error));
           } else {
             navigate(`/project/${data._id}`);

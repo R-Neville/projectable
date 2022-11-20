@@ -14,7 +14,7 @@ function AuthProvider({ children }) {
     return logUserIn(email, password)
       .then((response) => {
         const { data } = response;
-        if (data.error) {
+        if (data && data.error) {
           return data.error;
         }
         userManager.user = response.data.uid;
@@ -36,7 +36,7 @@ function AuthProvider({ children }) {
     return registerUser(username, email, password, confirmPassword)
       .then((response) => {
         const { data } = response;
-        if (data.error) {
+        if (data && data.error) {
           return data.error;
         }
         userManager.user = response.data.uid;

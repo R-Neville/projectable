@@ -49,7 +49,7 @@ function ViewMemberModal({ open, member, tasks, onClose }) {
                   </h4>
                 </div>
                 <button
-                  className="py-2 px-3"
+                  className="py-2 px-3 rounded"
                   style={{
                     backgroundColor: theme.bgHighlight,
                     color: theme.fgHighlight,

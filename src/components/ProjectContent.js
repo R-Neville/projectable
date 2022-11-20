@@ -72,16 +72,18 @@ function ProjectContent() {
   };
 
   const onRemoveMemberModalConfirm = () => {
-    removeMember(id, currentMember).then((response) => {
-      const { data } = response;
-      if (data && data.error) {
-        showError(new Error(data.error));
-      } else {
-        setCurrentMember(null);
-        setShowRemoveMemberModal(false);
-        loadProject();
-      }
-    }).catch(buildAxiosErrorHandler(logout));
+    removeMember(id, currentMember)
+      .then((response) => {
+        const { data } = response;
+        if (data && data.error) {
+          showError(new Error(data.error));
+        } else {
+          setCurrentMember(null);
+          setShowRemoveMemberModal(false);
+          loadProject();
+        }
+      })
+      .catch(buildAxiosErrorHandler(logout));
   };
 
   const linkData = [
@@ -402,7 +404,7 @@ function ProjectContent() {
           setCurrentTask(null);
         }}
         onDone={() => loadProject()}
-        task={currentTask}
+        task={currentTask || {}}
       />
       <QuestionModal
         open={currentMember && showRemoveMemberModal}

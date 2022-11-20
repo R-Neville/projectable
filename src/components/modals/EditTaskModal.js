@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuthContext } from '../../context-providers/AuthProvider';
 import Section from '../shared/Section';
@@ -13,22 +13,29 @@ import { buildAxiosErrorHandler, showError } from '../../utils/helpers';
 
 function EditTaskModal({ open, onClose, onDone, task }) {
   const { logout } = useAuthContext();
-
-  const brief = useCallback(() => task ? task.brief : '', [task]);
-  const description = useCallback(() => task ? task.description : '', [task]);
-
-  const initialFormState = {
+  const brief = useCallback(() => task.brief, [task]);
+  const description = useCallback(() => task.description, [task]);
+  const [formState, setFormState] = useState({
     brief: brief(),
     description: description(),
-  };
-  const [formState, setFormState] = useState(initialFormState);
+  });
   const [formError, setFormError] = useState(null);
-
-  if (!open) return null;
 
   const onFormInputChange = (event) => {
     setFormState({ ...formState, [event.target.name]: event.target.value });
   };
+
+  useEffect(() => {
+    const { brief, description } = formState;
+    if (brief === undefined || description === undefined) {
+      setFormState({
+        ...formState,
+        ...{ brief: task.brief, description: task.description },
+      });
+    }
+  }, [task, formState]);
+
+  if (!open) return null;
 
   const formActions = [
     {

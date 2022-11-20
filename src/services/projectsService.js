@@ -20,6 +20,10 @@ export const addMember = async (projectId, member) => {
   return projectableAPI.put(`/api/projects/${projectId}/members/new`, member);
 };
 
+export const removeMember = async (projectId, member) => {
+  return projectableAPI.put(`/api/projects/${projectId}/members/remove`, member);
+}
+
 export const searchUsers = async (query, projectId) => {
   return projectableAPI.get(`/api/projects/${projectId}/settings/?email=${query}`);
 };

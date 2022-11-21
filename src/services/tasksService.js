@@ -1,7 +1,7 @@
 import projectableAPI from '../config/axiosConfig';
 
 export const getAllTasks = (projectId) => {
-  return projectableAPI.get(`api/projects/${projectId}/tasks`);
+  return projectableAPI.get(`/api/projects/${projectId}/tasks`);
 };
 
 export const getAllAssignedTasks = ()=>{
@@ -9,11 +9,11 @@ export const getAllAssignedTasks = ()=>{
 }
 
 export const getTask = (projectId, taskId) => {
-  return projectableAPI.get(`api/projects/${projectId}/tasks/${taskId}`);
+  return projectableAPI.get(`/api/projects/${projectId}/tasks/${taskId}`);
 };
 
 export const createTask = (projectId, taskFormData) => {
-  return projectableAPI.post(`api/projects/${projectId}/tasks`, taskFormData);
+  return projectableAPI.post(`/api/projects/${projectId}/tasks`, taskFormData);
 };
 
 export const updateTask = (projectId, taskId, taskFormData) => {

@@ -369,7 +369,11 @@ function ProjectContent() {
         {project && userManager.user === project.userId && (
           <Route
             path="/settings"
-            element={<ProjectSettings project={project} />}
+            element={
+              <Frame title="Project Settings">
+                <ProjectSettings project={project} />
+              </Frame>
+            }
           ></Route>
         )}
       </Routes>

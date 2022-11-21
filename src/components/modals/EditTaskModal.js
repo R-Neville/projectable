@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuthContext } from '../../context-providers/AuthProvider';
 import Section from '../shared/Section';
@@ -13,11 +13,9 @@ import { buildAxiosErrorHandler, showError } from '../../utils/helpers';
 
 function EditTaskModal({ open, onClose, onDone, task }) {
   const { logout } = useAuthContext();
-  const brief = useCallback(() => task.brief, [task]);
-  const description = useCallback(() => task.description, [task]);
   const [formState, setFormState] = useState({
-    brief: brief(),
-    description: description(),
+    brief: task ? task.brief : '',
+    description: task ? task.brief : '',
   });
   const [formError, setFormError] = useState(null);
 
@@ -26,14 +24,10 @@ function EditTaskModal({ open, onClose, onDone, task }) {
   };
 
   useEffect(() => {
-    const { brief, description } = formState;
-    if (brief === undefined || description === undefined) {
-      setFormState({
-        ...formState,
-        ...{ brief: task.brief, description: task.description },
-      });
+    if (task) {
+      setFormState({ brief: task.brief, description: task.description });
     }
-  }, [task, formState]);
+  }, [task]);
 
   if (!open) return null;
 
@@ -52,8 +46,8 @@ function EditTaskModal({ open, onClose, onDone, task }) {
         event.preventDefault();
 
         const formData = {
-          brief: brief(),
-          description: description(),
+          brief: task.brief,
+          description: task.description,
         };
 
         if (

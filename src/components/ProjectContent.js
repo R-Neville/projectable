@@ -400,11 +400,11 @@ function ProjectContent() {
       <EditTaskModal
         open={currentTask && showEditTaskModal}
         onClose={() => {
-          setShowEditTaskModal(false);
           setCurrentTask(null);
+          setShowEditTaskModal(false);
         }}
         onDone={() => loadProject()}
-        task={currentTask || {}}
+        task={currentTask}
       />
       <QuestionModal
         open={currentMember && showRemoveMemberModal}

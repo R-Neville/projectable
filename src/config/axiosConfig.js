@@ -12,6 +12,7 @@ const projectableAPI = axios.create({
   baseURL: ROOT_URL,
 });
 
+// Add Authorization header with token to requests:
 projectableAPI.interceptors.request.use((req) => {
   const token = userManager.token;
   if (token) {

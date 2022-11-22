@@ -6,6 +6,8 @@ const ThemeContext = createContext();
 export const useThemeContext = () => useContext(ThemeContext);
 
 export default function ThemeProvider({ children }) {
+  // Instantiate ThemeManager to load
+  // user's last used theme:
   const themeManager = new ThemeManager();
   let initialTheme;
   if (themeManager.theme === 'DARK') {

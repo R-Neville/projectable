@@ -18,6 +18,7 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
     brief: '',
     description: '',
     priority: '',
+    deadline: new Date(),
   };
 
   const { logout } = useAuthContext();
@@ -27,6 +28,7 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
    
   const onInputChange = (event) => {
     setFormState({ ...formState, [event.target.name]: event.target.value });
+    console.log(formState)
   };
 
   const handleSubmit = async (event) => {
@@ -100,6 +102,18 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
                     <option value="medium">medium</option>
                     <option value="low">low</option>
                   </select>
+                </Fieldset>
+                <Fieldset>
+                  <input
+                    type="date"
+                    name="deadline"
+                    onChange={onInputChange}
+                    className="my-2 bg-transparent border-solid border-1"
+                    style={{
+                      backgroundColor: theme.bgHighlight,
+                      color: theme.fgHighlight,
+                    }}
+                  />
                 </Fieldset>
                 <FormActions
                   actions={[

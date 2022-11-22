@@ -20,27 +20,29 @@ function Frame({ title, actions, children }) {
   }
 
   return (
-    <div
-      className="flex flex-col items-center p-4 w-full h-full"
-      data-testid="frame"
-    >
+    <>
       <div
-        className="flex flex-col sm:flex-row w-full max-w-3xl py-3"
-        style={{ borderBottom: `2px solid ${theme.fgPrimary}` }}
+        className="flex flex-col items-center p-4 w-full h-full"
+        data-testid="frame"
       >
-        <h2
-          className="w-full mr-auto text-4xl"
-          style={{
-            color: theme.fgAccent,
-          }}
-          data-testid="frame-title"
+        <div
+          className="flex flex-col sm:flex-row w-full max-w-3xl py-3"
+          style={{ borderBottom: `2px solid ${theme.fgPrimary}` }}
         >
-          {title}
-        </h2>
-        <div className="flex justify-end">{buttons}</div>
+          <h2
+            className="w-full mr-auto text-4xl"
+            style={{
+              color: theme.fgAccent,
+            }}
+            data-testid="frame-title"
+          >
+            {title}
+          </h2>
+          <div className="flex justify-end">{buttons}</div>
+        </div>
+        <div className="flex flex-col w-full max-w-3xl">{children}</div>
       </div>
-      <div className="flex flex-col w-full max-w-3xl">{children}</div>
-    </div>
+    </>
   );
 }
 

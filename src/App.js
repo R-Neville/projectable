@@ -11,6 +11,8 @@ function App() {
   const [showErrorModal, setShowErrorModal] = useState(false);
 
   const onShowError = (event) => {
+    // Custom event is fired by showError 
+    // in utils/helpers.js
     const { error } = event.detail;
     setModalError(error);
     setShowErrorModal(true);

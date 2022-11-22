@@ -18,6 +18,7 @@ function Main() {
 
   useEffect(() => {
     const onSetProjectName = (event) => {
+      // Updates the project name:
       event.stopPropagation();
       const { name } = event.detail;
       setProjectName(name);

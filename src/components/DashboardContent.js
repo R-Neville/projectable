@@ -49,6 +49,7 @@ const linkData = [
   },
 ];
 
+// dryRun prop is for testing
 function DashboardContent({ dryRun }) {
   const { theme } = useThemeContext();
   const { logout, userManager } = useAuthContext();

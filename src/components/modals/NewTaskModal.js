@@ -18,7 +18,7 @@ export default function NewTaskModal({ open, onClose, projectId, onDone }) {
     brief: '',
     description: '',
     priority: '',
-    deadline: '',
+    deadline: new Date(),
   };
 
   const { logout } = useAuthContext();

@@ -160,11 +160,12 @@ function DashboardContent({ dryRun }) {
                   key={i}
                   title={task.brief}
                   content={
-                    <div className="flex justify-between">
-                      <span style={{ color: theme.fgPrimary }}>
+                    <div className="flex justify-end m-1">
+                      <span className="px-2" style={{ color: theme.fgPrimary }}>
                         {task.priority && `priority: ${task.priority}`}
                       </span>
                       <span
+                        className="px-2"
                         style={{ color: theme.fgPrimary }}
                       >{`@${task.createdBy}`}</span>
                       <span style={{ color: theme.fgPrimary }}>

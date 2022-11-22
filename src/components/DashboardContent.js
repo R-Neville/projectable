@@ -6,6 +6,7 @@ import Frame from './shared/Frame';
 import CardList from './shared/CardList';
 import Card from './shared/Card';
 import TaskModal from './modals/TaskModal';
+import Notifications from './Notifications';
 import NewProjectModal from './modals/NewProjectModal';
 import TasksIconDark from '../assets/icons/tasks-dark.svg';
 import TasksIconLight from '../assets/icons/tasks-light.svg';
@@ -72,29 +73,31 @@ function DashboardContent({ dryRun }) {
   });
 
   useEffect(() => {
-    !dryRun && getAllProjects()
-      .then((response) => {
-        const { data } = response;
-        if (data && data.error) {
-          showError(new Error(data.error));
-        } else {
-          setProjects(data);
-        }
-      })
-      .catch(buildAxiosErrorHandler(logout));
+    !dryRun &&
+      getAllProjects()
+        .then((response) => {
+          const { data } = response;
+          if (data && data.error) {
+            showError(new Error(data.error));
+          } else {
+            setProjects(data);
+          }
+        })
+        .catch(buildAxiosErrorHandler(logout));
   }, [logout, dryRun]);
 
   const loadAssignedTasks = useCallback(() => {
-    !dryRun && getAllAssignedTasks()
-      .then((response) => {
-        const { data } = response;
-        if (data && data.error) {
-          showError(new Error(data.error));
-        } else {
-          setAssignedTasks(data);
-        }
-      })
-      .catch(buildAxiosErrorHandler(logout));
+    !dryRun &&
+      getAllAssignedTasks()
+        .then((response) => {
+          const { data } = response;
+          if (data && data.error) {
+            showError(new Error(data.error));
+          } else {
+            setAssignedTasks(data);
+          }
+        })
+        .catch(buildAxiosErrorHandler(logout));
   }, [logout, dryRun]);
 
   useEffect(() => {
@@ -144,7 +147,9 @@ function DashboardContent({ dryRun }) {
   }
 
   const tasksFrame = (
+    <>
     <Frame title="My Tasks">
+      <Notifications assignedTasks={assignedTasks} />
       <CardList>
         {assignedTasks.filter((t) => !t.completed).length > 0 ? (
           assignedTasks
@@ -155,11 +160,12 @@ function DashboardContent({ dryRun }) {
                   key={i}
                   title={task.brief}
                   content={
-                    <div className="flex justify-between">
-                      <span style={{ color: theme.fgPrimary }}>
+                    <div className="flex justify-end m-1">
+                      <span className="px-2" style={{ color: theme.fgPrimary }}>
                         {task.priority && `priority: ${task.priority}`}
                       </span>
                       <span
+                        className="px-2"
                         style={{ color: theme.fgPrimary }}
                       >{`@${task.createdBy}`}</span>
                       <span style={{ color: theme.fgPrimary }}>
@@ -181,6 +187,7 @@ function DashboardContent({ dryRun }) {
         )}
       </CardList>
     </Frame>
+    </>
   );
 
   return (
@@ -202,7 +209,7 @@ function DashboardContent({ dryRun }) {
           setShowTaskModal(false);
         }}
       />
-      
+
       <Routes>
         <Route index element={tasksFrame} />
         <Route path="/tasks" element={tasksFrame} />
@@ -263,7 +270,7 @@ function DashboardContent({ dryRun }) {
           path="/settings"
           element={
             <Frame title="My Settings">
-              <UserSettings  />
+              <UserSettings />
             </Frame>
           }
         />

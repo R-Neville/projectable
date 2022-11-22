@@ -23,6 +23,7 @@ import FormActions from '../shared/FormActions';
 import FormError from '../shared/FormError';
 import { getTask, updateTask } from '../../services/tasksService';
 
+
 function TaskModal({ open, taskId, projectId, onClose }) {
   const { theme } = useThemeContext();
   const { logout, userManager } = useAuthContext();
@@ -132,6 +133,15 @@ function TaskModal({ open, taskId, projectId, onClose }) {
                 `${taskState.brief} ${taskState.completed ? '(COMPLETED)' : ''}`
               }
             >
+              <SectionP
+                text={
+                  taskState &&  (
+                    <div className={`${dateFromTimestamp(taskState.deadline) === dateFromTimestamp(new Date()) && 'text-red-500'}`}>
+                      {`due: ${dateFromTimestamp(taskState.deadline)}`}
+                    </div>
+                  )
+                }
+              />
               <SectionP text={taskState && taskState.description} />
               <div className="flex flex-col sm:flex-row justify-end items-center w-full">
                 {taskState &&

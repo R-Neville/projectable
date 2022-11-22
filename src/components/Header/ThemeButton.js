@@ -14,6 +14,7 @@ function ThemeButton() {
       className="theme-button flex justify-center items-center p-2 w-10 h-10 rounded-full"
       style={{ backgroundColor: theme.bgPrimary }}
       onClick={onClick}
+      data-testid="theme-button"
     >
       <img
         alt={isDarkMode ? 'Moon Icon' : 'Sun Icon'}

@@ -4,6 +4,7 @@ import ProtectedRoute from './ProjectedRoute';
 import Page from './shared/Page';
 import HomeContent from './HomeContent';
 import LoginContent from './LoginContent';
+import DateDisplay from './DateDisplay';
 import RegisterContent from './RegisterContent';
 import DashboardContent from './DashboardContent';
 import ProjectContent from './ProjectContent';
@@ -47,7 +48,7 @@ function Main() {
         path="/dashboard/*"
         element={
           <ProtectedRoute loggedIn={loggedIn}>
-            <Page title="Dashboard" content={<DashboardContent />} />
+            <Page title="Dashboard" date={<DateDisplay/>} content={<DashboardContent />} />
           </ProtectedRoute>
         }
       />
